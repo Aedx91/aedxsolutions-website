@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
@@ -26,7 +27,7 @@ export default function Terms() {
       <h2>5. Third-Party Services</h2>
       <p>The Site may link to third-party services. We are not responsible for their content, policies, or practices.</p>
       <h2>6. Privacy</h2>
-      <p>Your use of the Site is also governed by our <a href="/privacy">Privacy Policy</a>.</p>
+      <p>Your use of the Site is also governed by our <Link href="/privacy">Privacy Policy</Link>.</p>
       <h2>7. Changes to Terms</h2>
       <p>We may update these Terms. Changes are effective upon posting. Continued use constitutes acceptance.</p>
       <h2>8. Governing Law</h2>

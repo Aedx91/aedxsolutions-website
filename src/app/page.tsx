@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -193,8 +194,8 @@ export default function Home() {
           </div>
           <p className="mb-4">&copy; 2025 AedxCorp. All rights reserved.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 text-sm">
-            <a href="/privacy" className="hover:text-white underline-offset-4 hover:underline">Privacy Policy</a>
-            <a href="/terms" className="hover:text-white underline-offset-4 hover:underline">Terms &amp; Conditions</a>
+            <Link href="/privacy" className="hover:text-white underline-offset-4 hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white underline-offset-4 hover:underline">Terms &amp; Conditions</Link>
           </div>
         </div>
       </footer>
