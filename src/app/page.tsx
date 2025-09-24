@@ -191,7 +191,11 @@ export default function Home() {
             />
             <span className="font-semibold">AedxCorp</span>
           </div>
-          <p>&copy; 2025 AedxCorp. All rights reserved.</p>
+          <p className="mb-4">&copy; 2025 AedxCorp. All rights reserved.</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 text-sm">
+            <a href="/privacy" className="hover:text-white underline-offset-4 hover:underline">Privacy Policy</a>
+            <a href="/terms" className="hover:text-white underline-offset-4 hover:underline">Terms &amp; Conditions</a>
+          </div>
         </div>
       </footer>
     </div>
