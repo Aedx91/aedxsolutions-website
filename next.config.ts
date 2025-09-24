@@ -6,13 +6,17 @@ import createMDX from '@next/mdx';
 // a blank/black screen. In production we apply the hardened policy.
 const isProd = process.env.NODE_ENV === 'production';
 
+// NOTE: Temporary hotfix: Added 'unsafe-inline' to script-src to unblock blank screen
+// caused by CSP blocking Next.js small inline bootstrap/runtime chunks and our
+// (now removed) early theme setter. For a hardened policy, replace this with
+// nonce or hash based allowances per request.
 const prodCsp = [
   "default-src 'self'",
   "img-src 'self' data: blob:",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  // Only self in prod; if you later add analytics (e.g. plausible) extend here.
-  "script-src 'self'",
+  // TEMP: allow inline scripts so Next runtime can execute. Replace with nonce.
+  "script-src 'self' 'unsafe-inline'",
   "connect-src 'self'",
 ].join('; ');
 
