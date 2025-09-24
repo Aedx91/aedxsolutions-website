@@ -22,9 +22,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default function LangLayout({ params, children }: { params: Promise<{ lang: string }>; children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{__html:`try{const s=localStorage.getItem('theme');const m=window.matchMedia('(prefers-color-scheme: dark)').matches;const t=s??(m?'dark':'light');document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}catch{}`}} />
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-surface-app text-text-primary`}>        
         <LangShell paramsPromise={params}>{children}</LangShell>
       </body>
