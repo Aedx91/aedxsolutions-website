@@ -1,0 +1,3 @@
+cd C:\Users\aedxp\AedxCorpWebsite\website
+npm run build
+npm start

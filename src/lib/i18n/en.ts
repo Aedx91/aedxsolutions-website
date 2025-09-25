@@ -36,8 +36,8 @@ export const en = {
   },
   heroBadge: 'AedxSolutions • AI + Web + Integrations',
   features: {
-    sectionTitle: 'Platform Pillars',
-    sectionSubtitle: 'Foundational capabilities that accelerate delivery, reliability and insight.',
+    sectionTitle: 'Carmy Date Options',
+    sectionSubtitle: 'Choose your perfect date option and let me know!',
     items: [
       { title: 'Feature 1', desc: 'Concise value proposition highlighting measurable benefit number 1.' },
       { title: 'Feature 2', desc: 'Concise value proposition highlighting measurable benefit number 2.' },

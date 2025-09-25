@@ -1,6 +1,8 @@
+// *** CARMY DATE OPTIONS - PURPLE HEARTS & FLIP ANIMATION! ***
 import type { Metadata } from 'next'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
+import FlipCard from '../../components/FlipCard'
 
 export const dynamic = 'force-static'
 
@@ -48,14 +50,26 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary text-center mb-2">{dict.features.sectionTitle}</h2>
           <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {featureItems.map((f, idx) => (
-              <article key={idx} className="card">
-                <div className="h-10 w-10 rounded-md bg-surface-section/60" />
-                <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
-                <p className="mt-1 text-sm text-text-secondary">{f.desc}</p>
-              </article>
-            ))}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-9">
+            <FlipCard
+              title="Option #1 — Sushi to Go"
+              subtitle={<span>Sushi to Go and pillowing close to your casita</span>}
+              optionKey="option-1"
+            />
+            <FlipCard
+              title="Option #2 — Vesuvio + Movie"
+              subtitle={
+                <span>
+                  Vesuvio and watch this at Cinemark: <a className="link underline" href="https://www.imdb.com/title/tt10374610/?ref_=hm_tpks_i_1_pd_tp1_pbr_ic" target="_blank" rel="noreferrer noopener">IMDB 7.3</a>
+                </span>
+              }
+              optionKey="option-2"
+            />
+            <FlipCard
+              title="Option #3 — Pillowing Express"
+              subtitle={<span>Pillowing Express (Roosevelt) where we went last time — or dinner somewhere nice before I take you home</span>}
+              optionKey="option-3"
+            />
           </div>
         </div>
       </section>
