@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import React from 'react'
 import ThemeToggle from '@/components/ThemeToggle'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Link from 'next/link'
 import MobileNav from '@/components/MobileNav'
 
@@ -49,6 +50,7 @@ async function LangShell({ paramsPromise, children }: { paramsPromise: Promise<{
           <Link href={`/${safeLang}/products`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.products}</Link>
           <Link href={`/${safeLang}/customers`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.customers}</Link>
           <Link href={`/${safeLang}/contact`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.contact}</Link>
+          <LanguageSwitcher current={safeLang} />
           <ThemeToggle />
         </nav>
         <MobileNav lang={safeLang} dict={dict} />

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
+import LanguageSwitcher from './LanguageSwitcher'
 
 type DictShape = {
   nav: { products: string; customers: string; contact: string; home?: string }
@@ -65,7 +66,8 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
               <Link href={`/${lang}/contact`} onClick={() => setOpen(false)}>{dict.nav.contact}</Link>
             </nav>
 
-            <div className="mt-auto flex items-center justify-between">
+            <div className="mt-auto flex items-center justify-between gap-3">
+              <LanguageSwitcher current={lang === 'es' ? 'es' : 'en'} />
               <ThemeToggle />
             </div>
           </div>
