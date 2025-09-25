@@ -1,10 +1,13 @@
 {
   "name": "website",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.0",    "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
+    "next": "^15.5.4",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16","private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "cross-env TAILWIND_DISABLE_NATIVE=1 LIGHTNINGCSS_FORCE_WASM=1 next build --turbopack",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "test": "jest --passWithNoTests",
@@ -16,8 +19,7 @@
     "@next/mdx": "^15.5.4",
     "@react-email/render": "^1.3.1",
     "@types/nodemailer": "^7.0.1",
-    "lightningcss-wasm": "^1.26.0",
-    "lightningcss": "^1.26.0",
+
     "framer-motion": "^11.18.2",
     "nodemailer": "^7.0.6",
     "react": "19.1.0",
