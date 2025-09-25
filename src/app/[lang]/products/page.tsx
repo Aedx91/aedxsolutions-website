@@ -1,10 +1,22 @@
-import { getDictionary, Lang } from '@/lib/i18n/dictionaries';
-export const dynamic = 'force-static';
+import type { Metadata } from 'next'
+import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
+import { pageMeta } from '@/lib/seo'
+export const dynamic = 'force-static'
 
-export default async function ProductsPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang: rawLang } = await params;
-  const lang = rawLang === 'es' ? 'es' : 'en';
-  const dict = await getDictionary(lang as Lang);
+export async function generateMetadata(
+  { params }: { params: { lang: 'en' | 'es' } }
+): Promise<Metadata> {
+  const { lang } = params
+  const t = lang === 'es'
+    ? { title: 'Servicios | AedxSolutions', desc: 'Sitios web modernos, integraciones API, IA y consultoría.' }
+    : { title: 'Services | AedxSolutions', desc: 'Modern websites, API integrations, AI automations, and consulting.' }
+  return pageMeta(lang, '/products', t.title, t.desc)
+}
+
+export default async function ProductsPage({ params }: { params: { lang: string } }) {
+  const { lang: rawLang } = params
+  const lang = rawLang === 'es' ? 'es' : 'en'
+  const dict = await getDictionary(lang as Lang)
   return (
     <section className="bg-surface-section">
       <div className="container section">
@@ -22,5 +34,5 @@ export default async function ProductsPage({ params }: { params: Promise<{ lang:
         </div>
       </div>
     </section>
-  );
+  )
 }

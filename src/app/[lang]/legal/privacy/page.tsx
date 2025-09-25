@@ -1,14 +1,24 @@
-import { getDictionary, Lang } from '@/lib/i18n/dictionaries';
-import { LegalTOC } from '@/components/LegalTOC';
-import React from 'react';
+import type { Metadata } from 'next'
+import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
+import { LegalTOC } from '@/components/LegalTOC'
+import { pageMeta } from '@/lib/seo'
+import React from 'react'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
-export default async function PrivacyPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang: rawLang } = await params;
-  const lang = rawLang === 'es' ? 'es' : 'en';
-  const safeLang: Lang = lang;
-  const dict = await getDictionary(lang as Lang);
+export async function generateMetadata({ params }: { params: { lang: 'en'|'es' } }): Promise<Metadata> {
+  const { lang } = params
+  const t = lang === 'es'
+    ? { title: 'Política de Privacidad | AedxSolutions', desc: 'Cómo AedxSolutions gestiona los datos y protege tu privacidad.' }
+    : { title: 'Privacy Policy | AedxSolutions', desc: 'How AedxSolutions handles data and protects your privacy.' }
+  return pageMeta(lang, '/legal/privacy', t.title, t.desc)
+}
+
+export default async function PrivacyPage({ params }: { params: { lang: string } }) {
+  const { lang: rawLang } = params
+  const lang = rawLang === 'es' ? 'es' : 'en'
+  const safeLang: Lang = lang
+  const dict = await getDictionary(lang as Lang)
   const sections = [
     { id: 'data-we-collect', heading: 'Data We Collect', body: 'We currently collect minimal operational data required to respond to inbound requests, improve reliability and fulfill prospective commercial agreements. This placeholder section will be localized and expanded.' },
     { id: 'how-we-use', heading: 'How We Use Information', body: 'Usage is restricted to performing requested services, internal analytics, security monitoring and legal compliance.' },

@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Link from 'next/link'
 import LanguageSwitcher from './LanguageSwitcher';
 import { usePathname } from 'next/navigation';
 import type { Lang } from '@/lib/i18n/dictionaries';
@@ -24,21 +25,21 @@ export default function SiteNav({ lang, dict }: Props) {
   const pathname = usePathname();
   return (
     <header className="container flex items-center justify-between py-6">
-  <a href={`/${lang}`} className="font-semibold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary rounded-sm text-white">AedxSolutions</a>
+  <Link href={`/${lang}`} className="font-semibold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary rounded-sm text-white">AedxSolutions</Link>
   <nav className="flex items-center gap-6 text-sm" aria-label="Main navigation">
         {links.map(l => {
           const full = `/${lang}/${l.href}`;
           const active = pathname === full;
           return (
-            <a
+            <Link
               key={l.key}
               href={full}
               aria-current={active ? 'page' : undefined}
               className={`transition-colors text-white/85 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary rounded-sm ${active ? 'font-semibold underline underline-offset-4 decoration-brand-secondary text-white' : ''}`}
             >
               {dict.nav[l.key]}
-            </a>
-          );
+            </Link>
+          )
         })}
         <LanguageSwitcher lang={lang} />
       </nav>

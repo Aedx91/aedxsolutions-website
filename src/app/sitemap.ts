@@ -1,24 +1,14 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://aedxsolutions.com';
-  const lastModified = new Date();
-  const shared = ['', '/products', '/customers', '/contact', '/legal/privacy', '/legal/terms'];
-  const entries: MetadataRoute.Sitemap = [];
-  for (const p of shared) {
-    const enUrl = `${base}/en${p}`;
-    const esUrl = `${base}/es${p}`;
-    // We list only EN canonical plus ES counterpart OR both; here include both for clarity.
-    entries.push({
-      url: enUrl,
-      lastModified,
-      alternates: { languages: { en: enUrl, es: esUrl } }
-    });
-    entries.push({
-      url: esUrl,
-      lastModified,
-      alternates: { languages: { en: enUrl, es: esUrl } }
-    });
-  }
-  return entries;
+  const base = 'https://aedxsolutions.com'
+  const routes = ['', '/products', '/customers', '/contact', '/legal/privacy', '/legal/terms']
+  const langs: ('en'|'es')[] = ['en','es']
+  const urls = langs.flatMap(lang => routes.map(r => ({
+    url: `${base}/${lang}${r}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: r === '' ? 1 : 0.7,
+  })))
+  return urls
 }
