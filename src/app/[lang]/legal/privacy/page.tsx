@@ -24,7 +24,7 @@ export default async function PrivacyPage({ params }: { params: { lang: string }
     { id: 'how-we-use', heading: 'How We Use Information', body: 'Usage is restricted to performing requested services, internal analytics, security monitoring and legal compliance.' },
     { id: 'storage-retention', heading: 'Storage & Retention', body: 'Data is retained only as long as necessary for stated purposes or contractual / statutory requirements.' },
     { id: 'your-rights', heading: 'Your Rights', body: 'Access, rectification, deletion, portability and objection rights will be addressed once the full compliance copy is added.' },
-    { id: 'contact', heading: 'Contact', body: `Questions: <a href="/${safeLang}/contact" class="text-brand-primary underline">Contact us</a>.` },
+  { id: 'contact', heading: 'Contact', body: `Questions: <a href="/${safeLang}/contact" class="link underline">Contact us</a>.` },
   ];
   const rawHtml = sections.map(s => `<h2 id="${s.id}">${s.heading}</h2>`).join('');
   return (

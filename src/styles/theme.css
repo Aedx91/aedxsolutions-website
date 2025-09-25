@@ -4,6 +4,8 @@
   :root {
     --brand-primary: #0078D4;
     --brand-secondary: #00AEEF;
+    /* Accessible link/text color (≥4.5 contrast on light surfaces) */
+    --brand-link: #005A9E;
     --surface-app: #FFFFFF;
     --surface-section: #F5F7FA;
     --surface-raised: #FFFFFF;
@@ -26,6 +28,7 @@
   :root {
     --brand-primary: #0078D4;
     --brand-secondary: #00AEEF;
+    --brand-link: #00AEEF; /* secondary is sufficiently bright on dark */
     --surface-app: #0C0E10;
     --surface-section: #17191C;
     --surface-raised: rgba(255,255,255,0.06);
@@ -45,6 +48,7 @@
 :root[data-theme="light"] {
   --brand-primary: #0078D4;
   --brand-secondary: #00AEEF;
+  --brand-link: #005A9E;
   /* Surfaces (light) */
   --surface-app: #FFFFFF;
   --surface-section: #F5F7FA;
@@ -69,6 +73,7 @@
 :root[data-theme="dark"] {
   --brand-primary: #0078D4;
   --brand-secondary: #00AEEF;
+  --brand-link: #00AEEF;
   /* Surfaces (dark) */
   --surface-app: #0C0E10;
   --surface-section: #17191C;
@@ -223,8 +228,12 @@ select:focus {
 @media (min-width:1024px) { .hero-content { padding-top:10rem; padding-bottom:10rem; } }
 
 /* ---------- Links ---------- */
-.link { color:var(--brand-secondary); text-decoration:none; }
+.link { color:var(--brand-link); text-decoration:none; }
 .link:hover { text-decoration:underline; }
+
+/* Ensure semantic text brand utility classes map to accessible link color */
+.text-brand-primary, .text-brand-secondary { color: var(--brand-link); }
+[data-theme="dark"] .text-brand-primary, [data-theme="dark"] .text-brand-secondary { color: var(--brand-link); }
 
 /* ---------- Form Elements ---------- */
 .form-input, .form-textarea, .form-select {

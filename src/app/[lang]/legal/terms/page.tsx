@@ -26,7 +26,7 @@ export default async function TermsPage({ params }: { params: { lang: string } }
     { id: 'liability', heading: 'Limitation of Liability', body: 'To the maximum extent permitted by law liability will be limited to directly incurred fees.' },
     { id: 'changes', heading: 'Changes', body: 'We may update these terms; material changes will be versioned and dated.' },
     { id: 'governing-law', heading: 'Governing Law', body: 'Jurisdiction to be specified in final document.' },
-    { id: 'contact', heading: 'Contact', body: `For contract or compliance inquiries please <a href="/${safeLang}/contact" class="text-brand-primary underline">reach out</a>.` },
+  { id: 'contact', heading: 'Contact', body: `For contract or compliance inquiries please <a href="/${safeLang}/contact" class="link underline">reach out</a>.` },
   ];
   const rawHtml = sections.map(s => `<h2 id="${s.id}">${s.heading}</h2>`).join('');
   return (
