@@ -3,16 +3,16 @@ import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
 export const dynamic = 'force-static'
 
-export async function generateMetadata({ params }: { params: { lang: 'en'|'es' } }): Promise<Metadata> {
-  const { lang } = params
+export async function generateMetadata(props: { params: Promise<{ lang: 'en'|'es' }> }): Promise<Metadata> {
+  const { lang } = await props.params
   const t = lang === 'es'
     ? { title: 'Clientes | AedxSolutions', desc: 'Resultados medibles, casos de éxito y testimonios.' }
     : { title: 'Customers | AedxSolutions', desc: 'Measurable outcomes, case studies, and testimonials.' }
   return pageMeta(lang, '/customers', t.title, t.desc)
 }
 
-export default async function CustomersPage({ params }: { params: { lang: string } }) {
-  const { lang: rawLang } = params
+export default async function CustomersPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang: rawLang } = await props.params
   const lang = rawLang === 'es' ? 'es' : 'en'
   const dict = await getDictionary(lang as Lang)
   return (

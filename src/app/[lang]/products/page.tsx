@@ -4,17 +4,17 @@ import { pageMeta } from '@/lib/seo'
 export const dynamic = 'force-static'
 
 export async function generateMetadata(
-  { params }: { params: { lang: 'en' | 'es' } }
+  props: { params: Promise<{ lang: 'en' | 'es' }> }
 ): Promise<Metadata> {
-  const { lang } = params
+  const { lang } = await props.params
   const t = lang === 'es'
     ? { title: 'Servicios | AedxSolutions', desc: 'Sitios web modernos, integraciones API, IA y consultoría.' }
     : { title: 'Services | AedxSolutions', desc: 'Modern websites, API integrations, AI automations, and consulting.' }
   return pageMeta(lang, '/products', t.title, t.desc)
 }
 
-export default async function ProductsPage({ params }: { params: { lang: string } }) {
-  const { lang: rawLang } = params
+export default async function ProductsPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang: rawLang } = await props.params
   const lang = rawLang === 'es' ? 'es' : 'en'
   const dict = await getDictionary(lang as Lang)
   return (

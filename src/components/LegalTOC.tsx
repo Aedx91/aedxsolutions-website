@@ -14,7 +14,7 @@ export function LegalTOC({ content }: { content: string }) {
   if (!headings.length) return null;
   return (
     <nav aria-label="Table of contents" className="hidden lg:block sticky top-28 max-h-[calc(100vh-8rem)] overflow-auto pr-6 text-sm">
-      <p className="font-semibold mb-3 text-text-secondary/80 tracking-wide uppercase">On this page</p>
+  <p className="legal-meta font-semibold mb-3 tracking-wide uppercase">On this page</p>
       <ul className="space-y-2">
         {headings.map(h => (
           <li key={h.id}>

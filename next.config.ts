@@ -38,6 +38,9 @@ const nextConfig: NextConfig = withMDX({
   reactStrictMode: true,
   trailingSlash: false,
   pageExtensions: ['ts', 'tsx', 'mdx'],
+  turbopack: {
+    root: __dirname,
+  },
   typescript: {
     ignoreBuildErrors: true, // Ignore Playwright config errors
   },

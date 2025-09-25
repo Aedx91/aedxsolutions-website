@@ -241,13 +241,17 @@ select:focus {
 .legal-prose h2 { font-size:1rem; margin-top:2.25rem; margin-bottom:.75rem; font-weight:600; letter-spacing:.25px; color: var(--text-primary); }
 [data-theme="dark"] .legal-prose h2 { color:#F5F7FA; }
 .legal-prose p { margin-bottom:1rem; line-height:1.45; }
-.legal-meta { font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; color: var(--text-secondary); }
+.legal-meta { font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; color:#444444; }
 [data-theme="dark"] .legal-meta { color:#C7CED9; }
 .legal-toc { font-size:.7rem; font-weight:600; letter-spacing:.5px; display:flex; flex-direction:column; gap:.5rem; }
 .legal-toc a { text-decoration:none; color:var(--text-secondary); }
 .legal-toc a:hover { text-decoration:underline; color:var(--brand-link); }
 [data-theme="dark"] .legal-toc a { color:#C7CED9; }
 [data-theme="dark"] .legal-toc a:hover { color:var(--brand-link); }
+
+/* Ensure inline legal body links are distinguishable without color reliance */
+.legal-prose a { text-decoration:underline; font-weight:500; }
+.underline { text-decoration:underline; }
 
 /* ---------- Form Elements ---------- */
 .form-input, .form-textarea, .form-select {
