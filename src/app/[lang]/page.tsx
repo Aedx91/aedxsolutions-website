@@ -50,7 +50,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary text-center mb-2">{dict.features.sectionTitle}</h2>
           <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-9">
+          <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             <FlipCard
               title="Option #1 — Sushi to Go"
               subtitle={<span>Sushi to Go and pillowing close to your casita</span>}

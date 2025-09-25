@@ -65,34 +65,34 @@ export default function FlipCard({ title, subtitle, optionKey }: FlipCardProps) 
         <div className={`${styles.face} ${styles.front}`}>
           <div>
             <div className={styles.iconCircle}>💜</div>
-            <h3 className="text-xl font-bold text-primary">{title}</h3>
-            <p className={styles.hint}>Click to flip and see details</p>
+            <h3 className="text-lg sm:text-xl font-bold text-primary px-2">{title}</h3>
+            <p className={styles.hint}>Tap to flip and see details</p>
           </div>
         </div>
 
         {/* Back face */}
         <div className={`${styles.face} ${styles.back}`}>
           <div>
-            <h3 className="text-lg font-semibold text-primary mb-3">{title}</h3>
-            <div className="text-sm text-text-secondary mb-4" onClick={(e) => e.stopPropagation()}>{subtitle}</div>
+            <h3 className="text-base sm:text-lg font-semibold text-primary mb-3 leading-tight">{title}</h3>
+            <div className="text-xs sm:text-sm text-text-secondary mb-4 leading-relaxed" onClick={(e) => e.stopPropagation()}>{subtitle}</div>
           </div>
 
-          <div className="space-y-4">
-            <label className="flex items-start space-x-3 cursor-pointer" onClick={(e) => e.stopPropagation()}>
+          <div className="space-y-3 sm:space-y-4">
+            <label className="flex items-start space-x-2 sm:space-x-3 cursor-pointer" onClick={(e) => e.stopPropagation()}>
               <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
-                className="rounded border-gray-300 text-primary focus:ring-primary mt-1"
+                className="rounded border-gray-300 text-primary focus:ring-primary mt-1 min-w-[16px]"
               />
-              <span className="text-sm font-medium">Yes, I'd love this date!</span>
+              <span className="text-xs sm:text-sm font-medium leading-tight">Yes, I'd love this date!</span>
             </label>
 
             <div className="flex">
               <button
                 onClick={(e) => { e.stopPropagation(); void handleSubmit(); }}
                 disabled={!isChecked || isLoading}
-                className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg"
+                className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg touch-manipulation"
               >
                 {isLoading ? 'Sending...' : 'Accept & Send'}
               </button>
