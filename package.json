@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "cross-env TAILWIND_DISABLE_NATIVE=1 LIGHTNINGCSS_FORCE_WASM=1 next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "test": "jest --passWithNoTests",
@@ -43,6 +43,7 @@
     "eslint-config-next": "15.5.4",
     "jest": "^30.1.3",
     "jest-environment-jsdom": "^30.1.2",
+  "cross-env": "^7.0.3",
     "next": "^15.5.4",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
