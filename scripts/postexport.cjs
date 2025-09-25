@@ -1,4 +1,6 @@
-// Ensure exported static files exist and copy public extras into out/
+/* eslint-disable @typescript-eslint/no-require-imports */
+// Node build helper: Ensure exported static files exist and copy public extras into out/
+// CommonJS is intentional here for execution simplicity without transpilation.
 const { copyFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
