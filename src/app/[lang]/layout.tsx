@@ -1,9 +1,11 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/app/globals.css'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import React from 'react'
 import ThemeToggle from '@/components/ThemeToggle'
+import Link from 'next/link'
+import MobileNav from '@/components/MobileNav'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
@@ -18,6 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     alternates: { canonical: current, languages: { en: `${base}/en`, es: `${base}/es` } },
   }
 }
+
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, maximumScale: 5, viewportFit: 'cover' }
 
 export default function LangLayout({ params, children }: { params: Promise<{ lang: string }>; children: React.ReactNode }) {
   return (
@@ -36,17 +40,18 @@ async function LangShell({ paramsPromise, children }: { paramsPromise: Promise<{
   return (
     <>
       <header className="container section-sm flex items-center justify-between">
-        <a href={`/${safeLang}`} className="brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">
+        <Link href={`/${safeLang}`} className="brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">
           <span className="brand-badge" aria-hidden />
           <span className="text-lg sm:text-xl">AedxSolutions</span>
-        </a>
-        <nav className="flex items-center gap-6 text-sm">
-          <a href={`/${safeLang}`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.home}</a>
-          <a href={`/${safeLang}/products`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.products}</a>
-          <a href={`/${safeLang}/customers`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.customers}</a>
-          <a href={`/${safeLang}/contact`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.contact}</a>
+        </Link>
+        <nav className="hidden md:flex items-center gap-6 text-sm">
+          <Link href={`/${safeLang}`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.home}</Link>
+          <Link href={`/${safeLang}/products`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.products}</Link>
+          <Link href={`/${safeLang}/customers`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.customers}</Link>
+          <Link href={`/${safeLang}/contact`} className="hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded">{dict.nav.contact}</Link>
           <ThemeToggle />
         </nav>
+        <MobileNav lang={safeLang} dict={dict} />
       </header>
       <main className="flex-1">{children}</main>
       <footer className="bg-surface-section">

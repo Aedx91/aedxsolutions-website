@@ -1,17 +1,31 @@
-import { getDictionary, Lang } from '@/lib/i18n/dictionaries';
-import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/structuredData';
+import type { Metadata } from 'next'
+import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
+import { pageMeta } from '@/lib/seo'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
-export default async function HomeLangPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang: rawLang } = await params;
-  const lang = rawLang === 'es' ? 'es' : 'en';
-  const dict = await getDictionary(lang as Lang);
-  const org = organizationJsonLd(lang as Lang);
-  const site = websiteJsonLd(lang as Lang);
+export async function generateMetadata(
+  { params }: { params: { lang: 'en' | 'es' } }
+): Promise<Metadata> {
+  const { lang } = params
+  const t = lang === 'es'
+    ? {
+        title: 'Software con IA para operaciones reales | AedxSolutions',
+        desc: 'Web moderna, integraciones API y consultoría que escalan con tu negocio.',
+      }
+    : {
+        title: 'AI-powered software for real-world operations | AedxSolutions',
+        desc: 'Modern web, API integrations, and consulting that scale with your business.',
+      }
+  return pageMeta(lang, '', t.title, t.desc)
+}
+
+export default async function HomeLangPage({ params }: { params: { lang: string } }) {
+  const { lang: rawLang } = params
+  const lang = rawLang === 'es' ? 'es' : 'en'
+  const dict = await getDictionary(lang as Lang)
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([org, site], null, 0) }} />
       <section className="hero">
         <div className="hero-bg" aria-hidden></div>
         <div className="hero-overlay" aria-hidden></div>
@@ -43,6 +57,33 @@ export default async function HomeLangPage({ params }: { params: Promise<{ lang:
           </div>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'AedxSolutions',
+            url: 'https://aedxsolutions.com',
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'AedxSolutions',
+            url: 'https://aedxsolutions.com',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: 'https://aedxsolutions.com/en?search={query}',
+              'query-input': 'required name=query',
+            },
+          }),
+        }}
+      />
     </div>
-  );
+  )
 }

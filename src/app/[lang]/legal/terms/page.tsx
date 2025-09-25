@@ -1,14 +1,24 @@
-import { getDictionary, Lang } from '@/lib/i18n/dictionaries';
-import { LegalTOC } from '@/components/LegalTOC';
-import React from 'react';
+import type { Metadata } from 'next'
+import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
+import { LegalTOC } from '@/components/LegalTOC'
+import { pageMeta } from '@/lib/seo'
+import React from 'react'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
-export default async function TermsPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang: rawLang } = await params;
-  const lang = rawLang === 'es' ? 'es' : 'en';
-  const safeLang: Lang = lang;
-  const dict = await getDictionary(lang as Lang);
+export async function generateMetadata({ params }: { params: { lang: 'en'|'es' } }): Promise<Metadata> {
+  const { lang } = params
+  const t = lang === 'es'
+    ? { title: 'Términos de Servicio | AedxSolutions', desc: 'Condiciones para colaborar con AedxSolutions.' }
+    : { title: 'Terms of Service | AedxSolutions', desc: 'The service terms and conditions for working with AedxSolutions.' }
+  return pageMeta(lang, '/legal/terms', t.title, t.desc)
+}
+
+export default async function TermsPage({ params }: { params: { lang: string } }) {
+  const { lang: rawLang } = params
+  const lang = rawLang === 'es' ? 'es' : 'en'
+  const safeLang: Lang = lang
+  const dict = await getDictionary(lang as Lang)
   const sections = [
     { id: 'agreement', heading: 'Agreement', body: 'These placeholder terms outline a future commercial relationship framework. They will be replaced with finalized bilingual legal language.' },
     { id: 'license', heading: 'License & Access', body: 'Access is provided on an as-is basis. No warranties are currently expressed in this provisional document.' },
