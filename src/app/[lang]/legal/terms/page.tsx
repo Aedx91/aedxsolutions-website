@@ -32,9 +32,9 @@ export default async function TermsPage({ params }: { params: { lang: string } }
   return (
     <section className="bg-surface-section">
       <div className="container section grid lg:grid-cols-[1fr_280px] gap-12">
-        <div className="prose prose-neutral dark:prose-invert max-w-none">
-          <h1 className="mb-2 text-3xl font-bold tracking-tight text-text-primary dark:text-white">{dict.legal.termsTitle}</h1>
-          <p className="text-sm text-text-secondary dark:text-white/60 mb-10">Version: 2025-09-01</p>
+        <div className="legal-prose max-w-none">
+          <h1 className="mb-2 text-3xl font-bold tracking-tight">{dict.legal.termsTitle}</h1>
+          <p className="legal-meta mb-10">Version: 2025-09-01</p>
           {sections.map(s => (
             <section key={s.id}>
               <h2 id={s.id}>{s.heading}</h2>
@@ -42,7 +42,10 @@ export default async function TermsPage({ params }: { params: { lang: string } }
             </section>
           ))}
         </div>
-        <LegalTOC content={rawHtml} />
+        <div className="legal-toc" aria-label="On this page">
+          <span className="legal-meta mb-2">ON THIS PAGE</span>
+          <LegalTOC content={rawHtml} />
+        </div>
       </div>
     </section>
   );
