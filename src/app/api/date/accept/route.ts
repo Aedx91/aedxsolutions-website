@@ -10,19 +10,19 @@ export async function POST(request: NextRequest) {
     const { option } = await request.json()
     
     const optionTitles: Record<string, string> = {
-      'option-1': 'Option #1 — Sushi to Go',
-      'option-2': 'Option #2 — Vesuvio + Movie', 
-      'option-3': 'Option #3 — Pillowing Express'
+      'discovery': 'Discovery Accelerator',
+      'integration': 'Integration Launchpad', 
+      'ai-pilot': 'AI Pilot Sprint'
     }
     
     const optionTitle = optionTitles[option] || 'Unknown Option'
     
     // Email content
-    const subject = `Date Option Accepted: ${optionTitle}`
+    const subject = `Engagement Track Selected: ${optionTitle}`
     const html = `
-      <h2>Someone accepted your date invitation!</h2>
-      <p><strong>Selected Option:</strong> ${optionTitle}</p>
-      <p><em>This email was sent from your AedxCorp website.</em></p>
+      <h2>Someone selected a delivery playbook from the site</h2>
+      <p><strong>Selected Track:</strong> ${optionTitle}</p>
+      <p><em>This notification was generated automatically by aedxsolutions.com.</em></p>
     `
     
     // Prefer Resend if configured (env only; no hardcoded fallback)

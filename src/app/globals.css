@@ -1,20 +1,10 @@
-@import "tailwindcss";
-@import "../styles/theme.css";
+/* Tailwind v3 setup */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-secondary: var(--brand-secondary);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-surface-app: var(--surface-app);
-  --color-surface-section: var(--surface-section);
-  --color-surface-raised: var(--surface-raised);
-  --color-state-success: var(--state-success);
-  --color-state-warning: var(--state-warning);
-  --color-state-error: var(--state-error);
-}body {
+/* Base body styling */
+body {
   background: var(--surface-app);
   color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;

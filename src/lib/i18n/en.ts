@@ -36,12 +36,21 @@ export const en = {
   },
   heroBadge: 'AedxSolutions • AI + Web + Integrations',
   features: {
-    sectionTitle: 'Carmy Date Options',
-    sectionSubtitle: 'Choose your perfect date option and let me know!',
+    sectionTitle: 'Engagement playbooks',
+    sectionSubtitle: 'Choose the track that matches your roadmap and we will prepare the next steps for you.',
     items: [
-      { title: 'Feature 1', desc: 'Concise value proposition highlighting measurable benefit number 1.' },
-      { title: 'Feature 2', desc: 'Concise value proposition highlighting measurable benefit number 2.' },
-      { title: 'Feature 3', desc: 'Concise value proposition highlighting measurable benefit number 3.' }
+      {
+        title: 'Discovery Accelerator',
+        desc: 'A 90-minute facilitation to align stakeholders, surface constraints, and produce a prioritized delivery plan.'
+      },
+      {
+        title: 'Integration Launchpad',
+        desc: 'A hands-on sprint that connects critical systems, ships the first automated workflow, and documents the hand-off.'
+      },
+      {
+        title: 'AI Pilot Sprint',
+        desc: 'Build a lightweight AI-assisted workflow with human-in-the-loop guardrails and rollout guidance.'
+      }
     ]
   }
 };

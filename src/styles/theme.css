@@ -92,9 +92,53 @@
 }
 
 /* ---------- Layout utilities ---------- */
-.container { max-width:80rem; margin-inline:auto; padding-inline:1rem; }
-.section { padding-block:6rem; }
-.section-sm { padding-block:3rem; }
+.container { 
+  max-width: 80rem; 
+  margin-left: auto; 
+  margin-right: auto; 
+  padding-left: 1rem; 
+  padding-right: 1rem; 
+}
+@media (min-width: 640px) { 
+  .container { 
+    padding-left: 1.5rem; 
+    padding-right: 1.5rem; 
+  } 
+}
+@media (min-width: 1024px) { 
+  .container { 
+    padding-left: 2rem; 
+    padding-right: 2rem; 
+  } 
+}
+
+.section { 
+  padding-top: 4rem; 
+  padding-bottom: 4rem; 
+}
+@media (min-width: 640px) { 
+  .section { 
+    padding-top: 5rem; 
+    padding-bottom: 5rem; 
+  } 
+}
+@media (min-width: 1024px) { 
+  .section { 
+    padding-top: 6rem; 
+    padding-bottom: 6rem; 
+  } 
+}
+
+.section-sm { 
+  padding-top: 2rem; 
+  padding-bottom: 2rem; 
+}
+@media (min-width: 640px) { 
+  .section-sm { 
+    padding-top: 3rem; 
+    padding-bottom: 3rem; 
+  } 
+}
 
 /* ---------- General Interactive Elements ---------- */
 input:not([type="submit"]):not([type="button"]):not([type="reset"]),

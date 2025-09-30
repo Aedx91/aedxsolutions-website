@@ -34,7 +34,7 @@ export default function FlipCard({ title, subtitle, optionKey }: FlipCardProps) 
       // After submitting, rotate another 180° to return to the opposite face (likely the front)
       setRotation((prev) => prev + 180)
       setIsChecked(false)
-    } catch (e) {
+    } catch {
       alert('Oops! Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
@@ -64,9 +64,9 @@ export default function FlipCard({ title, subtitle, optionKey }: FlipCardProps) 
         {/* Front face */}
         <div className={`${styles.face} ${styles.front}`}>
           <div>
-            <div className={styles.iconCircle}>💜</div>
+            <div className={styles.iconCircle}>�</div>
             <h3 className="text-lg sm:text-xl font-bold text-primary px-2">{title}</h3>
-            <p className={styles.hint}>Tap to flip and see details</p>
+            <p className={styles.hint}>Tap or click to flip and see details</p>
           </div>
         </div>
 
@@ -85,7 +85,7 @@ export default function FlipCard({ title, subtitle, optionKey }: FlipCardProps) 
                 onChange={(e) => setIsChecked(e.target.checked)}
                 className="rounded border-gray-300 text-primary focus:ring-primary mt-1 min-w-[16px]"
               />
-              <span className="text-xs sm:text-sm font-medium leading-tight">Yes, I'd love this date!</span>
+              <span className="text-xs sm:text-sm font-medium leading-tight">This is the right track for us</span>
             </label>
 
             <div className="flex">

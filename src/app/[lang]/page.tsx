@@ -26,8 +26,6 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
   const { lang: rawLang } = await props.params
   const lang = rawLang === 'es' ? 'es' : 'en'
   const dict = await getDictionary(lang as Lang)
-  interface FeatureItem { title: string; desc: string }
-  const featureItems = dict.features.items as FeatureItem[]
   return (
     <div>
       <section className="hero">
@@ -50,26 +48,51 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary text-center mb-2">{dict.features.sectionTitle}</h2>
           <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <FlipCard
-              title="Option #1 — Sushi to Go"
-              subtitle={<span>Sushi to Go and pillowing close to your casita</span>}
-              optionKey="option-1"
-            />
-            <FlipCard
-              title="Option #2 — Vesuvio + Movie"
-              subtitle={
-                <span>
-                  Vesuvio and watch this at Cinemark: <a className="link underline" href="https://www.imdb.com/title/tt10374610/?ref_=hm_tpks_i_1_pd_tp1_pbr_ic" target="_blank" rel="noreferrer noopener">IMDB 7.3</a>
-                </span>
-              }
-              optionKey="option-2"
-            />
-            <FlipCard
-              title="Option #3 — Pillowing Express"
-              subtitle={<span>Pillowing Express (Roosevelt) where we went last time — or dinner somewhere nice before I take you home</span>}
-              optionKey="option-3"
-            />
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+            {(
+              lang === 'es'
+                ? [
+                    {
+                      key: 'discovery',
+                      title: 'Discovery Accelerator',
+                      subtitle: 'Alineamos a stakeholders, definimos restricciones y salimos con un plan priorizado de ejecución en 7 días.'
+                    },
+                    {
+                      key: 'integration',
+                      title: 'Integration Launchpad',
+                      subtitle: 'Conectamos tu stack, automatizamos el primer flujo crítico y dejamos documentado el traspaso.'
+                    },
+                    {
+                      key: 'ai-pilot',
+                      title: 'AI Pilot Sprint',
+                      subtitle: 'Prototipamos una capacidad asistida por IA con controles humanos y guía de despliegue.'
+                    }
+                  ]
+                : [
+                    {
+                      key: 'discovery',
+                      title: 'Discovery Accelerator',
+                      subtitle: 'Align key stakeholders, surface constraints, and leave with a prioritized delivery plan in seven days.'
+                    },
+                    {
+                      key: 'integration',
+                      title: 'Integration Launchpad',
+                      subtitle: 'Connect your critical systems, automate the first workflow, and document the hand-off.'
+                    },
+                    {
+                      key: 'ai-pilot',
+                      title: 'AI Pilot Sprint',
+                      subtitle: 'Prototype an AI-assisted workflow with human-in-the-loop guardrails and rollout playbook.'
+                    }
+                  ]
+            ).map(option => (
+              <FlipCard
+                key={option.key}
+                title={option.title}
+                subtitle={<span>{option.subtitle}</span>}
+                optionKey={option.key}
+              />
+            ))}
           </div>
         </div>
       </section>

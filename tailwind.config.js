@@ -1,24 +1,40 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  darkMode: ['class', '[data-theme="dark"]'],
+  content: ['./src/**/*.{ts,tsx,js,jsx,mdx}'],
   theme: {
     extend: {
       colors: {
-        primary: 'var(--color-primary)',
-        secondary: 'var(--color-secondary)',
-        accent: 'var(--color-accent)',
-        background: 'var(--color-background)',
-        surface: 'var(--color-surface)',
-        'surface-raised': 'var(--color-surface-raised)',
-        'text-primary': 'var(--color-text-primary)',
-        'text-secondary': 'var(--color-text-secondary)',
-        'border-subtle': 'var(--color-border-subtle)',
+        brand: {
+          primary: 'var(--brand-primary)',
+          secondary: 'var(--brand-secondary)'
+        },
+        surface: {
+          app: 'var(--surface-app)',
+          section: 'var(--surface-section)',
+          raised: 'var(--surface-raised)',
+          deep: 'var(--surface-deep)'
+        },
+        text: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          inverse: 'var(--text-inverse)'
+        },
+        border: {
+          subtle: 'var(--border-subtle)'
+        },
+        state: {
+          success: 'var(--state-success)',
+          warning: 'var(--state-warning)',
+          error: 'var(--state-error)'
+        }
       },
-    },
+      boxShadow: {
+        card: '0 1px 2px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.10)',
+        cardDark: '0 1px 1px rgba(0,0,0,0.40), 0 12px 32px rgba(0,0,0,0.45)',
+        glow: '0 0 0 4px rgba(0,120,212,0.30)'
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 }

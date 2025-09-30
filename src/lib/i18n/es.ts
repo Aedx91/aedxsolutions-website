@@ -36,12 +36,21 @@ export const es = {
   },
   heroBadge: 'AedxSolutions • IA + Web + Integraciones',
   features: {
-    sectionTitle: 'Pilares de Plataforma',
-    sectionSubtitle: 'Capacidades fundamentales que aceleran entrega, fiabilidad e insight.',
+    sectionTitle: 'Playbooks de implementación',
+    sectionSubtitle: 'Elige la ruta que se alinea con tu hoja de ruta y prepararemos los siguientes pasos contigo.',
     items: [
-      { title: 'Función 1', desc: 'Propuesta de valor concisa destacando el beneficio medible número 1.' },
-      { title: 'Función 2', desc: 'Propuesta de valor concisa destacando el beneficio medible número 2.' },
-      { title: 'Función 3', desc: 'Propuesta de valor concisa destacando el beneficio medible número 3.' }
+      {
+        title: 'Discovery Accelerator',
+        desc: 'Sesión facilitada de 90 minutos para alinear a los stakeholders, identificar restricciones y priorizar un plan de entrega.'
+      },
+      {
+        title: 'Integration Launchpad',
+        desc: 'Sprint práctico para conectar sistemas críticos, lanzar el primer flujo automatizado y documentar el traspaso.'
+      },
+      {
+        title: 'AI Pilot Sprint',
+        desc: 'Construye un flujo asistido por IA con controles humanos y una guía clara para el despliegue.'
+      }
     ]
   }
 };
