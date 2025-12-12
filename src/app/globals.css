@@ -1,7 +1,5 @@
-/* Tailwind v3 setup */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 setup */
+@import "tailwindcss";
 
 /* Base body styling */
 body {
@@ -31,6 +29,50 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 .radial-soft { background: radial-gradient(40rem 40rem at 50% -10%, rgba(0,0,0,0.06), transparent 60%); }
 
 /* Hero helpers */
-.hero-bg-base { background: radial-gradient(50rem 50rem at 50% -10%, rgba(0,120,212,0.12), transparent 60%), linear-gradient(180deg, var(--surface-section) 0%, var(--surface-app) 100%); }
+/* Softer, layered hero gradient that blends into page background without harsh cutoff */
+.hero-bg-base {
+  /* Base layered gradients: subtle top glow + smooth blend to app surface */
+  background-image:
+    radial-gradient(60rem 30rem at 20% -10%, color-mix(in oklab, var(--brand-primary) 28%, transparent), transparent 60%),
+    radial-gradient(42rem 24rem at 80% -12%, color-mix(in oklab, var(--brand-secondary) 18%, transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in oklab, var(--surface-section) 88%, transparent) 0%, var(--surface-app) 100%);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% 100%;
+}
+
+/* Simple solid hero background for a clean, no-band look */
+.hero-bg-solid {
+  background-color: #000;
+}
+
+/* Feather the bottom edge to avoid visible banding between hero and next section */
+.hero-bg-feather {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+}
+
 .hero-bg-overlay { background: linear-gradient(var(--hero-overlay), var(--hero-overlay)); }
 .icon-gradient { background: linear-gradient(135deg,var(--brand-primary),var(--brand-secondary)); }
+
+/* Respect reduced motion users: keep color presence but remove perceived animation/strong contrast */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-base {
+    background-image:
+      radial-gradient(50rem 26rem at 20% -10%, color-mix(in oklab, var(--brand-primary) 22%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--surface-section) 0%, var(--surface-app) 100%);
+  }
+  .hero-bg-feather {
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  }
+}
+
+/* Helper to feather the top edge of the next section under hero */
+.section-top-feather {
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+}
+
+/* Utility: app-surface background helper to avoid inline styles */
+.bg-app-surface { background: var(--surface-app); }

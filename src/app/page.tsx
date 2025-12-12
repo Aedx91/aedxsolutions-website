@@ -28,8 +28,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white py-20">
+  {/* Hero Section */}
+  <section className="relative hero-bg-solid text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Welcome to AedxCorp
@@ -46,8 +46,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-16 bg-white">
+  {/* About Section */}
+  <section id="about" className="py-16 bg-app-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-text-primary mb-4">About Us</h3>
@@ -79,8 +79,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-16 bg-neutral-light">
+  {/* Services Section */}
+  <section id="services" className="py-16 bg-app-surface section-top-feather">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-text-primary mb-4">What We Do</h3>

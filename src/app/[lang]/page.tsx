@@ -28,7 +28,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
   const dict = await getDictionary(lang as Lang)
   return (
     <div>
-      <section className="hero">
+  <section className="hero hero-bg-solid">
         <div className="hero-bg" aria-hidden></div>
         <div className="hero-overlay" aria-hidden></div>
         <div className="hero-accent" aria-hidden></div>
@@ -44,7 +44,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
           </div>
         </div>
       </section>
-      <section className="bg-surface-section">
+  <section className="bg-app-surface section-top-feather">
         <div className="container section">
           <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary text-center mb-2">{dict.features.sectionTitle}</h2>
           <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>

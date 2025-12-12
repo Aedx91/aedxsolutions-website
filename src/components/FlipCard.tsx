@@ -50,21 +50,22 @@ export default function FlipCard({ title, subtitle, optionKey }: FlipCardProps) 
     setRotation((prev) => prev + delta)
   }
 
-  const rotSteps = Math.round(rotation / 180)
-  const rotClass = (rotSteps === 0) ? 'rot-0' : `rot-${rotSteps}`
+  // Note: Keyboard activation is omitted here to avoid nested interactive controls a11y lint error
+  // because the back face contains its own checkbox and button. Flip remains mouse/touch activated.
 
   return (
     <div className={`${styles.container} ${animating ? styles.animating : ''}`}>
       <div
         ref={cardRef}
-        className={`${styles.card} ${styles[rotClass as keyof typeof styles] ?? ''}`}
+        className={styles.card}
+        style={{ '--rotation': `${rotation}deg` } as React.CSSProperties}
         onClick={handleCardClick}
         onTransitionEnd={() => setAnimating(false)}
       >
         {/* Front face */}
         <div className={`${styles.face} ${styles.front}`}>
           <div>
-            <div className={styles.iconCircle}>�</div>
+            <div className={styles.iconCircle} aria-hidden="true">❤️</div>
             <h3 className="text-lg sm:text-xl font-bold text-primary px-2">{title}</h3>
             <p className={styles.hint}>Tap or click to flip and see details</p>
           </div>
