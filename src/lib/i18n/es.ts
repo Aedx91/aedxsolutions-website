@@ -1,6 +1,31 @@
 export const es = {
   nav: { home: 'Inicio', products: 'Productos', customers: 'Clientes', contact: 'Contacto' },
   footer: { privacy: 'Privacidad', terms: 'Términos' },
+  demo: {
+    loginTitle: 'Acceso Demo | AedxSolutions',
+    loginDescription: 'Inicia sesión para acceder al panel de demo.',
+    dashboardTitle: 'Panel Demo | AedxSolutions',
+    dashboardDescription: 'Panel demo protegido para recorridos con clientes.',
+    loginButton: 'Acceso Demo',
+    login: {
+      title: 'Iniciar sesión',
+      username: 'Usuario',
+      password: 'Contraseña',
+      signIn: 'Entrar',
+      invalidCreds: 'Usuario o contraseña inválidos.',
+    },
+    dashboard: {
+      logout: 'Salir',
+      walmartDemo: 'Demo Walmart',
+      viewLogs: 'Ver Logs',
+      toastSaved: 'Log guardado.',
+      modalTitle: 'Demo Walmart',
+      packedBoxesLabel: 'Cajas Empacadas / Packed Boxes',
+      logEntry: 'Registrar',
+      close: 'Cerrar',
+      invalidNumber: 'Ingresa un entero válido (0 o mayor).',
+    },
+  },
   hero: {
     title: 'Software con IA para operaciones reales',
     subtitle: 'Soluciones modernas web, cloud y consultoría que escalan con tu ambición.',

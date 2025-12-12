@@ -6,6 +6,7 @@ import LanguageSwitcher from './LanguageSwitcher'
 
 type DictShape = {
   nav: { products: string; customers: string; contact: string; home?: string }
+  demo?: { loginButton?: string }
 }
 
 export default function MobileNav({ lang, dict }: { lang: string; dict: DictShape }) {
@@ -64,6 +65,7 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
               <Link href={`/${lang}/products`} onClick={() => setOpen(false)}>{dict.nav.products}</Link>
               <Link href={`/${lang}/customers`} onClick={() => setOpen(false)}>{dict.nav.customers}</Link>
               <Link href={`/${lang}/contact`} onClick={() => setOpen(false)}>{dict.nav.contact}</Link>
+              <Link href={`/${lang}/demo/login`} onClick={() => setOpen(false)}>{dict.demo?.loginButton ?? 'Demo Login'}</Link>
             </nav>
 
             <div className="mt-auto flex items-center justify-between gap-3">

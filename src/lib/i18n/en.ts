@@ -1,6 +1,31 @@
 export const en = {
   nav: { home: 'Home', products: 'Products', customers: 'Customers', contact: 'Contact' },
   footer: { privacy: 'Privacy', terms: 'Terms' },
+  demo: {
+    loginTitle: 'Demo Login | AedxSolutions',
+    loginDescription: 'Sign in to access the demo dashboard.',
+    dashboardTitle: 'Demo Dashboard | AedxSolutions',
+    dashboardDescription: 'Protected demo dashboard for customer walkthroughs.',
+    loginButton: 'Demo Login',
+    login: {
+      title: 'Sign in',
+      username: 'Username',
+      password: 'Password',
+      signIn: 'Sign in',
+      invalidCreds: 'Invalid username or password.',
+    },
+    dashboard: {
+      logout: 'Logout',
+      walmartDemo: 'Walmart Demo',
+      viewLogs: 'View Logs',
+      toastSaved: 'Log saved.',
+      modalTitle: 'Walmart Demo',
+      packedBoxesLabel: 'Cajas Empacadas / Packed Boxes',
+      logEntry: 'Log Entry',
+      close: 'Close',
+      invalidNumber: 'Enter a valid non-negative integer.',
+    },
+  },
   hero: {
     title: 'AI-powered software for real-world operations',
     subtitle: 'Modern web, cloud and consulting solutions that scale with your ambition.',
