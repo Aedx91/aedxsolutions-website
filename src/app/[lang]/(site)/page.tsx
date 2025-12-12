@@ -1,4 +1,3 @@
-// *** CARMY DATE OPTIONS - PURPLE HEARTS & FLIP ANIMATION! ***
 import type { Metadata } from 'next'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
@@ -34,7 +33,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container">
           <div className="hero-content">
             <span className="btn-chip">{dict.heroBadge}</span>
-            <h1 className="hero-heading mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight">
+            <h1 className="hero-heading mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
               {dict.hero.title}
             </h1>
             <p className="hero-sub mt-4 max-w-2xl">{dict.hero.subtitle}</p>
@@ -60,50 +59,13 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
           </h2>
           <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-            {(lang === 'es'
-              ? [
-                  {
-                    key: 'discovery',
-                    title: 'Discovery Accelerator',
-                    subtitle:
-                      'Alineamos a stakeholders, definimos restricciones y salimos con un plan priorizado de ejecución en 7 días.',
-                  },
-                  {
-                    key: 'integration',
-                    title: 'Integration Launchpad',
-                    subtitle:
-                      'Conectamos tu stack, automatizamos el primer flujo crítico y dejamos documentado el traspaso.',
-                  },
-                  {
-                    key: 'ai-pilot',
-                    title: 'AI Pilot Sprint',
-                    subtitle: 'Prototipamos una capacidad asistida por IA con controles humanos y guía de despliegue.',
-                  },
-                ]
-              : [
-                  {
-                    key: 'discovery',
-                    title: 'Discovery Accelerator',
-                    subtitle:
-                      'Align key stakeholders, surface constraints, and leave with a prioritized delivery plan in seven days.',
-                  },
-                  {
-                    key: 'integration',
-                    title: 'Integration Launchpad',
-                    subtitle: 'Connect your critical systems, automate the first workflow, and document the hand-off.',
-                  },
-                  {
-                    key: 'ai-pilot',
-                    title: 'AI Pilot Sprint',
-                    subtitle: 'Prototype an AI-assisted workflow with human-in-the-loop guardrails and rollout playbook.',
-                  },
-                ]
-            ).map((option) => (
+            {dict.features.items.map((item) => (
               <FlipCard
-                key={option.key}
-                title={option.title}
-                subtitle={<span>{option.subtitle}</span>}
-                optionKey={option.key}
+                key={item.title}
+                title={item.title}
+                subtitle={<span>{item.desc}</span>}
+                ctaHref={`/${lang}/products`}
+                ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
               />
             ))}
           </div>

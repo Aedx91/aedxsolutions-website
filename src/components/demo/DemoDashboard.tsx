@@ -76,7 +76,12 @@ export default function DemoDashboard({
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
           {options.map((option) => (
             <div key={option.key} className="transition-all hover:scale-105">
-              <FlipCard title={option.title} subtitle={<span>{option.subtitle}</span>} optionKey={option.key} />
+              <FlipCard
+                title={option.title}
+                subtitle={<span>{option.subtitle}</span>}
+                ctaHref={`/${lang}/products`}
+                ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
+              />
             </div>
           ))}
         </div>

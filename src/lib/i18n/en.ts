@@ -27,8 +27,8 @@ export const en = {
     },
   },
   hero: {
-    title: 'AI-powered software for real-world operations',
-    subtitle: 'Modern web, cloud and consulting solutions that scale with your ambition.',
+    title: 'Level up your operations with AI + automation',
+    subtitle: 'Fast builds, clean integrations, and smart workflows—crafted like a high-score run.',
     cta: 'Talk to us'
   },
   contact: { title: 'Contact Us', intro: 'Tell us about your project and we will get back shortly.' },
@@ -59,22 +59,22 @@ export const en = {
       ]
     }
   },
-  heroBadge: 'AedxSolutions • AI + Web + Integrations',
+  heroBadge: 'AedxSolutions • Build • Integrate • Automate',
   features: {
-    sectionTitle: 'Engagement playbooks',
-    sectionSubtitle: 'Choose the track that matches your roadmap and we will prepare the next steps for you.',
+    sectionTitle: 'Choose your quest',
+    sectionSubtitle: 'Flip a card to preview the run, then hit “More info” to see what we can build together.',
     items: [
       {
-        title: 'Discovery Accelerator',
-        desc: 'A 90-minute facilitation to align stakeholders, surface constraints, and produce a prioritized delivery plan.'
+        title: 'Quest Kickoff',
+        desc: 'A short, focused session to map the mission, define constraints, and leave with a clear roadmap.'
       },
       {
-        title: 'Integration Launchpad',
-        desc: 'A hands-on sprint that connects critical systems, ships the first automated workflow, and documents the hand-off.'
+        title: 'Boss-Fight Integrations',
+        desc: 'We connect your systems, ship the first automated workflow, and document everything for smooth hand-off.'
       },
       {
-        title: 'AI Pilot Sprint',
-        desc: 'Build a lightweight AI-assisted workflow with human-in-the-loop guardrails and rollout guidance.'
+        title: 'AI Companion Sprint',
+        desc: 'Prototype an AI-assisted workflow with human-in-the-loop guardrails and a rollout playbook.'
       }
     ]
   }

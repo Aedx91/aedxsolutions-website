@@ -27,8 +27,8 @@ export const es = {
     },
   },
   hero: {
-    title: 'Software con IA para operaciones reales',
-    subtitle: 'Soluciones modernas web, cloud y consultoría que escalan con tu ambición.',
+    title: 'Sube de nivel tus operaciones con IA + automatización',
+    subtitle: 'Construcciones rápidas, integraciones limpias y flujos inteligentes—como una run perfecta.',
     cta: 'Hablemos'
   },
   contact: { title: 'Contáctanos', intro: 'Cuéntanos tu proyecto y te responderemos pronto.' },
@@ -59,22 +59,22 @@ export const es = {
       ]
     }
   },
-  heroBadge: 'AedxSolutions • IA + Web + Integraciones',
+  heroBadge: 'AedxSolutions • Construir • Integrar • Automatizar',
   features: {
-    sectionTitle: 'Playbooks de implementación',
-    sectionSubtitle: 'Elige la ruta que se alinea con tu hoja de ruta y prepararemos los siguientes pasos contigo.',
+    sectionTitle: 'Elige tu misión',
+    sectionSubtitle: 'Voltea una carta para ver detalles y luego toca “Más info” para conocer el siguiente paso.',
     items: [
       {
-        title: 'Discovery Accelerator',
-        desc: 'Sesión facilitada de 90 minutos para alinear a los stakeholders, identificar restricciones y priorizar un plan de entrega.'
+        title: 'Inicio de Misión',
+        desc: 'Sesión corta y enfocada para definir objetivos, restricciones y salir con una hoja de ruta clara.'
       },
       {
-        title: 'Integration Launchpad',
-        desc: 'Sprint práctico para conectar sistemas críticos, lanzar el primer flujo automatizado y documentar el traspaso.'
+        title: 'Integraciones “Boss Fight”',
+        desc: 'Conectamos tus sistemas, lanzamos el primer flujo automatizado y dejamos el traspaso documentado.'
       },
       {
-        title: 'AI Pilot Sprint',
-        desc: 'Construye un flujo asistido por IA con controles humanos y una guía clara para el despliegue.'
+        title: 'Sprint de IA Compañera',
+        desc: 'Prototipamos un flujo asistido por IA con controles humanos y una guía clara de despliegue.'
       }
     ]
   }

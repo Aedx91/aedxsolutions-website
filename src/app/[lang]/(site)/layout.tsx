@@ -33,7 +33,9 @@ export default async function SiteLayout({
           className="brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded"
         >
           <span className="brand-badge" aria-hidden />
-          <span className="text-lg sm:text-xl">AedxSolutions</span>
+          <span className="text-xl sm:text-2xl font-semibold tracking-tight leading-tight">
+            AedxSolutions
+          </span>
         </Link>
 
         <div className="flex items-center gap-3">
