@@ -3,6 +3,38 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FlipCard from '@/components/FlipCard'
+import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
+import { clearStoredAuth, getStoredAuth } from '@/hooks/useAuth'
+import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
+import type { Lang } from '@/lib/i18n/dictionaries'
+
+type FeatureItem = { title: string; desc: string }
+
+export default function DemoDashboard({
+  lang,
+  labels,
+  hero,
+  features,
+}: {
+  lang: Lang
+  labels: {
+    logout: string
+    walmartDemo: string
+    viewLogs: string
+    toastSaved: string
+    modalTitle: string
+    packedBoxesLabel: string
+    logEntry: string
+    close: string
+    invalidNumber: string
+  }
+  hero: { title: string; subtitle: string }
+  features: {
+    sectionTitle: string
+    sectionSubtitle: string
+    items: FeatureItem[]
+  }
+}) {
   const router = useRouter()
   const [isAuthed, setIsAuthed] = useState(false)
   const [tab, setTab] = useState<'menu' | 'dates' | 'todo' | 'watch'>('menu')
@@ -171,7 +203,7 @@ import FlipCard from '@/components/FlipCard'
                 router.replace(`/${lang}`)
               }}
             >
-              Log out
+              {labels.logout}
             </button>
           </div>
           <p className="text-sm uppercase tracking-[0.2em] text-pink-200/70">Carmy space</p>
