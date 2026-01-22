@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FlipCard from '@/components/FlipCard'
 import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
-import { clearStoredAuth, getStoredAuth } from '@/hooks/useAuth'
+import { getStoredAuth } from '@/hooks/useAuth'
 import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
 import type { Lang } from '@/lib/i18n/dictionaries'
 
@@ -37,7 +37,7 @@ export default function DemoDashboard({
 }) {
   const router = useRouter()
   const [isAuthed, setIsAuthed] = useState(false)
-  const [tab, setTab] = useState<'menu' | 'dates' | 'todo' | 'watch'>('menu')
+  const [tab, setTab] = useState<'menu' | 'dates' | 'todo' | 'watch' | null>(null)
   const [role, setRole] = useState<'carmy' | 'admin' | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -194,18 +194,6 @@ export default function DemoDashboard({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#8b5cf6_0,transparent_35%)] opacity-40" aria-hidden />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_60%,#ec4899_0,transparent_35%)] opacity-30" aria-hidden />
         <div className="relative px-6 md:px-10">
-          <div className="absolute right-4 top-4 flex gap-2">
-            <button
-              type="button"
-              className="px-3 py-2 text-sm rounded-full border border-white/20 bg-white/10 text-white hover:border-white/40"
-              onClick={() => {
-                clearStoredAuth()
-                router.replace(`/${lang}`)
-              }}
-            >
-              {labels.logout}
-            </button>
-          </div>
           <p className="text-sm uppercase tracking-[0.2em] text-pink-200/70">Carmy space</p>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">{hero.title}</h1>
           <p className="mt-3 text-pink-100/80 max-w-2xl">{hero.subtitle}</p>
@@ -230,7 +218,7 @@ export default function DemoDashboard({
                 key={item.id}
                 type="button"
                 onClick={() => setTab(item.id as typeof tab)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
+                className={`px-5 py-3 rounded-full text-base font-semibold transition-all border ${
                   active
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent shadow-lg shadow-pink-500/30'
                     : 'bg-white/5 text-pink-100/80 border-white/10 hover:border-pink-400/50'
@@ -242,7 +230,13 @@ export default function DemoDashboard({
           })}
         </div>
 
-        <div className="mt-6">{tabContent[tab]}</div>
+        <div className="mt-6">
+          {tab ? (
+            tabContent[tab]
+          ) : (
+            <div className="text-pink-100/80 text-sm">Pick a list to view its details.</div>
+          )}
+        </div>
       </section>
 
       {tab === 'menu' ? (
