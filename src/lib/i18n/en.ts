@@ -27,8 +27,8 @@ export const en = {
     },
   },
   hero: {
-    title: 'A space to remember what you love',
-    subtitle: 'Keep the meals, plans, and little moments you never want to forget—a hub for movie dates, birthdays, and the important days we should remember.',
+    title: 'AI-powered software for real-world operations',
+    subtitle: 'Modern web, API integrations, and consulting that scale with your team\'s growth.',
     cta: 'Talk to us'
   },
   demoHero: {

@@ -27,8 +27,8 @@ export const es = {
     },
   },
   hero: {
-    title: 'Un espacio para no olvidar lo que amas',
-    subtitle: 'Guarda comidas, planes y momentos que no quieres perder—tu espacio para agendar citas de cine, cumpleaños y fechas importantes.',
+    title: 'Software con IA para operaciones reales',
+    subtitle: 'Web moderna, integraciones API y consultoría que escalan con el crecimiento de tu equipo.',
     cta: 'Hablemos'
   },
   demoHero: {
