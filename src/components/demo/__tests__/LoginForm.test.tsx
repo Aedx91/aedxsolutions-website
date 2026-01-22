@@ -57,11 +57,11 @@ describe('LoginForm', () => {
       />
     )
 
-    await user.type(screen.getByLabelText('Username'), 'admin')
-    await user.type(screen.getByLabelText('Password'), 'admin')
+    await user.type(screen.getByLabelText('Username'), 'carmy')
+    await user.type(screen.getByLabelText('Password'), 'carmylovesfood')
     await user.click(screen.getByRole('button', { name: 'Sign in' }))
 
-    expect(window.localStorage.getItem('demoAuth')).toContain('admin')
+    expect(window.localStorage.getItem('demoAuth')).toContain('carmy')
     expect(push).toHaveBeenCalledWith('/en/demo/dashboard')
   })
 })

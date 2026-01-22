@@ -32,8 +32,11 @@ export function clearStoredAuth() {
   window.localStorage.removeItem(AUTH_STORAGE_KEY)
 }
 
+const CARMY_USER = 'carmy'
+const CARMY_PASS = 'carmylovesfood'
+
 export function validateDemoCredentials(username: string, password: string) {
-  return username === 'admin' && password === 'admin'
+  return username.trim().toLowerCase() === CARMY_USER && password === CARMY_PASS
 }
 
 export function useAuth() {

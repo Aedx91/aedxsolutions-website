@@ -44,7 +44,7 @@ export default function LoginForm({
               setError(labels.invalidCreds)
               return
             }
-            setStoredAuth({ isAuthenticated: true, user: 'admin' })
+            setStoredAuth({ isAuthenticated: true, user: username.trim().toLowerCase() })
             router.push(`/${lang}/demo/dashboard`)
           }}
         >

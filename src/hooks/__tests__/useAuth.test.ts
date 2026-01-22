@@ -11,23 +11,23 @@ describe('useAuth storage helpers', () => {
     window.localStorage.clear()
   })
 
-  test('validateDemoCredentials accepts only admin/admin', () => {
-    expect(validateDemoCredentials('admin', 'admin')).toBe(true)
-    expect(validateDemoCredentials('admin', 'nope')).toBe(false)
-    expect(validateDemoCredentials('nope', 'admin')).toBe(false)
+  test('validateDemoCredentials accepts only Carmy credentials', () => {
+    expect(validateDemoCredentials('carmy', 'carmylovesfood')).toBe(true)
+    expect(validateDemoCredentials('carmy', 'nope')).toBe(false)
+    expect(validateDemoCredentials('nope', 'carmylovesfood')).toBe(false)
   })
 
   test('setStoredAuth/getStoredAuth roundtrip', () => {
     expect(getStoredAuth()).toBeNull()
 
-    setStoredAuth({ isAuthenticated: true, user: 'admin' })
-    expect(window.localStorage.getItem(AUTH_STORAGE_KEY)).toContain('admin')
+    setStoredAuth({ isAuthenticated: true, user: 'carmy' })
+    expect(window.localStorage.getItem(AUTH_STORAGE_KEY)).toContain('carmy')
 
-    expect(getStoredAuth()).toEqual({ isAuthenticated: true, user: 'admin' })
+    expect(getStoredAuth()).toEqual({ isAuthenticated: true, user: 'carmy' })
   })
 
   test('clearStoredAuth removes token', () => {
-    setStoredAuth({ isAuthenticated: true, user: 'admin' })
+    setStoredAuth({ isAuthenticated: true, user: 'carmy' })
     clearStoredAuth()
     expect(getStoredAuth()).toBeNull()
   })
