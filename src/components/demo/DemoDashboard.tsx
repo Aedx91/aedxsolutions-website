@@ -282,33 +282,3 @@ import FlipCard from '@/components/FlipCard'
     </div>
   )
 }
-                        <div className="text-lg font-semibold text-white">{labels.walmartDemo}</div>
-                        <div className="mt-1 text-sm text-pink-100/80">{labels.logEntry}</div>
-                      </button>
-
-                      <button
-                        type="button"
-                        className="text-left bg-black/60 hover:bg-black/50 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
-                        onClick={() => {
-                          const logs = getDemoLogs()
-                          downloadJson('demoLogs.json', logs)
-                        }}
-                      >
-                        <div className="text-lg font-semibold text-white">{labels.viewLogs}</div>
-                        <div className="mt-1 text-sm text-pink-100/80">demoLogs.json</div>
-                      </button>
-                    </div>
-                  ) : null}
-                </section>
-              ) : null}
-        }}
-      />
-
-      {toast ? (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg border border-white/10 z-50">
-          {toast}
-        </div>
-      ) : null}
-    </div>
-  )
-}
