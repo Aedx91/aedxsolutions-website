@@ -28,7 +28,7 @@ export const es = {
   },
   hero: {
     title: 'Un espacio para no olvidar lo que amas',
-    subtitle: 'Guarda comidas, planes y momentos que no quieres perder—hecho para Carmy y Aedx.',
+    subtitle: 'Guarda comidas, planes y momentos que no quieres perder—tu espacio para agendar citas de cine, cumpleaños y fechas importantes.',
     cta: 'Hablemos'
   },
   contact: { title: 'Contáctanos', intro: 'Cuéntanos tu proyecto y te responderemos pronto.' },
@@ -61,20 +61,20 @@ export const es = {
   },
   heroBadge: 'AedxSolutions • Construir • Integrar • Automatizar',
   features: {
-    sectionTitle: 'Elige tu misión',
-    sectionSubtitle: 'Voltea una carta para ver detalles y luego toca “Más info” para conocer el siguiente paso.',
+    sectionTitle: 'Elige qué planear',
+    sectionSubtitle: 'Voltea una carta para ver el plan y toca “Más info” para saber cómo lo ejecutamos.',
     items: [
       {
-        title: 'Inicio de Misión',
-        desc: 'Sesión corta y enfocada para definir objetivos, restricciones y salir con una hoja de ruta clara.'
+        title: 'Sesión de Descubrimiento',
+        desc: 'Sesión corta y enfocada para mapear objetivos, restricciones y salir con una hoja de ruta clara.'
       },
       {
-        title: 'Integraciones “Boss Fight”',
-        desc: 'Conectamos tus sistemas, lanzamos el primer flujo automatizado y dejamos el traspaso documentado.'
+        title: 'Sprint de Integración',
+        desc: 'Conectamos tus sistemas, lanzamos el primer flujo automatizado y dejamos todo documentado para un traspaso claro.'
       },
       {
         title: 'Sprint de IA Compañera',
-        desc: 'Prototipamos un flujo asistido por IA con controles humanos y una guía clara de despliegue.'
+        desc: 'Prototipamos un flujo asistido por IA con controles humanos y una guía de despliegue.'
       }
     ]
   }

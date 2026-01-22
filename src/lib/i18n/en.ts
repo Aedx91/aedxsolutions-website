@@ -28,7 +28,7 @@ export const en = {
   },
   hero: {
     title: 'A space to remember what you love',
-    subtitle: 'Keep the meals, plans, and little moments you never want to forget—made for Carmy & Aedx.',
+    subtitle: 'Keep the meals, plans, and little moments you never want to forget—a hub for movie dates, birthdays, and the important days we should remember.',
     cta: 'Talk to us'
   },
   contact: { title: 'Contact Us', intro: 'Tell us about your project and we will get back shortly.' },
@@ -61,16 +61,16 @@ export const en = {
   },
   heroBadge: 'AedxSolutions • Build • Integrate • Automate',
   features: {
-    sectionTitle: 'Choose your quest',
-    sectionSubtitle: 'Flip a card to preview the run, then hit “More info” to see what we can build together.',
+    sectionTitle: 'Choose what to plan',
+    sectionSubtitle: 'Flip a card to preview the run, then tap “More info” to see how we ship it.',
     items: [
       {
-        title: 'Quest Kickoff',
-        desc: 'A short, focused session to map the mission, define constraints, and leave with a clear roadmap.'
+        title: 'Discovery Session',
+        desc: 'A short, focused session to map goals, define constraints, and leave with a clear roadmap.'
       },
       {
-        title: 'Boss-Fight Integrations',
-        desc: 'We connect your systems, ship the first automated workflow, and document everything for smooth hand-off.'
+        title: 'Integration Sprint',
+        desc: 'Connect your systems, ship the first automated workflow, and document everything for a smooth hand-off.'
       },
       {
         title: 'AI Companion Sprint',

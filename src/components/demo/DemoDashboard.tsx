@@ -128,37 +128,13 @@ export default function DemoDashboard({
     menu: (
       <div className="space-y-4">
         <div className="rounded-2xl border border-purple-500/30 bg-purple-900/30 p-6 shadow-lg shadow-purple-900/40">
-          <h3 className="text-xl font-semibold text-pink-200">Carmy Food Menu</h3>
-          <p className="mt-2 text-sm text-pink-100/80">
-            Aedx Restaurant started from our love of cooking together—this is the corner where we park the
-            dishes, dates, shows, and quests we never want to forget. Pick anything you like and choose how we cover it.
-          </p>
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="rounded-xl bg-black/50 border border-white/5 p-4">
-              <div className="text-pink-200 font-semibold">This week</div>
-              <ul className="mt-2 space-y-1 text-pink-100/80">
-                <li>• Truffle pasta</li>
-                <li>• Spicy tuna bowls</li>
-                <li>• Citrus salmon</li>
-              </ul>
-            </div>
-            <div className="rounded-xl bg-black/50 border border-white/5 p-4">
-              <div className="text-pink-200 font-semibold">On deck</div>
-              <ul className="mt-2 space-y-1 text-pink-100/80">
-                <li>• Gnocchi w/ pesto</li>
-                <li>• Miso cod</li>
-                <li>• Roasted veggies</li>
-              </ul>
-            </div>
-            <div className="rounded-xl bg-black/50 border border-white/5 p-4">
-              <div className="text-pink-200 font-semibold">Treats</div>
-              <ul className="mt-2 space-y-1 text-pink-100/80">
-                <li>• Tiramisu jars</li>
-                <li>• Berry shortcake</li>
-                <li>• Mochi flight</li>
-              </ul>
-            </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-pink-100">
+            Aedx Restaurant for Carmy
           </div>
+          <h3 className="mt-3 text-xl font-semibold text-pink-200">Carmy Food Menu</h3>
+          <p className="mt-2 text-sm text-pink-100/80">
+            I love cooking for you—this is the corner where we park the dishes, date nights, movies, and memories we want to keep. You never have to cook; just pick anything you like and choose how we cover it. It is also our little hub to jot movie dates, birthdays, and the important days we should remember.
+          </p>
         </div>
       </div>
     ),
