@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FlipCard from '@/components/FlipCard'
 import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
@@ -9,7 +9,13 @@ import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
 import type { Lang } from '@/lib/i18n/dictionaries'
 
 type FeatureItem = { title: string; desc: string }
-type DateItem = { id: string; date: string; description: string }
+type DateItem = {
+  id: string
+  date: string
+  description: string
+  googleEventId?: string | null
+  microsoftEventId?: string | null
+}
 
 export default function DemoDashboard({
   lang,
@@ -40,11 +46,13 @@ export default function DemoDashboard({
   const [isAuthed, setIsAuthed] = useState(false)
   const [tab, setTab] = useState<'menu' | 'dates' | 'todo' | 'watch' | null>(null)
   const [role, setRole] = useState<'carmy' | 'admin' | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selection, setSelection] = useState<Record<string, string>>({})
   const [submittingDish, setSubmittingDish] = useState<string | null>(null)
   const [dates, setDates] = useState<DateItem[]>([])
+  const [datesLoading, setDatesLoading] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateForm, setDateForm] = useState({ date: '', description: '' })
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
@@ -94,30 +102,116 @@ export default function DemoDashboard({
     }
   }
 
-  function persistDates(next: DateItem[]) {
-    if (typeof window === 'undefined') return
-    window.localStorage.setItem(datesStorageKey, JSON.stringify(next))
-  }
+  const cacheDates = useCallback(
+    (next: DateItem[]) => {
+      if (typeof window === 'undefined') return
+      window.localStorage.setItem(datesStorageKey, JSON.stringify(next))
+    },
+    [datesStorageKey]
+  )
 
-  const addDate = (e: React.FormEvent<HTMLFormElement>) => {
+  const loadDates = useCallback(async (currentUser: string) => {
+    setDatesLoading(true)
+    // Try API first
+    try {
+      const res = await fetch('/api/dates', {
+        headers: { 'x-demo-user': currentUser },
+        cache: 'no-store',
+      })
+      if (res.ok) {
+        const data = (await res.json()) as DateItem[]
+        const sorted = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        setDates(sorted)
+        cacheDates(sorted)
+        setDatesLoading(false)
+        return
+      }
+    } catch (error) {
+      console.error('Fetch dates failed', error)
+    }
+
+    // Fallback to local cache
+    if (typeof window !== 'undefined') {
+      const cached = window.localStorage.getItem(datesStorageKey)
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached) as DateItem[]
+          setDates(parsed)
+        } catch (error) {
+          console.error('Failed to parse cached dates', error)
+        }
+      }
+    }
+    setDatesLoading(false)
+  }, [cacheDates, datesStorageKey])
+
+  const addDate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!dateForm.date || !dateForm.description.trim()) return
-    const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`
-    const next = [...dates, { id, date: dateForm.date, description: dateForm.description.trim() }].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    )
-    setDates(next)
-    persistDates(next)
+    if (!userId) {
+      setToast('Not signed in')
+      return
+    }
+
+    const optimisticId = `tmp-${Date.now()}`
+    const pendingItem: DateItem = {
+      id: optimisticId,
+      date: dateForm.date,
+      description: dateForm.description.trim(),
+    }
+
+    const optimistic = [...dates, pendingItem].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    setDates(optimistic)
+    cacheDates(optimistic)
     setDateForm({ date: '', description: '' })
     setIsDateModalOpen(false)
-    setToast('Date added')
+
+    try {
+      const res = await fetch('/api/dates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-demo-user': userId,
+        },
+        body: JSON.stringify({ date: pendingItem.date, description: pendingItem.description }),
+      })
+      if (!res.ok) throw new Error('Save failed')
+      const saved = (await res.json()) as DateItem
+      const reconciled = optimistic.map((item) => (item.id === optimisticId ? saved : item))
+      cacheDates(reconciled)
+      setDates(reconciled)
+      setToast('Date added')
+    } catch (error) {
+      console.error('Add date failed', error)
+      const rolledBack = dates.filter((d) => d.id !== optimisticId)
+      setDates(rolledBack)
+      cacheDates(rolledBack)
+      setToast('Could not save date')
+    }
   }
 
-  const deleteDate = (id: string) => {
+  const deleteDate = async (id: string) => {
+    if (!userId) {
+      setToast('Not signed in')
+      return
+    }
+    const previous = dates
     const next = dates.filter((item) => item.id !== id)
     setDates(next)
-    persistDates(next)
-    setToast('Removed')
+    cacheDates(next)
+    try {
+      const res = await fetch(`/api/dates/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-demo-user': userId },
+      })
+      if (!res.ok) throw new Error('Delete failed')
+      setToast('Removed')
+    } catch (error) {
+      console.error('Delete date failed', error)
+      setDates(previous)
+      cacheDates(previous)
+      setToast('Could not delete')
+    }
   }
 
   async function submitDishChoice(dish: string) {
@@ -152,21 +246,14 @@ export default function DemoDashboard({
       return
     }
     setRole(token.role)
+    setUserId(token.user)
     setIsAuthed(true)
   }, [lang, router])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const stored = window.localStorage.getItem(datesStorageKey)
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as DateItem[]
-        setDates(parsed.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
-      } catch (error) {
-        console.error('Failed to parse stored dates', error)
-      }
-    }
-  }, [datesStorageKey])
+    if (!userId) return
+    loadDates(userId)
+  }, [userId, loadDates])
 
   useEffect(() => {
     if (!toast) return
@@ -208,15 +295,24 @@ export default function DemoDashboard({
             <button
               type="button"
               className="rounded-full border border-white/10 bg-gradient-to-r from-cyan-500/40 to-blue-500/40 px-4 py-2 text-sm font-semibold text-white hover:from-cyan-500 hover:to-blue-500 transition-all"
-              onClick={() => setToast('Calendar sync coming soon (Google & Outlook)')}
+              onClick={() => setToast('Connect Google to sync')}
             >
-              Sync calendars
+              Connect Google
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-gradient-to-r from-indigo-500/40 to-purple-500/40 px-4 py-2 text-sm font-semibold text-white hover:from-indigo-500 hover:to-purple-500 transition-all"
+              onClick={() => setToast('Connect Outlook to sync')}
+            >
+              Connect Outlook
             </button>
           </div>
         </div>
 
         <div className="mt-4 rounded-2xl bg-black/50 border border-white/5 p-4">
-          {dates.length === 0 ? (
+          {datesLoading ? (
+            <div className="text-sm text-pink-100/70">Loading dates...</div>
+          ) : dates.length === 0 ? (
             <div className="text-sm text-pink-100/70">No dates yet. Add one to keep it here.</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
