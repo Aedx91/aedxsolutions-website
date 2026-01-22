@@ -129,7 +129,10 @@ export default function DemoDashboard({
       <div className="space-y-4">
         <div className="rounded-2xl border border-purple-500/30 bg-purple-900/30 p-6 shadow-lg shadow-purple-900/40">
           <h3 className="text-xl font-semibold text-pink-200">Carmy Food Menu</h3>
-          <p className="mt-2 text-sm text-pink-100/80">Save favorite dishes, weekly picks, and new experiments.</p>
+          <p className="mt-2 text-sm text-pink-100/80">
+            Aedx Restaurant started from our love of cooking together—this is the corner where we park the
+            dishes, dates, shows, and quests we never want to forget. Pick anything you like and choose how we cover it.
+          </p>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="rounded-xl bg-black/50 border border-white/5 p-4">
               <div className="text-pink-200 font-semibold">This week</div>
