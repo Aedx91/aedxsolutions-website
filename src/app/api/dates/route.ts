@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getSupabaseServiceClient } from '@/lib/supabase/server'
+import { createGoogleEvent } from '@/lib/integrations/google'
+import { createMicrosoftEvent } from '@/lib/integrations/microsoft'
+import { getProviderToken } from '@/lib/integrations/tokens'
 
 function requireUser(headers: Headers) {
   const user = headers.get('x-demo-user')
@@ -55,6 +58,31 @@ export async function POST(req: Request) {
   if (error || !data) {
     console.error('Supabase insert date error', error)
     return NextResponse.json({ error: 'Failed to save date' }, { status: 500 })
+  }
+
+  // Attempt calendar syncs if tokens exist; failures do not block response
+  try {
+    const googleToken = await getProviderToken(user, 'google')
+    if (googleToken) {
+      const eventId = await createGoogleEvent(user, { summary: description, description, date })
+      if (eventId) {
+        await supabase.from('dates').update({ google_event_id: eventId }).eq('id', data.id)
+      }
+    }
+  } catch (syncErr) {
+    console.error('Google sync failed', syncErr)
+  }
+
+  try {
+    const msToken = await getProviderToken(user, 'microsoft')
+    if (msToken) {
+      const eventId = await createMicrosoftEvent(user, { subject: description, body: description, date })
+      if (eventId) {
+        await supabase.from('dates').update({ microsoft_event_id: eventId }).eq('id', data.id)
+      }
+    }
+  } catch (syncErr) {
+    console.error('MS sync failed', syncErr)
   }
 
   return NextResponse.json({

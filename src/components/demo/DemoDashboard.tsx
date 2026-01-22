@@ -295,14 +295,26 @@ export default function DemoDashboard({
             <button
               type="button"
               className="rounded-full border border-white/10 bg-gradient-to-r from-cyan-500/40 to-blue-500/40 px-4 py-2 text-sm font-semibold text-white hover:from-cyan-500 hover:to-blue-500 transition-all"
-              onClick={() => setToast('Connect Google to sync')}
+              onClick={() => {
+                if (!userId) {
+                  setToast('Not signed in')
+                  return
+                }
+                window.location.href = `/api/integrations/google/start?user=${encodeURIComponent(userId)}`
+              }}
             >
               Connect Google
             </button>
             <button
               type="button"
               className="rounded-full border border-white/10 bg-gradient-to-r from-indigo-500/40 to-purple-500/40 px-4 py-2 text-sm font-semibold text-white hover:from-indigo-500 hover:to-purple-500 transition-all"
-              onClick={() => setToast('Connect Outlook to sync')}
+              onClick={() => {
+                if (!userId) {
+                  setToast('Not signed in')
+                  return
+                }
+                window.location.href = `/api/integrations/microsoft/start?user=${encodeURIComponent(userId)}`
+              }}
             >
               Connect Outlook
             </button>
@@ -378,6 +390,10 @@ export default function DemoDashboard({
                     required
                   />
                 </label>
+
+                <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-pink-100/80">
+                  If Google or Outlook is connected, we will sync this date to your calendar.
+                </div>
 
                 <div className="flex justify-end gap-2 pt-2">
                   <button
