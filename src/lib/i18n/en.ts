@@ -27,8 +27,8 @@ export const en = {
     },
   },
   hero: {
-    title: 'Level up your operations with AI + automation',
-    subtitle: 'Fast builds, clean integrations, and smart workflows—crafted like a high-score run.',
+    title: 'A space to remember what you love',
+    subtitle: 'Keep the meals, plans, and little moments you never want to forget—made for Carmy & Aedx.',
     cta: 'Talk to us'
   },
   contact: { title: 'Contact Us', intro: 'Tell us about your project and we will get back shortly.' },

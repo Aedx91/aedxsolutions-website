@@ -27,8 +27,8 @@ export const es = {
     },
   },
   hero: {
-    title: 'Sube de nivel tus operaciones con IA + automatización',
-    subtitle: 'Construcciones rápidas, integraciones limpias y flujos inteligentes—como una run perfecta.',
+    title: 'Un espacio para no olvidar lo que amas',
+    subtitle: 'Guarda comidas, planes y momentos que no quieres perder—hecho para Carmy y Aedx.',
     cta: 'Hablemos'
   },
   contact: { title: 'Contáctanos', intro: 'Cuéntanos tu proyecto y te responderemos pronto.' },
