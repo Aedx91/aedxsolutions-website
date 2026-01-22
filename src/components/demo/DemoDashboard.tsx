@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import FlipCard from '@/components/FlipCard'
 import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
 import { getStoredAuth } from '@/hooks/useAuth'
 import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
@@ -301,17 +302,11 @@ export default function DemoDashboard({
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {dishes.map((dish) => {
               const selected = selection[dish]
-              return (
-                <div
-                  key={dish}
-                  className="rounded-2xl border border-purple-500/30 bg-black/60 p-5 shadow-lg shadow-purple-900/30"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-pink-100">{dish}</h3>
-                  </div>
-                  <p className="mt-2 text-xs text-pink-100/70">Tap a pay option below.</p>
 
-                  <div className="mt-4 grid grid-cols-2 gap-2">
+              const subtitle = (
+                <>
+                  <p className="text-xs text-pink-100/70">Tap a pay option below.</p>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
                     {payOptions.map((opt) => {
                       const active = selected === opt.id
                       return (
@@ -336,16 +331,22 @@ export default function DemoDashboard({
                       )
                     })}
                   </div>
+                </>
+              )
 
-                  <button
-                    type="button"
-                    disabled={!selected || submittingDish === dish}
-                    onClick={() => submitDishChoice(dish)}
-                    className="mt-4 w-full rounded-xl border border-white/10 bg-gradient-to-r from-purple-600 to-pink-500 px-4 py-2 text-white font-semibold shadow-md shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {submittingDish === dish ? 'Sending...' : 'Submit choice'}
-                  </button>
-                </div>
+              const action = (
+                <button
+                  type="button"
+                  disabled={!selected || submittingDish === dish}
+                  onClick={() => submitDishChoice(dish)}
+                  className="w-full rounded-xl border border-white/10 bg-gradient-to-r from-purple-600 to-pink-500 px-4 py-2 text-white font-semibold shadow-md shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submittingDish === dish ? 'Sending...' : 'Submit choice'}
+                </button>
+              )
+
+              return (
+                <FlipCard key={dish} title={dish} subtitle={subtitle} action={action} />
               )
             })}
           </div>

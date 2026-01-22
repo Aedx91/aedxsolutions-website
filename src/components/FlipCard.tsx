@@ -7,11 +7,12 @@ import styles from './FlipCard.module.css'
 interface FlipCardProps {
   title: string
   subtitle: React.ReactNode
-  ctaHref: string
+  ctaHref?: string
   ctaLabel?: string
+  action?: React.ReactNode
 }
 
-export default function FlipCard({ title, subtitle, ctaHref, ctaLabel = 'More info' }: FlipCardProps) {
+export default function FlipCard({ title, subtitle, ctaHref, ctaLabel = 'More info', action }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
   const [animating, setAnimating] = useState(false)
 
@@ -51,13 +52,17 @@ export default function FlipCard({ title, subtitle, ctaHref, ctaLabel = 'More in
             </div>
           </div>
 
-          <Link
-            href={ctaHref}
-            onClick={(e) => e.stopPropagation()}
-            className="btn btn-outline w-full justify-center"
-          >
-            {ctaLabel}
-          </Link>
+          {action ? (
+            <div onClick={(e) => e.stopPropagation()}>{action}</div>
+          ) : ctaHref ? (
+            <Link
+              href={ctaHref}
+              onClick={(e) => e.stopPropagation()}
+              className="btn btn-outline w-full justify-center"
+            >
+              {ctaLabel}
+            </Link>
+          ) : null}
         </div>
       </div>
     </div>
