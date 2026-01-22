@@ -10,11 +10,21 @@ function requireUser(headers: Headers) {
   return user
 }
 
+function tryGetSupabase() {
+  try {
+    return getSupabaseServiceClient()
+  } catch (error) {
+    console.error('Supabase config error', error)
+    return null
+  }
+}
+
 export async function GET(req: Request) {
   const user = requireUser(req.headers)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const supabase = getSupabaseServiceClient()
+  const supabase = tryGetSupabase()
+  if (!supabase) return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 })
   const { data, error } = await supabase
     .from('dates')
     .select('id, date, description, google_event_id, microsoft_event_id')
@@ -59,7 +69,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Missing date or description' }, { status: 400 })
   }
 
-  const supabase = getSupabaseServiceClient()
+  const supabase = tryGetSupabase()
+  if (!supabase) return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 })
   const { data, error } = await supabase
     .from('dates')
     .insert({ user_id: user, date, description })
