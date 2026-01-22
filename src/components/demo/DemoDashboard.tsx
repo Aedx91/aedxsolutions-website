@@ -3,47 +3,42 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FlipCard from '@/components/FlipCard'
-import type { Lang } from '@/lib/i18n/dictionaries'
-import { getStoredAuth } from '@/hooks/useAuth'
-import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
-import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
-
-export default function DemoDashboard({
-  lang,
-  labels,
-  hero,
-  features,
-}: {
-  lang: Lang
-  labels: {
-    logout: string
-    walmartDemo: string
-    viewLogs: string
-    toastSaved: string
-    modalTitle: string
-    packedBoxesLabel: string
-    logEntry: string
-    close: string
-    invalidNumber: string
-  }
-  hero: { title: string; subtitle: string }
-  features: {
-    sectionTitle: string
-    sectionSubtitle: string
-    items: Array<{ title: string; desc: string }>
-  }
-}) {
   const router = useRouter()
   const [isAuthed, setIsAuthed] = useState(false)
   const [tab, setTab] = useState<'menu' | 'dates' | 'todo' | 'watch'>('menu')
+  const [role, setRole] = useState<'carmy' | 'admin' | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
   const options = useMemo(() => {
     return features.items.map((item, idx) => {
       const key = idx === 0 ? 'discovery' : idx === 1 ? 'integration' : 'ai-pilot'
       return { key, title: item.title, subtitle: item.desc }
     })
   }, [features.items])
+
+  useEffect(() => {
+    const token = getStoredAuth()
+    if (!token?.isAuthenticated) {
+      router.replace(`/${lang}/demo/login`)
+      return
+    }
+    if (token.role === 'admin') {
+      router.replace(`/${lang}/demo/admin`)
+      return
+    }
+    setRole(token.role)
+    setIsAuthed(true)
+  }, [lang, router])
+
+  useEffect(() => {
+    if (!toast) return
+    const t = window.setTimeout(() => setToast(null), 2500)
+    return () => window.clearTimeout(t)
+  }, [toast])
+
+  if (!isAuthed) return null
+
   const tabContent = {
     menu: (
       <div className="space-y-4">
@@ -167,6 +162,18 @@ export default function DemoDashboard({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#8b5cf6_0,transparent_35%)] opacity-40" aria-hidden />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_60%,#ec4899_0,transparent_35%)] opacity-30" aria-hidden />
         <div className="relative px-6 md:px-10">
+          <div className="absolute right-4 top-4 flex gap-2">
+            <button
+              type="button"
+              className="px-3 py-2 text-sm rounded-full border border-white/20 bg-white/10 text-white hover:border-white/40"
+              onClick={() => {
+                clearStoredAuth()
+                router.replace(`/${lang}`)
+              }}
+            >
+              Log out
+            </button>
+          </div>
           <p className="text-sm uppercase tracking-[0.2em] text-pink-200/70">Carmy space</p>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">{hero.title}</h1>
           <p className="mt-3 text-pink-100/80 max-w-2xl">{hero.subtitle}</p>
@@ -203,51 +210,53 @@ export default function DemoDashboard({
           })}
         </div>
 
-        <div className="mt-6">
-          {tabContent[tab]}
-        </div>
+        <div className="mt-6">{tabContent[tab]}</div>
       </section>
 
-      <section className="py-6">
-        <h2 className="text-2xl font-semibold text-pink-100 text-center">{features.sectionTitle}</h2>
-        <p className="mt-2 text-pink-100/80 max-w-2xl mx-auto text-center">{features.sectionSubtitle}</p>
+      {tab === 'menu' ? (
+        <section className="py-6">
+          <h2 className="text-2xl font-semibold text-pink-100 text-center">{features.sectionTitle}</h2>
+          <p className="mt-2 text-pink-100/80 max-w-2xl mx-auto text-center">{features.sectionSubtitle}</p>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {options.map((option) => (
-            <div key={option.key} className="transition-all hover:scale-105">
-              <FlipCard
-                title={option.title}
-                subtitle={<span>{option.subtitle}</span>}
-                ctaHref={`/${lang}/products`}
-                ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
-              />
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {options.map((option) => (
+              <div key={option.key} className="transition-all hover:scale-105">
+                <FlipCard
+                  title={option.title}
+                  subtitle={<span>{option.subtitle}</span>}
+                  ctaHref={`/${lang}/products`}
+                  ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
+                />
+              </div>
+            ))}
+          </div>
+
+          {role === 'admin' ? (
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <button
+                type="button"
+                className="text-left bg-gradient-to-r from-purple-700/70 to-pink-700/70 hover:from-purple-700 hover:to-pink-700 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <div className="text-lg font-semibold text-white">{labels.walmartDemo}</div>
+                <div className="mt-1 text-sm text-pink-100/80">{labels.logEntry}</div>
+              </button>
+
+              <button
+                type="button"
+                className="text-left bg-black/60 hover:bg-black/50 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
+                onClick={() => {
+                  const logs = getDemoLogs()
+                  downloadJson('demoLogs.json', logs)
+                }}
+              >
+                <div className="text-lg font-semibold text-white">{labels.viewLogs}</div>
+                <div className="mt-1 text-sm text-pink-100/80">demoLogs.json</div>
+              </button>
             </div>
-          ))}
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <button
-            type="button"
-            className="text-left bg-gradient-to-r from-purple-700/70 to-pink-700/70 hover:from-purple-700 hover:to-pink-700 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <div className="text-lg font-semibold text-white">{labels.walmartDemo}</div>
-            <div className="mt-1 text-sm text-pink-100/80">{labels.logEntry}</div>
-          </button>
-
-          <button
-            type="button"
-            className="text-left bg-black/60 hover:bg-black/50 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
-            onClick={() => {
-              const logs = getDemoLogs()
-              downloadJson('demoLogs.json', logs)
-            }}
-          >
-            <div className="text-lg font-semibold text-white">{labels.viewLogs}</div>
-            <div className="mt-1 text-sm text-pink-100/80">demoLogs.json</div>
-          </button>
-        </div>
-      </section>
+          ) : null}
+        </section>
+      ) : null}
 
       <WalmartDemoModal
         isOpen={isModalOpen}
@@ -262,6 +271,36 @@ export default function DemoDashboard({
         onLog={(entry) => {
           appendDemoLog(entry)
           setToast(labels.toastSaved)
+        }}
+      />
+
+      {toast ? (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg border border-white/10 z-50">
+          {toast}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+                        <div className="text-lg font-semibold text-white">{labels.walmartDemo}</div>
+                        <div className="mt-1 text-sm text-pink-100/80">{labels.logEntry}</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="text-left bg-black/60 hover:bg-black/50 rounded-xl p-6 transition-all hover:scale-105 border border-white/10"
+                        onClick={() => {
+                          const logs = getDemoLogs()
+                          downloadJson('demoLogs.json', logs)
+                        }}
+                      >
+                        <div className="text-lg font-semibold text-white">{labels.viewLogs}</div>
+                        <div className="mt-1 text-sm text-pink-100/80">demoLogs.json</div>
+                      </button>
+                    </div>
+                  ) : null}
+                </section>
+              ) : null}
         }}
       />
 
