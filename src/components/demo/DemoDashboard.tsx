@@ -116,43 +116,46 @@ export default function DemoDashboard({
     [datesStorageKey]
   )
 
-  const loadDates = useCallback(async (currentUser: string) => {
-    setDatesLoading(true)
-    // Try API first
-    try {
-      const res = await fetch('/api/dates', {
-        headers: { 'x-demo-user': currentUser },
-        cache: 'no-store',
-      })
-      if (res.ok) {
-        const data = (await res.json()) as { dates: DateItem[]; integrations: IntegrationStatus } | DateItem[]
-        const list = Array.isArray(data) ? data : data.dates
-        const status = Array.isArray(data) ? integrations : data.integrations
-        const sorted = list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-        setDates(sorted)
-        cacheDates(sorted)
-        if (status) setIntegrations(status)
-        setDatesLoading(false)
-        return
+  const loadDates = useCallback(
+    async (currentUser: string) => {
+      setDatesLoading(true)
+      // Try API first
+      try {
+        const res = await fetch('/api/dates', {
+          headers: { 'x-demo-user': currentUser },
+          cache: 'no-store',
+        })
+        if (res.ok) {
+          const payload = (await res.json()) as { dates: DateItem[]; integrations: IntegrationStatus } | DateItem[]
+          const list = Array.isArray(payload) ? payload : payload.dates
+          const status = Array.isArray(payload) ? null : payload.integrations
+          const sorted = list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+          setDates(sorted)
+          cacheDates(sorted)
+          if (status) setIntegrations(status)
+          setDatesLoading(false)
+          return
+        }
+      } catch (error) {
+        console.error('Fetch dates failed', error)
       }
-    } catch (error) {
-      console.error('Fetch dates failed', error)
-    }
 
-    // Fallback to local cache
-    if (typeof window !== 'undefined') {
-      const cached = window.localStorage.getItem(datesStorageKey)
-      if (cached) {
-        try {
-          const parsed = JSON.parse(cached) as DateItem[]
-          setDates(parsed)
-        } catch (error) {
-          console.error('Failed to parse cached dates', error)
+      // Fallback to local cache
+      if (typeof window !== 'undefined') {
+        const cached = window.localStorage.getItem(datesStorageKey)
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached) as DateItem[]
+            setDates(parsed)
+          } catch (error) {
+            console.error('Failed to parse cached dates', error)
+          }
         }
       }
-    }
-    setDatesLoading(false)
-  }, [cacheDates, datesStorageKey, integrations])
+      setDatesLoading(false)
+    },
+    [cacheDates, datesStorageKey]
+  )
 
   const addDate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
