@@ -31,6 +31,10 @@ export const es = {
     subtitle: 'Guarda comidas, planes y momentos que no quieres perder—tu espacio para agendar citas de cine, cumpleaños y fechas importantes.',
     cta: 'Hablemos'
   },
+  demoHero: {
+    title: 'Espacio Carmy',
+    subtitle: 'Guarda los platos, citas, pelis y momentos que queremos anotar. Tú eliges; yo cocino; decidimos cómo cubrirlo.',
+  },
   contact: { title: 'Contáctanos', intro: 'Cuéntanos tu proyecto y te responderemos pronto.' },
   products: { title: 'Productos', intro: 'Un vistazo a las plataformas y aceleradores que construimos.' },
   customers: { title: 'Nuestros Clientes', intro: 'Equipos que confían en nosotros para rendimiento, seguridad y velocidad.' },

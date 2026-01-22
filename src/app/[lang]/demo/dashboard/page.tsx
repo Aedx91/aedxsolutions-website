@@ -23,7 +23,7 @@ export default async function DemoDashboardPage(props: { params: Promise<{ lang:
   return (
     <DemoDashboard
       lang={safe}
-      hero={{ title: dict.hero.title, subtitle: dict.hero.subtitle }}
+      hero={{ title: dict.demoHero.title, subtitle: dict.demoHero.subtitle }}
       features={dict.features}
       labels={dict.demo.dashboard}
     />

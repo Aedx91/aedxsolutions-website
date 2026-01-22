@@ -31,6 +31,10 @@ export const en = {
     subtitle: 'Keep the meals, plans, and little moments you never want to forget—a hub for movie dates, birthdays, and the important days we should remember.',
     cta: 'Talk to us'
   },
+  demoHero: {
+    title: 'Carmy space',
+    subtitle: 'Keep the dishes, date nights, movies, and little moments we want to log. You pick; I cook; we decide how to cover it.',
+  },
   contact: { title: 'Contact Us', intro: 'Tell us about your project and we will get back shortly.' },
   products: { title: 'Products', intro: 'A glimpse at the platforms & accelerators we are building.' },
   customers: { title: 'Our Customers', intro: 'Trusted by teams focused on performance, security and velocity.' },
