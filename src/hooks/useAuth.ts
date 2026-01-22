@@ -4,9 +4,12 @@ import { useCallback, useEffect, useState } from 'react'
 
 export const AUTH_STORAGE_KEY = 'demoAuth'
 
+export type DemoRole = 'carmy' | 'admin'
+
 export type DemoAuthToken = {
   isAuthenticated: true
   user: string
+  role: DemoRole
 }
 
 export function getStoredAuth(): DemoAuthToken | null {
@@ -15,8 +18,10 @@ export function getStoredAuth(): DemoAuthToken | null {
     const raw = window.localStorage.getItem(AUTH_STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<DemoAuthToken> | null
-    if (!parsed || parsed.isAuthenticated !== true || typeof parsed.user !== 'string') return null
-    return { isAuthenticated: true, user: parsed.user }
+    if (!parsed || parsed.isAuthenticated !== true || typeof parsed.user !== 'string' || parsed.role !== 'carmy' && parsed.role !== 'admin') {
+      return null
+    }
+    return { isAuthenticated: true, user: parsed.user, role: parsed.role }
   } catch {
     return null
   }
@@ -34,9 +39,18 @@ export function clearStoredAuth() {
 
 const CARMY_USER = 'carmy'
 const CARMY_PASS = 'carmylovesfood'
+const ADMIN_USER = 'admin'
+const ADMIN_PASS = 'admin'
 
-export function validateDemoCredentials(username: string, password: string) {
-  return username.trim().toLowerCase() === CARMY_USER && password === CARMY_PASS
+export function validateDemoCredentials(username: string, password: string): DemoAuthToken | null {
+  const normalized = username.trim().toLowerCase()
+  if (normalized === CARMY_USER && password === CARMY_PASS) {
+    return { isAuthenticated: true, user: CARMY_USER, role: 'carmy' }
+  }
+  if (normalized === ADMIN_USER && password === ADMIN_PASS) {
+    return { isAuthenticated: true, user: ADMIN_USER, role: 'admin' }
+  }
+  return null
 }
 
 export function useAuth() {
@@ -50,10 +64,9 @@ export function useAuth() {
     refresh()
   }, [refresh])
 
-  const login = useCallback((user: string) => {
-    const next: DemoAuthToken = { isAuthenticated: true, user }
-    setStoredAuth(next)
-    setToken(next)
+  const login = useCallback((auth: DemoAuthToken) => {
+    setStoredAuth(auth)
+    setToken(auth)
   }, [])
 
   const logout = useCallback(() => {
@@ -64,6 +77,7 @@ export function useAuth() {
   return {
     isAuthenticated: token?.isAuthenticated === true,
     user: token?.user ?? null,
+    role: token?.role ?? null,
     login,
     logout,
     refresh,

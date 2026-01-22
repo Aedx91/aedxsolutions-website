@@ -40,12 +40,14 @@ export default function LoginForm({
           onSubmit={(e) => {
             e.preventDefault()
             setError(null)
-            if (!validateDemoCredentials(username, password)) {
+            const auth = validateDemoCredentials(username, password)
+            if (!auth) {
               setError(labels.invalidCreds)
               return
             }
-            setStoredAuth({ isAuthenticated: true, user: username.trim().toLowerCase() })
-            router.push(`/${lang}/demo/dashboard`)
+            setStoredAuth(auth)
+            const destination = auth.role === 'admin' ? `/${lang}/demo/admin` : `/${lang}/demo/dashboard`
+            router.push(destination)
           }}
         >
           <div>

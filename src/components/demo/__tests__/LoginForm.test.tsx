@@ -41,7 +41,7 @@ describe('LoginForm', () => {
     expect(push).not.toHaveBeenCalled()
   })
 
-  test('stores token and navigates on success', async () => {
+  test('stores token and navigates Carmy to dashboard', async () => {
     const user = userEvent.setup()
 
     render(
@@ -61,7 +61,35 @@ describe('LoginForm', () => {
     await user.type(screen.getByLabelText('Password'), 'carmylovesfood')
     await user.click(screen.getByRole('button', { name: 'Sign in' }))
 
-    expect(window.localStorage.getItem('demoAuth')).toContain('carmy')
+    const stored = window.localStorage.getItem('demoAuth')
+    expect(stored).toBeTruthy()
+    expect(JSON.parse(stored as string)).toMatchObject({ user: 'carmy', role: 'carmy' })
     expect(push).toHaveBeenCalledWith('/en/demo/dashboard')
+  })
+
+  test('routes admin to admin experience', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <LoginForm
+        lang="en"
+        labels={{
+          title: 'Sign in',
+          username: 'Username',
+          password: 'Password',
+          signIn: 'Sign in',
+          invalidCreds: 'Invalid username or password.',
+        }}
+      />
+    )
+
+    await user.type(screen.getByLabelText('Username'), 'admin')
+    await user.type(screen.getByLabelText('Password'), 'admin')
+    await user.click(screen.getByRole('button', { name: 'Sign in' }))
+
+    const stored = window.localStorage.getItem('demoAuth')
+    expect(stored).toBeTruthy()
+    expect(JSON.parse(stored as string)).toMatchObject({ user: 'admin', role: 'admin' })
+    expect(push).toHaveBeenCalledWith('/en/demo/admin')
   })
 })
