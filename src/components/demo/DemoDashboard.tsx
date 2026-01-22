@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import FlipCard from '@/components/FlipCard'
 import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
 import { getStoredAuth } from '@/hooks/useAuth'
 import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
@@ -41,13 +40,66 @@ export default function DemoDashboard({
   const [role, setRole] = useState<'carmy' | 'admin' | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selection, setSelection] = useState<Record<string, string>>({})
+  const [submittingDish, setSubmittingDish] = useState<string | null>(null)
 
-  const options = useMemo(() => {
-    return features.items.map((item, idx) => {
-      const key = idx === 0 ? 'discovery' : idx === 1 ? 'integration' : 'ai-pilot'
-      return { key, title: item.title, subtitle: item.desc }
-    })
-  }, [features.items])
+  const dishes = useMemo(
+    () => [
+      'Truffle pasta',
+      'Spicy tuna bowls',
+      'Citrus salmon',
+      'Gnocchi w/ pesto',
+      'Miso cod',
+      'Roasted veggies',
+      'Tiramisu jars',
+      'Berry shortcake',
+      'Mochi flight',
+      'Porcini risotto',
+      'Charred broccolini',
+      'Chili crisp noodles',
+      'Lemon butter scallops',
+      'Burrata salad',
+      'Harissa chicken',
+      'Pomegranate lamb',
+      'Garlic miso eggplant',
+      'Chimichurri steak',
+      'Cacio e pepe',
+      'Caprese toasties',
+      'Matcha tiramisu',
+      'Salted caramel pots',
+      'Mango sticky rice',
+      'Affogato duo',
+    ],
+    []
+  )
+
+  const payOptions = [
+    { id: 'x1', label: 'x1', desc: 'You cover it all' },
+    { id: 'x2', label: 'x2', desc: 'Split 50/50' },
+    { id: 'x3', label: 'x3', desc: 'Carmy covers it' },
+    { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
+  ]
+
+  async function submitDishChoice(dish: string) {
+    const choice = selection[dish]
+    if (!choice) return
+    try {
+      setSubmittingDish(dish)
+      const res = await fetch('/api/menu/selection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dish, option: choice, lang }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || 'Request failed')
+      setToast('Saved your pick—thanks!')
+    } catch (error) {
+      console.error('Submit dish failed', error)
+      setToast('Could not send right now')
+    } finally {
+      setSubmittingDish(null)
+    }
+  }
 
   useEffect(() => {
     const token = getStoredAuth()
@@ -242,19 +294,60 @@ export default function DemoDashboard({
       {tab === 'menu' ? (
         <section className="py-6">
           <h2 className="text-2xl font-semibold text-pink-100 text-center">{features.sectionTitle}</h2>
-          <p className="mt-2 text-pink-100/80 max-w-2xl mx-auto text-center">{features.sectionSubtitle}</p>
+          <p className="mt-2 text-pink-100/80 max-w-2xl mx-auto text-center">
+            Pick a dish, choose who covers it, then submit so we log it.
+          </p>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {options.map((option) => (
-              <div key={option.key} className="transition-all hover:scale-105">
-                <FlipCard
-                  title={option.title}
-                  subtitle={<span>{option.subtitle}</span>}
-                  ctaHref={`/${lang}/products`}
-                  ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
-                />
-              </div>
-            ))}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {dishes.map((dish) => {
+              const selected = selection[dish]
+              return (
+                <div
+                  key={dish}
+                  className="rounded-2xl border border-purple-500/30 bg-black/60 p-5 shadow-lg shadow-purple-900/30"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-lg font-semibold text-pink-100">{dish}</h3>
+                  </div>
+                  <p className="mt-2 text-xs text-pink-100/70">Tap a pay option below.</p>
+
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    {payOptions.map((opt) => {
+                      const active = selected === opt.id
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() =>
+                            setSelection((prev) => ({
+                              ...prev,
+                              [dish]: prev[dish] === opt.id ? '' : opt.id,
+                            }))
+                          }
+                          className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm transition-all ${
+                            active
+                              ? 'border-pink-400 bg-pink-500/20 text-white shadow-lg shadow-pink-500/20'
+                              : 'border-white/10 bg-white/5 text-pink-100/80 hover:border-pink-400/50'
+                          }`}
+                        >
+                          <span className="font-semibold">{opt.label}</span>
+                          <span className="text-xs text-pink-100/70">{opt.desc}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={!selected || submittingDish === dish}
+                    onClick={() => submitDishChoice(dish)}
+                    className="mt-4 w-full rounded-xl border border-white/10 bg-gradient-to-r from-purple-600 to-pink-500 px-4 py-2 text-white font-semibold shadow-md shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submittingDish === dish ? 'Sending...' : 'Submit choice'}
+                  </button>
+                </div>
+              )
+            })}
           </div>
 
           {role === 'admin' ? (
