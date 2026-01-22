@@ -9,6 +9,7 @@ import { appendDemoLog, downloadJson, getDemoLogs } from '@/lib/demoLogs'
 import type { Lang } from '@/lib/i18n/dictionaries'
 
 type FeatureItem = { title: string; desc: string }
+type DateItem = { id: string; date: string; description: string }
 
 export default function DemoDashboard({
   lang,
@@ -43,6 +44,10 @@ export default function DemoDashboard({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selection, setSelection] = useState<Record<string, string>>({})
   const [submittingDish, setSubmittingDish] = useState<string | null>(null)
+  const [dates, setDates] = useState<DateItem[]>([])
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false)
+  const [dateForm, setDateForm] = useState({ date: '', description: '' })
+  const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
 
   const dishes = useMemo(
     () => [
@@ -81,6 +86,40 @@ export default function DemoDashboard({
     { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
   ]
 
+  const formatDate = (value: string) => {
+    try {
+      return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value))
+    } catch {
+      return value
+    }
+  }
+
+  function persistDates(next: DateItem[]) {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(datesStorageKey, JSON.stringify(next))
+  }
+
+  const addDate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!dateForm.date || !dateForm.description.trim()) return
+    const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`
+    const next = [...dates, { id, date: dateForm.date, description: dateForm.description.trim() }].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+    setDates(next)
+    persistDates(next)
+    setDateForm({ date: '', description: '' })
+    setIsDateModalOpen(false)
+    setToast('Date added')
+  }
+
+  const deleteDate = (id: string) => {
+    const next = dates.filter((item) => item.id !== id)
+    setDates(next)
+    persistDates(next)
+    setToast('Removed')
+  }
+
   async function submitDishChoice(dish: string) {
     const choice = selection[dish]
     if (!choice) return
@@ -117,6 +156,19 @@ export default function DemoDashboard({
   }, [lang, router])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const stored = window.localStorage.getItem(datesStorageKey)
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as DateItem[]
+        setDates(parsed.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
+      } catch (error) {
+        console.error('Failed to parse stored dates', error)
+      }
+    }
+  }, [datesStorageKey])
+
+  useEffect(() => {
     if (!toast) return
     const t = window.setTimeout(() => setToast(null), 2500)
     return () => window.clearTimeout(t)
@@ -140,26 +192,116 @@ export default function DemoDashboard({
     ),
     dates: (
       <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-black to-pink-900/20 p-6 shadow-lg shadow-purple-900/40">
-        <h3 className="text-xl font-semibold text-pink-200">Dates & Moments</h3>
-        <p className="mt-2 text-sm text-pink-100/80">Keep little anniversaries, plans, and surprises aligned.</p>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="rounded-xl bg-black/50 border border-white/5 p-4">
-            <div className="text-pink-200 font-semibold">Upcoming</div>
-            <ul className="mt-2 space-y-1 text-pink-100/80">
-              <li>• Thursday: sushi + movie</li>
-              <li>• Sunday: hike + picnic</li>
-              <li>• Next week: new coffee spot</li>
-            </ul>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 className="text-xl font-semibold text-pink-200">Dates & Moments</h3>
+            <p className="mt-2 text-sm text-pink-100/80">Keep little anniversaries, plans, and surprises aligned.</p>
           </div>
-          <div className="rounded-xl bg-black/50 border border-white/5 p-4">
-            <div className="text-pink-200 font-semibold">Memories</div>
-            <ul className="mt-2 space-y-1 text-pink-100/80">
-              <li>• First ramen date</li>
-              <li>• Rooftop sunset</li>
-              <li>• Surprise gelato run</li>
-            </ul>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-pink-100 hover:border-pink-400/50 hover:text-white transition-all"
+              onClick={() => setIsDateModalOpen(true)}
+            >
+              + Add date
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-gradient-to-r from-cyan-500/40 to-blue-500/40 px-4 py-2 text-sm font-semibold text-white hover:from-cyan-500 hover:to-blue-500 transition-all"
+              onClick={() => setToast('Calendar sync coming soon (Google & Outlook)')}
+            >
+              Sync calendars
+            </button>
           </div>
         </div>
+
+        <div className="mt-4 rounded-2xl bg-black/50 border border-white/5 p-4">
+          {dates.length === 0 ? (
+            <div className="text-sm text-pink-100/70">No dates yet. Add one to keep it here.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              {dates.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/50 to-pink-900/30 px-4 py-3 shadow-lg shadow-purple-900/30"
+                >
+                  <div>
+                    <div className="text-xs uppercase tracking-wide text-pink-200/80">{formatDate(item.date)}</div>
+                    <div className="text-pink-100 font-semibold">{item.description}</div>
+                  </div>
+                  <button
+                    type="button"
+                    className="text-xs text-pink-100/70 hover:text-white underline"
+                    onClick={() => deleteDate(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {isDateModalOpen ? (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+            <div className="w-full max-w-md rounded-2xl border border-white/10 bg-gradient-to-br from-purple-900 via-black to-pink-900 p-6 shadow-2xl shadow-pink-900/40">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-sm uppercase tracking-[0.2em] text-pink-200/80">New date</div>
+                  <h4 className="mt-1 text-xl font-semibold text-white">Add a plan or memory</h4>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close"
+                  className="text-pink-100/70 hover:text-white"
+                  onClick={() => setIsDateModalOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form className="mt-4 space-y-4" onSubmit={addDate}>
+                <label className="block space-y-1 text-sm text-pink-100/80">
+                  <span>Date</span>
+                  <input
+                    type="date"
+                    value={dateForm.date}
+                    onChange={(e) => setDateForm((prev) => ({ ...prev, date: e.target.value }))}
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-pink-400 focus:outline-none"
+                    required
+                  />
+                </label>
+                <label className="block space-y-1 text-sm text-pink-100/80">
+                  <span>Description</span>
+                  <input
+                    type="text"
+                    value={dateForm.description}
+                    onChange={(e) => setDateForm((prev) => ({ ...prev, description: e.target.value }))}
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white focus:border-pink-400 focus:outline-none"
+                    placeholder="Birthday, movie night, weekend getaway"
+                    required
+                  />
+                </label>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    className="rounded-full border border-white/10 px-4 py-2 text-sm text-pink-100 hover:border-pink-400/60"
+                    onClick={() => setIsDateModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/30"
+                  >
+                    Save date
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        ) : null}
       </div>
     ),
     todo: (
