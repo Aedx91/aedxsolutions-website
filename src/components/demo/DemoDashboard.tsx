@@ -16,6 +16,10 @@ type DateItem = {
   googleEventId?: string | null
   microsoftEventId?: string | null
 }
+type IntegrationStatus = {
+  google: boolean
+  microsoft: boolean
+}
 
 export default function DemoDashboard({
   lang,
@@ -55,6 +59,8 @@ export default function DemoDashboard({
   const [datesLoading, setDatesLoading] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateForm, setDateForm] = useState({ date: '', description: '' })
+  const [integrations, setIntegrations] = useState<IntegrationStatus>({ google: false, microsoft: false })
+  const [syncToCalendar, setSyncToCalendar] = useState(true)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
 
   const dishes = useMemo(
@@ -119,10 +125,13 @@ export default function DemoDashboard({
         cache: 'no-store',
       })
       if (res.ok) {
-        const data = (await res.json()) as DateItem[]
-        const sorted = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        const data = (await res.json()) as { dates: DateItem[]; integrations: IntegrationStatus } | DateItem[]
+        const list = Array.isArray(data) ? data : data.dates
+        const status = Array.isArray(data) ? integrations : data.integrations
+        const sorted = list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         setDates(sorted)
         cacheDates(sorted)
+        if (status) setIntegrations(status)
         setDatesLoading(false)
         return
       }
@@ -143,7 +152,7 @@ export default function DemoDashboard({
       }
     }
     setDatesLoading(false)
-  }, [cacheDates, datesStorageKey])
+  }, [cacheDates, datesStorageKey, integrations])
 
   const addDate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -173,7 +182,7 @@ export default function DemoDashboard({
           'Content-Type': 'application/json',
           'x-demo-user': userId,
         },
-        body: JSON.stringify({ date: pendingItem.date, description: pendingItem.description }),
+        body: JSON.stringify({ date: pendingItem.date, description: pendingItem.description, sync: syncToCalendar }),
       })
       if (!res.ok) throw new Error('Save failed')
       const saved = (await res.json()) as DateItem
@@ -318,6 +327,10 @@ export default function DemoDashboard({
             >
               Connect Outlook
             </button>
+            <div className="text-xs text-pink-100/70 flex flex-col">
+              <span>{integrations.google ? 'Google connected' : 'Google not connected'}</span>
+              <span>{integrations.microsoft ? 'Outlook connected' : 'Outlook not connected'}</span>
+            </div>
           </div>
         </div>
 
@@ -391,9 +404,20 @@ export default function DemoDashboard({
                   />
                 </label>
 
-                <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-pink-100/80">
-                  If Google or Outlook is connected, we will sync this date to your calendar.
-                </div>
+                <label className="flex items-center gap-2 text-sm text-pink-100/80">
+                  <input
+                    type="checkbox"
+                    checked={syncToCalendar}
+                    onChange={(e) => setSyncToCalendar(e.target.checked)}
+                    className="h-4 w-4 rounded border-white/20 bg-white/5"
+                    disabled={!integrations.google && !integrations.microsoft}
+                  />
+                  <span>
+                    {integrations.google || integrations.microsoft
+                      ? 'Sync to connected calendars'
+                      : 'Connect Google or Outlook to sync'}
+                  </span>
+                </label>
 
                 <div className="flex justify-end gap-2 pt-2">
                   <button

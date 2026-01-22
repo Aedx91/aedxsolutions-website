@@ -21,6 +21,11 @@ export async function GET(req: Request) {
     .eq('user_id', user)
     .order('date', { ascending: true })
 
+  const { data: tokens } = await supabase
+    .from('oauth_tokens')
+    .select('provider')
+    .eq('user_id', user)
+
   if (error) {
     console.error('Supabase GET dates error', error)
     return NextResponse.json({ error: 'Failed to load dates' }, { status: 500 })
@@ -34,7 +39,12 @@ export async function GET(req: Request) {
     microsoftEventId: row.microsoft_event_id ?? null,
   }))
 
-  return NextResponse.json(mapped)
+  const integrations = {
+    google: !!tokens?.some((t) => t.provider === 'google'),
+    microsoft: !!tokens?.some((t) => t.provider === 'microsoft'),
+  }
+
+  return NextResponse.json({ dates: mapped, integrations })
 }
 
 export async function POST(req: Request) {
@@ -44,6 +54,7 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null)
   const date = body?.date as string | undefined
   const description = body?.description as string | undefined
+  const sync = body?.sync === true
   if (!date || !description) {
     return NextResponse.json({ error: 'Missing date or description' }, { status: 400 })
   }
@@ -60,29 +71,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to save date' }, { status: 500 })
   }
 
-  // Attempt calendar syncs if tokens exist; failures do not block response
-  try {
-    const googleToken = await getProviderToken(user, 'google')
-    if (googleToken) {
-      const eventId = await createGoogleEvent(user, { summary: description, description, date })
-      if (eventId) {
-        await supabase.from('dates').update({ google_event_id: eventId }).eq('id', data.id)
+  if (sync) {
+    // Attempt calendar syncs if tokens exist; failures do not block response
+    try {
+      const googleToken = await getProviderToken(user, 'google')
+      if (googleToken) {
+        const eventId = await createGoogleEvent(user, { summary: description, description, date })
+        if (eventId) {
+          await supabase.from('dates').update({ google_event_id: eventId }).eq('id', data.id)
+        }
       }
+    } catch (syncErr) {
+      console.error('Google sync failed', syncErr)
     }
-  } catch (syncErr) {
-    console.error('Google sync failed', syncErr)
-  }
 
-  try {
-    const msToken = await getProviderToken(user, 'microsoft')
-    if (msToken) {
-      const eventId = await createMicrosoftEvent(user, { subject: description, body: description, date })
-      if (eventId) {
-        await supabase.from('dates').update({ microsoft_event_id: eventId }).eq('id', data.id)
+    try {
+      const msToken = await getProviderToken(user, 'microsoft')
+      if (msToken) {
+        const eventId = await createMicrosoftEvent(user, { subject: description, body: description, date })
+        if (eventId) {
+          await supabase.from('dates').update({ microsoft_event_id: eventId }).eq('id', data.id)
+        }
       }
+    } catch (syncErr) {
+      console.error('MS sync failed', syncErr)
     }
-  } catch (syncErr) {
-    console.error('MS sync failed', syncErr)
   }
 
   return NextResponse.json({
