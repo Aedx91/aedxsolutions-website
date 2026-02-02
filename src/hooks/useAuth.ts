@@ -12,13 +12,17 @@ export type DemoAuthToken = {
   role: DemoRole
 }
 
+function isDemoRole(role: unknown): role is DemoRole {
+  return role === 'carmy' || role === 'admin' || role === 'pollo'
+}
+
 export function getStoredAuth(): DemoAuthToken | null {
   if (typeof window === 'undefined') return null
   try {
     const raw = window.localStorage.getItem(AUTH_STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<DemoAuthToken> | null
-    if (!parsed || parsed.isAuthenticated !== true || typeof parsed.user !== 'string' || parsed.role !== 'carmy' && parsed.role !== 'admin') {
+    if (!parsed || parsed.isAuthenticated !== true || typeof parsed.user !== 'string' || !isDemoRole(parsed.role)) {
       return null
     }
     return { isAuthenticated: true, user: parsed.user, role: parsed.role }
