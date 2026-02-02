@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getStoredAuth } from '@/hooks/useAuth'
 
@@ -13,24 +13,33 @@ function resolveLangFromPath(): string {
 
 export default function PolloDashboardPage() {
   const router = useRouter()
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
     const auth = getStoredAuth()
     const lang = resolveLangFromPath()
     if (!auth) {
+      setChecked(true)
       router.replace(`/${lang}/demo/login`)
       return
     }
     if (auth.role === 'admin') {
+      setChecked(true)
       router.replace(`/${lang}/demo/admin`)
       return
     }
     if (auth.role === 'carmy') {
+      setChecked(true)
       router.replace(`/${lang}/demo/dashboard`)
       return
     }
     // Only pollo is allowed to stay here
+    setChecked(true)
   }, [router])
+
+  if (!checked) {
+    return <div className="min-h-[60vh] flex items-center justify-center text-gray-200">Cargando...</div>
+  }
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-4">
