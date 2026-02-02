@@ -46,8 +46,12 @@ export default function LoginForm({
               return
             }
             setStoredAuth(auth)
-            const destination = auth.role === 'admin' ? `/${lang}/demo/admin` : `/${lang}/demo/dashboard`
-            router.push(destination)
+            const destinationMap: Record<string, string> = {
+              admin: `/${lang}/demo/admin`,
+              carmy: `/${lang}/demo/dashboard`,
+              pollo: `/${lang}/demo/pollo`,
+            }
+            router.push(destinationMap[auth.role] || `/${lang}/demo/dashboard`)
           }}
         >
           <div>

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 export const AUTH_STORAGE_KEY = 'demoAuth'
 
-export type DemoRole = 'carmy' | 'admin'
+export type DemoRole = 'carmy' | 'admin' | 'pollo'
 
 export type DemoAuthToken = {
   isAuthenticated: true
@@ -41,6 +41,8 @@ const CARMY_USER = 'carmy'
 const CARMY_PASS = 'carmylovesfood'
 const ADMIN_USER = 'admin'
 const ADMIN_PASS = 'admin'
+const POLLO_USER = 'pollo'
+const POLLO_PASS = 'stormtruper'
 
 export function validateDemoCredentials(username: string, password: string): DemoAuthToken | null {
   const normalized = username.trim().toLowerCase()
@@ -49,6 +51,9 @@ export function validateDemoCredentials(username: string, password: string): Dem
   }
   if (normalized === ADMIN_USER && password === ADMIN_PASS) {
     return { isAuthenticated: true, user: ADMIN_USER, role: 'admin' }
+  }
+  if (normalized === POLLO_USER && password === POLLO_PASS) {
+    return { isAuthenticated: true, user: POLLO_USER, role: 'pollo' }
   }
   return null
 }
