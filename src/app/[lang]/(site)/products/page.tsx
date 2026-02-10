@@ -8,8 +8,8 @@ export async function generateMetadata(props: { params: Promise<{ lang: 'en' | '
   const { lang } = await props.params
   const t =
     lang === 'es'
-      ? { title: 'Servicios | AedxSolutions', desc: 'Sitios web modernos, integraciones API, IA y consultoría.' }
-      : { title: 'Services | AedxSolutions', desc: 'Modern websites, API integrations, AI automations, and consulting.' }
+      ? { title: 'Soluciones | AedxSolutions', desc: 'Automatizacion, integraciones API, chatbots y servicios IA a medida.' }
+      : { title: 'Solutions | AedxSolutions', desc: 'Automation, API integrations, chatbots, and custom AI services.' }
   return pageMeta(lang, '/products', t.title, t.desc)
 }
 
@@ -20,16 +20,16 @@ export default async function ProductsPage(props: { params: Promise<{ lang: stri
   return (
     <section className="bg-surface-section">
       <div className="container section">
-        <h1 className="text-3xl font-bold mb-4 text-text-primary">{dict.products.title}</h1>
-        <p className="text-text-secondary mb-10 max-w-2xl">{dict.products.intro}</p>
+        <h1 className="text-3xl font-bold mb-4 text-text-primary font-display">{dict.solutionsPage.title}</h1>
+        <p className="text-text-secondary mb-10 max-w-2xl text-lg">{dict.solutionsPage.intro}</p>
         <div className="grid md:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <article key={i} className="card flex flex-col">
+          {dict.solutionsPage.items.map((item) => (
+            <article key={item.title} className="card flex flex-col">
               <div className="h-40 rounded-md bg-surface-app/60 mb-4" />
-              <h3 className="font-semibold mb-2">Product {i}</h3>
-              <p className="text-sm text-text-secondary mb-4 flex-1">Short elevator pitch of product capability {i}.</p>
-              <a className="mt-auto inline-flex text-brand-secondary hover:underline text-sm" href="#">
-                Learn more →
+              <h3 className="font-semibold mb-2 text-lg text-text-primary">{item.title}</h3>
+              <p className="text-sm text-text-secondary mb-4 flex-1">{item.desc}</p>
+              <a className="mt-auto inline-flex text-brand-secondary hover:underline text-sm" href={`/${lang}/contact`}>
+                {lang === 'es' ? 'Hablemos' : 'Let\'s talk'} →
               </a>
             </article>
           ))}

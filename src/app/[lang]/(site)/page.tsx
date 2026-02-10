@@ -13,12 +13,12 @@ export async function generateMetadata(
   const t =
     lang === 'es'
       ? {
-          title: 'Soluciones con IA para pequeños negocios | AedxSolutions',
-          desc: 'Automatización real, sistemas conectados y resultados medibles para equipos pequeños.',
+          title: 'IA aplicada para pequeños negocios | AedxSolutions',
+          desc: 'Automatización clara, flujos conectados y resultados medibles para equipos pequeños.',
         }
       : {
-          title: 'AI-driven small business solutions | AedxSolutions',
-          desc: 'Practical automation, connected systems, and measurable outcomes for lean teams.',
+          title: 'AI that keeps small businesses moving | AedxSolutions',
+          desc: 'Practical automation, connected workflows, and measurable outcomes for lean teams.',
         }
   return pageMeta(lang, '', t.title, t.desc)
 }

@@ -1,5 +1,5 @@
 export const en = {
-  nav: { home: 'Home', products: 'Products', customers: 'Customers', contact: 'Contact' },
+  nav: { home: 'Home', products: 'Solutions', customers: 'Customers', contact: 'Contact' },
   footer: { privacy: 'Privacy', terms: 'Terms' },
   demo: {
     loginTitle: 'Demo Login | AedxSolutions',
@@ -27,15 +27,15 @@ export const en = {
     },
   },
   hero: {
-    title: 'AI-driven small business solutions that turn busywork into momentum',
-    subtitle: 'We design, build, and automate systems that keep sales, operations, and customer care moving without adding headcount.',
-    ctaPrimary: 'Book a strategy call',
-    ctaSecondary: 'See solutions',
-    ctaTertiary: 'View demo',
+    title: 'AI that keeps small businesses moving',
+    subtitle: 'Automate intake, operations, and customer care with workflows built for the tools you already use.',
+    ctaPrimary: 'Get a roadmap',
+    ctaSecondary: 'Explore solutions',
+    ctaTertiary: 'See demo',
     highlights: [
-      'AI copilots that fit your workflow',
-      'Integrations across tools you already use',
-      'Fast launches with measurable impact',
+      'Custom automations, not generic bots',
+      'Human-in-the-loop AI your team trusts',
+      'Fast launch with clear ROI',
     ],
   },
   demoHero: {
@@ -43,7 +43,7 @@ export const en = {
     subtitle: 'Keep the dishes, date nights, movies, and little moments we want to log. You pick; I cook; we decide how to cover it.',
   },
   contact: { title: 'Contact Us', intro: 'Tell us about your project and we will get back shortly.' },
-  products: { title: 'Products', intro: 'A glimpse at the platforms & accelerators we are building.' },
+  products: { title: 'Solutions', intro: 'Custom AI services designed around your workflows.' },
   customers: { title: 'Our Customers', intro: 'Trusted by teams focused on performance, security and velocity.' },
   legal: {
     privacyTitle: 'Privacy Policy',
@@ -70,26 +70,26 @@ export const en = {
       ]
     }
   },
-  heroBadge: 'AedxSolutions • AI Ops for Small Business',
+  heroBadge: 'AedxSolutions • AI Operations for Small Business',
   signal: {
-    eyebrow: 'Signal to action',
-    title: 'From insight to execution',
-    subtitle: 'We translate your daily chaos into clean systems, then automate the repeatable steps so your team can focus on growth.',
+    eyebrow: 'Built for lean teams',
+    title: 'From chaos to clear execution',
+    subtitle: 'We map the work, connect your tools, and automate the repeatable steps so your team can focus on growth.',
     items: [
-      { title: 'Capture', desc: 'Unify intake from web, email, and tools into one AI-ready stream.' },
-      { title: 'Decide', desc: 'Score, summarize, and route work with rules your team trusts.' },
-      { title: 'Execute', desc: 'Trigger workflows, follow-ups, and reports automatically.' },
+      { title: 'Capture', desc: 'Unify intake from web, email, and tools into a single workflow.' },
+      { title: 'Decide', desc: 'Summarize, score, and route work with rules your team approves.' },
+      { title: 'Execute', desc: 'Trigger workflows, follow-ups, and reporting automatically.' },
     ],
   },
   solutions: {
-    eyebrow: 'AI solution set',
-    title: 'AI-driven solutions for lean teams',
-    subtitle: 'Practical automations built around your current stack and the way your team already works.',
+    eyebrow: 'Solution stack',
+    title: 'Custom solutions, not off-the-shelf products',
+    subtitle: 'We build the AI workflows your team needs, on top of your current tools.',
     items: [
       {
         title: 'AI Intake & Routing',
-        desc: 'Turn inbound requests into structured work items with instant context.',
-        bullets: ['Website, email, and form capture', 'Smart tagging and priority queues', 'Follow-up drafts in minutes'],
+        desc: 'Turn inbound requests into structured work with instant context.',
+        bullets: ['Website, email, and form capture', 'Smart tagging and routing', 'Follow-up drafts in minutes'],
       },
       {
         title: 'Operations Autopilot',
@@ -135,6 +135,36 @@ export const en = {
     subtitle: 'Tell us how work flows today, and we will design a practical path to automation.',
     primaryCta: 'Talk to Aedx',
     secondaryCta: 'See capabilities',
+  },
+  solutionsPage: {
+    title: 'Solutions',
+    intro: 'Custom AI services designed around your workflows and the tools you already use.',
+    items: [
+      {
+        title: 'Custom AI Automations',
+        desc: 'Automate intake, approvals, and follow-ups with guardrails your team controls.',
+      },
+      {
+        title: 'Process Automation',
+        desc: 'Map SOPs into reliable workflows that remove bottlenecks and handoffs.',
+      },
+      {
+        title: 'API Integrations',
+        desc: 'Connect your CRM, inbox, billing, and ops tools into a single flow of work.',
+      },
+      {
+        title: 'AI Chatbots',
+        desc: 'Deploy customer-facing assistants that know your business and stay on brand.',
+      },
+      {
+        title: 'AI Reporting',
+        desc: 'Turn operational data into summaries, alerts, and decisions leaders trust.',
+      },
+      {
+        title: 'AI Ops Enablement',
+        desc: 'Training, governance, and playbooks so your team can operate confidently.',
+      },
+    ],
   },
   features: {
     sectionTitle: 'Choose what to plan',

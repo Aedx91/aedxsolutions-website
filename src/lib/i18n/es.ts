@@ -1,5 +1,5 @@
 export const es = {
-  nav: { home: 'Inicio', products: 'Productos', customers: 'Clientes', contact: 'Contacto' },
+  nav: { home: 'Inicio', products: 'Soluciones', customers: 'Clientes', contact: 'Contacto' },
   footer: { privacy: 'Privacidad', terms: 'Términos' },
   demo: {
     loginTitle: 'Acceso Demo | AedxSolutions',
@@ -27,15 +27,15 @@ export const es = {
     },
   },
   hero: {
-    title: 'Soluciones con IA para pequeños negocios que convierten tareas en impulso',
-    subtitle: 'Diseñamos, construimos y automatizamos sistemas que mantienen ventas, operaciones y soporte en marcha sin sumar personal.',
-    ctaPrimary: 'Agendar llamada estratégica',
-    ctaSecondary: 'Ver soluciones',
+    title: 'IA que mantiene en marcha a los pequeños negocios',
+    subtitle: 'Automatiza ingreso, operaciones y soporte con flujos creados para tus herramientas actuales.',
+    ctaPrimary: 'Solicitar hoja de ruta',
+    ctaSecondary: 'Explorar soluciones',
     ctaTertiary: 'Ver demo',
     highlights: [
-      'Copilotos de IA que se adaptan a tu flujo',
-      'Integraciones con las herramientas que ya usas',
-      'Lanzamientos rapidos con impacto medible',
+      'Automatizaciones a medida, no bots genéricos',
+      'IA con control humano que tu equipo confía',
+      'Lanzamiento rápido con ROI claro',
     ],
   },
   demoHero: {
@@ -43,7 +43,7 @@ export const es = {
     subtitle: 'Guarda los platos, citas, pelis y momentos que queremos anotar. Tú eliges; yo cocino; decidimos cómo cubrirlo.',
   },
   contact: { title: 'Contáctanos', intro: 'Cuéntanos tu proyecto y te responderemos pronto.' },
-  products: { title: 'Productos', intro: 'Un vistazo a las plataformas y aceleradores que construimos.' },
+  products: { title: 'Soluciones', intro: 'Servicios de IA a medida para tu operación.' },
   customers: { title: 'Nuestros Clientes', intro: 'Equipos que confían en nosotros para rendimiento, seguridad y velocidad.' },
   legal: {
     privacyTitle: 'Política de Privacidad',
@@ -72,24 +72,24 @@ export const es = {
   },
   heroBadge: 'AedxSolutions • Operaciones con IA para Pymes',
   signal: {
-    eyebrow: 'Del dato a la acción',
-    title: 'De insight a ejecución',
-    subtitle: 'Convertimos el caos diario en sistemas claros y automatizamos lo repetible para que tu equipo crezca.',
+    eyebrow: 'Para equipos ligeros',
+    title: 'Del caos a la ejecución clara',
+    subtitle: 'Mapeamos el trabajo, conectamos tus herramientas y automatizamos lo repetible.',
     items: [
-      { title: 'Captura', desc: 'Unificamos entradas desde web, email y herramientas en un flujo listo para IA.' },
-      { title: 'Decide', desc: 'Priorizamos, resumimos y enroutamos con reglas que tu equipo valida.' },
-      { title: 'Ejecuta', desc: 'Activamos flujos, seguimientos y reportes automaticamente.' },
+      { title: 'Captura', desc: 'Unificamos entradas desde web, email y herramientas en un solo flujo.' },
+      { title: 'Decide', desc: 'Resumimos, priorizamos y enroutamos con reglas aprobadas.' },
+      { title: 'Ejecuta', desc: 'Activamos flujos, seguimientos y reportes automáticamente.' },
     ],
   },
   solutions: {
-    eyebrow: 'Soluciones con IA',
-    title: 'Soluciones con IA para equipos pequenos',
-    subtitle: 'Automatizaciones prácticas construidas sobre tu stack actual y tu forma real de trabajar.',
+    eyebrow: 'Paquete de soluciones',
+    title: 'Soluciones a medida, no productos genéricos',
+    subtitle: 'Construimos los flujos de IA que tu equipo necesita sobre tu stack actual.',
     items: [
       {
         title: 'Ingreso y Enrutamiento con IA',
         desc: 'Convierte solicitudes en trabajo estructurado con contexto instantáneo.',
-        bullets: ['Captura web, email y formularios', 'Etiquetas y colas inteligentes', 'Seguimientos en minutos'],
+        bullets: ['Captura web, email y formularios', 'Etiquetas y enrutamiento inteligente', 'Seguimientos en minutos'],
       },
       {
         title: 'Piloto Automático de Operaciones',
@@ -116,7 +116,7 @@ export const es = {
       { value: 'Semanas', label: 'Para lanzar un flujo real' },
       { value: 'Menos handoffs', label: 'Con enrutamiento automático' },
       { value: '24/7', label: 'Seguimientos sin agotamiento' },
-      { value: 'ROI claro', label: 'Paneles en los que confia liderazgo' },
+      { value: 'ROI claro', label: 'Paneles en los que confía liderazgo' },
     ],
   },
   process: {
@@ -135,6 +135,18 @@ export const es = {
     subtitle: 'Cuéntanos cómo fluye el trabajo hoy y diseñamos un plan práctico de automatización.',
     primaryCta: 'Hablar con Aedx',
     secondaryCta: 'Ver capacidades',
+  },
+  solutionsPage: {
+    title: 'Soluciones',
+    intro: 'Servicios de IA a medida para tus flujos y las herramientas que ya usas.',
+    items: [
+      { title: 'Automatizaciones con IA', desc: 'Automatiza ingresos, aprobaciones y seguimientos con control humano.' },
+      { title: 'Automatización de Procesos', desc: 'Convertimos SOPs en flujos confiables que eliminan cuellos de botella.' },
+      { title: 'Integraciones API', desc: 'Conecta CRM, correo, facturación y operaciones en un solo flujo.' },
+      { title: 'Chatbots con IA', desc: 'Asistentes para clientes que conocen tu negocio y tu tono.' },
+      { title: 'Reportes con IA', desc: 'Resúmenes, alertas y decisiones con datos operativos.' },
+      { title: 'Habilitación de IA', desc: 'Capacitación, gobierno y playbooks para operar con confianza.' },
+    ],
   },
   features: {
     sectionTitle: 'Elige qué planear',
