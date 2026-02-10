@@ -10,8 +10,11 @@ function buildCsp(nonce: string, isProd: boolean) {
     "img-src 'self' data: blob:",
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self' data:",
-    // Nonce-based inline script allowance (no 'unsafe-inline' in production).
-    `script-src 'self' 'nonce-${nonce}'${isProd ? '' : " 'unsafe-eval'"}`,
+    // NOTE: Some deployments may serve fully static HTML that cannot carry per-request nonces.
+    // Keep nonce support for future hardening, but allow inline scripts to avoid blank screens.
+    isProd
+      ? `script-src 'self' 'nonce-${nonce}' 'unsafe-inline'`
+      : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval'`,
   ]
 
   if (isProd) {
