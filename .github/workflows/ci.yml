@@ -27,11 +27,5 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build (static export)
+      - name: Build
         run: npm run build
-
-      - name: Upload artifact (out)
-        uses: actions/upload-artifact@v4
-        with:
-          name: site-out
-          path: out

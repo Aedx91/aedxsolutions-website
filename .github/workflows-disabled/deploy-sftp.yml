@@ -1,8 +1,22 @@
-name: Deploy to GoDaddy (SFTP)
+# DISABLED WORKFLOW
+#
+# This file was moved out of `.github/workflows/` to avoid running and to avoid editor
+# workflow diagnostics in local environments. It is kept only as reference.
+#
+# NOTE: The current Next.js app is not configured as a static export (`out/`), so this
+# SFTP approach is likely not appropriate unless the project is converted to a static build.
+
+name: Deploy to GoDaddy (SFTP) [DISABLED]
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_SSH_PRIVATE_KEY: ${{ secrets.SFTP_SSH_PRIVATE_KEY }}
 
 jobs:
   build:
@@ -43,10 +57,11 @@ jobs:
       - name: Deploy via SFTP to GoDaddy
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          server: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          port: ${{ secrets.SFTP_PORT || 22 }}
+          server: ${{ env.SFTP_HOST }}
+          username: ${{ env.SFTP_USER }}
+          password: ${{ env.SFTP_PASSWORD }}
+          ssh_private_key: ${{ env.SFTP_SSH_PRIVATE_KEY }}
+          port: ${{ env.SFTP_PORT != '' && env.SFTP_PORT || '22' }}
           local_path: 'out/*'
           remote_path: 'public_html/'
           delete_remote_files: false

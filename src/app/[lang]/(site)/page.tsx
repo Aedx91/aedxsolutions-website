@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
 import FlipCard from '@/components/FlipCard'
@@ -26,6 +27,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
   const { lang: rawLang } = await props.params
   const lang = rawLang === 'es' ? 'es' : 'en'
   const dict = await getDictionary(lang as Lang)
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   return (
     <div>
       <section className="hero">
@@ -74,6 +76,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
 
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -85,6 +88,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
       />
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

@@ -1,16 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
 import { submitContact, type ContactResult } from '@/app/[lang]/contact/actions'
 
-function SubmitBtn() {
-  const { pending } = useFormStatus()
+function SubmitBtn({ pending }: { pending: boolean }) {
   return (
-    <button
-      className="btn btn-primary tap-target"
-      disabled={pending}
-    >
+    <button className="btn btn-primary tap-target" disabled={pending}>
       {pending ? 'Sending…' : 'Send message'}
     </button>
   )
@@ -19,7 +15,7 @@ function SubmitBtn() {
 const initialState: ContactResult = { ok: false, errors: {} }
 
 export default function ContactForm({ lang }: { lang: 'en' | 'es' }) {
-  const [state, action] = useFormState<ContactResult, FormData>(submitContact, initialState)
+  const [state, action, pending] = useActionState<ContactResult, FormData>(submitContact, initialState)
 
   const ok = state?.ok === true
   const e = !state || state.ok ? {} : state.errors || {}
@@ -79,7 +75,7 @@ export default function ContactForm({ lang }: { lang: 'en' | 'es' }) {
       </label>
 
       <div className="flex gap-3 items-center">
-        <SubmitBtn />
+        <SubmitBtn pending={pending} />
         <Link className="btn btn-outline" href={`/${lang}/customers`}>
           {lang === 'es' ? 'Ver trabajo' : 'See work'}
         </Link>
