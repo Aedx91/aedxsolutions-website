@@ -1,15 +1,18 @@
 /* Tailwind v4 setup */
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
 /* Base body styling */
 body {
   background: var(--surface-app);
   color: var(--text-primary);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Space Grotesk", "Segoe UI", "Helvetica Neue", sans-serif;
 }
 /* Utility gradient text (optional) */
 .gradient-text { background: linear-gradient(90deg,var(--brand-primary),var(--brand-secondary)); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .focus-ring:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: 2px; }
+.font-display { font-family: "Fraunces", "Georgia", serif; letter-spacing: -0.015em; }
+.shadow-glow { box-shadow: 0 18px 40px rgba(0, 120, 212, 0.18), 0 6px 16px rgba(0, 0, 0, 0.12); }
 
 /* Better typography inside prose */
 .prose h2 { scroll-margin-top: 6rem; }

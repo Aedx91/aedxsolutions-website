@@ -24,7 +24,13 @@ export async function GET(req: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const supabase = tryGetSupabase()
-  if (!supabase) return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 })
+  if (!supabase) {
+    return NextResponse.json({
+      dates: [],
+      integrations: { google: false, microsoft: false },
+      warning: 'Supabase not configured',
+    })
+  }
   const { data, error } = await supabase
     .from('dates')
     .select('id, date, description, google_event_id, microsoft_event_id')
@@ -38,7 +44,11 @@ export async function GET(req: Request) {
 
   if (error) {
     console.error('Supabase GET dates error', error)
-    return NextResponse.json({ error: 'Failed to load dates' }, { status: 500 })
+    return NextResponse.json({
+      dates: [],
+      integrations: { google: false, microsoft: false },
+      warning: 'Failed to load dates',
+    })
   }
 
   const mapped = (data || []).map((row) => ({

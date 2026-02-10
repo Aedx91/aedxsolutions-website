@@ -27,9 +27,16 @@ export const en = {
     },
   },
   hero: {
-    title: 'AI-powered software for real-world operations',
-    subtitle: 'Modern web, API integrations, and consulting that scale with your team\'s growth.',
-    cta: 'Talk to us'
+    title: 'AI-driven small business solutions that turn busywork into momentum',
+    subtitle: 'We design, build, and automate systems that keep sales, operations, and customer care moving without adding headcount.',
+    ctaPrimary: 'Book a strategy call',
+    ctaSecondary: 'See solutions',
+    ctaTertiary: 'View demo',
+    highlights: [
+      'AI copilots that fit your workflow',
+      'Integrations across tools you already use',
+      'Fast launches with measurable impact',
+    ],
   },
   demoHero: {
     title: 'Carmy space',
@@ -63,7 +70,72 @@ export const en = {
       ]
     }
   },
-  heroBadge: 'AedxSolutions • Build • Integrate • Automate',
+  heroBadge: 'AedxSolutions • AI Ops for Small Business',
+  signal: {
+    eyebrow: 'Signal to action',
+    title: 'From insight to execution',
+    subtitle: 'We translate your daily chaos into clean systems, then automate the repeatable steps so your team can focus on growth.',
+    items: [
+      { title: 'Capture', desc: 'Unify intake from web, email, and tools into one AI-ready stream.' },
+      { title: 'Decide', desc: 'Score, summarize, and route work with rules your team trusts.' },
+      { title: 'Execute', desc: 'Trigger workflows, follow-ups, and reports automatically.' },
+    ],
+  },
+  solutions: {
+    eyebrow: 'AI solution set',
+    title: 'AI-driven solutions for lean teams',
+    subtitle: 'Practical automations built around your current stack and the way your team already works.',
+    items: [
+      {
+        title: 'AI Intake & Routing',
+        desc: 'Turn inbound requests into structured work items with instant context.',
+        bullets: ['Website, email, and form capture', 'Smart tagging and priority queues', 'Follow-up drafts in minutes'],
+      },
+      {
+        title: 'Operations Autopilot',
+        desc: 'Coordinate tasks across people and systems with reliable guardrails.',
+        bullets: ['Workflow orchestration', 'SOP checklists and approvals', 'Exceptions flagged automatically'],
+      },
+      {
+        title: 'Revenue Intelligence',
+        desc: 'Give sales visibility without extra spreadsheets.',
+        bullets: ['Pipeline summaries', 'Lead scoring and alerts', 'Quote and proposal support'],
+      },
+      {
+        title: 'Customer Care Assist',
+        desc: 'Speed up responses while keeping your brand voice consistent.',
+        bullets: ['Unified inbox insights', 'Suggested replies and macros', 'Knowledge retrieval on demand'],
+      },
+    ],
+  },
+  outcomes: {
+    eyebrow: 'Outcomes',
+    title: 'Practical wins, measurable momentum',
+    subtitle: 'No vanity AI. Just better operations your team can feel every week.',
+    stats: [
+      { value: 'Weeks', label: 'To launch a real workflow' },
+      { value: 'Fewer handoffs', label: 'With automated routing' },
+      { value: '24/7', label: 'Follow-ups without burnout' },
+      { value: 'Clear ROI', label: 'Dashboards leadership can trust' },
+    ],
+  },
+  process: {
+    eyebrow: 'Delivery',
+    title: 'How we work',
+    steps: [
+      { title: 'Discover', desc: 'Map your workflow, tools, and the bottlenecks costing time.' },
+      { title: 'Design', desc: 'Prototype the AI and automation plan with your team in the loop.' },
+      { title: 'Deploy', desc: 'Ship the first workflow, test fast, and train the team.' },
+      { title: 'Optimize', desc: 'Measure impact and expand automations that earn their keep.' },
+    ],
+  },
+  cta: {
+    eyebrow: 'Start here',
+    title: 'Ready to run leaner with AI?',
+    subtitle: 'Tell us how work flows today, and we will design a practical path to automation.',
+    primaryCta: 'Talk to Aedx',
+    secondaryCta: 'See capabilities',
+  },
   features: {
     sectionTitle: 'Choose what to plan',
     sectionSubtitle: 'Flip a card to preview the run, then tap “More info” to see how we ship it.',

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
-import FlipCard from '@/components/FlipCard'
+import { MotionSection } from '@/components/MotionSection'
 
 export const dynamic = 'force-static'
 
@@ -13,12 +13,12 @@ export async function generateMetadata(
   const t =
     lang === 'es'
       ? {
-          title: 'Software con IA para operaciones reales | AedxSolutions',
-          desc: 'Web moderna, integraciones API y consultoría que escalan con tu negocio.',
+          title: 'Soluciones con IA para pequeños negocios | AedxSolutions',
+          desc: 'Automatización real, sistemas conectados y resultados medibles para equipos pequeños.',
         }
       : {
-          title: 'AI-powered software for real-world operations | AedxSolutions',
-          desc: 'Modern web, API integrations, and consulting that scale with your business.',
+          title: 'AI-driven small business solutions | AedxSolutions',
+          desc: 'Practical automation, connected systems, and measurable outcomes for lean teams.',
         }
   return pageMeta(lang, '', t.title, t.desc)
 }
@@ -32,47 +32,143 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
     <div>
       <section className="hero">
         <div className="hero-accent" aria-hidden></div>
-        <div className="container">
-          <div className="hero-content">
+        <div className="container section">
+          <div className="max-w-3xl">
             <span className="btn-chip">{dict.heroBadge}</span>
-            <h1 className="hero-heading mt-4 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
+            <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-tight font-display text-text-hero">
               {dict.hero.title}
             </h1>
-            <p className="hero-sub mt-4 max-w-2xl">{dict.hero.subtitle}</p>
-            <div className="mt-8 flex items-center gap-3">
+            <p className="mt-5 text-lg sm:text-xl text-text-secondary max-w-2xl">{dict.hero.subtitle}</p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="btn btn-primary shadow-glow" href={`/${lang}/contact`}>
-                {dict.hero.cta}
+                {dict.hero.ctaPrimary}
               </a>
               <a className="btn btn-outline" href={`/${lang}/products`}>
-                {dict.nav.products}
+                {dict.hero.ctaSecondary}
               </a>
               <a className="btn btn-outline" href={`/${lang}/demo/login`}>
-                {dict.demo.loginButton}
+                {dict.hero.ctaTertiary}
               </a>
+            </div>
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-text-secondary">
+              {dict.hero.highlights.map((item) => (
+                <div key={item} className="card">
+                  <p className="font-medium text-text-primary">{item}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-app-surface">
+      <MotionSection className="bg-surface-section">
         <div className="container section">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary text-center mb-2">
-            {dict.features.sectionTitle}
-          </h2>
-          <p className="text-text-secondary max-w-2xl mx-auto text-center">{dict.features.sectionSubtitle}</p>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-            {dict.features.items.map((item) => (
-              <FlipCard
-                key={item.title}
-                title={item.title}
-                subtitle={<span>{item.desc}</span>}
-                ctaHref={`/${lang}/products`}
-                ctaLabel={lang === 'es' ? 'Más info' : 'More info'}
-              />
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{dict.signal.eyebrow}</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold font-display text-text-primary">
+              {dict.signal.title}
+            </h2>
+            <p className="mt-4 text-text-secondary text-lg">{dict.signal.subtitle}</p>
+          </div>
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {dict.signal.items.map((item) => (
+              <div key={item.title} className="card">
+                <h3 className="text-xl font-semibold text-text-primary">{item.title}</h3>
+                <p className="mt-3 text-text-secondary">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
-      </section>
+      </MotionSection>
+
+      <MotionSection className="bg-app-surface">
+        <div className="container section">
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{dict.solutions.eyebrow}</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold font-display text-text-primary">
+              {dict.solutions.title}
+            </h2>
+            <p className="mt-4 text-text-secondary text-lg">{dict.solutions.subtitle}</p>
+          </div>
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {dict.solutions.items.map((item) => (
+              <div key={item.title} className="card">
+                <h3 className="text-xl font-semibold text-text-primary">{item.title}</h3>
+                <p className="mt-3 text-text-secondary">{item.desc}</p>
+                <ul className="mt-4 space-y-2 text-sm text-text-secondary">
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet}>• {bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="bg-surface-section">
+        <div className="container section">
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{dict.outcomes.eyebrow}</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold font-display text-text-primary">
+              {dict.outcomes.title}
+            </h2>
+            <p className="mt-4 text-text-secondary text-lg">{dict.outcomes.subtitle}</p>
+          </div>
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {dict.outcomes.stats.map((stat) => (
+              <div key={stat.label} className="card">
+                <p className="text-3xl font-semibold text-text-primary">{stat.value}</p>
+                <p className="mt-2 text-sm text-text-secondary">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="bg-app-surface">
+        <div className="container section">
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{dict.process.eyebrow}</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold font-display text-text-primary">
+              {dict.process.title}
+            </h2>
+          </div>
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+            {dict.process.steps.map((step, index) => (
+              <div key={step.title} className="card">
+                <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="mt-3 text-lg font-semibold text-text-primary">{step.title}</h3>
+                <p className="mt-2 text-sm text-text-secondary">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="bg-surface-section">
+        <div className="container section">
+          <div className="card">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="max-w-2xl">
+                <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{dict.cta.eyebrow}</p>
+                <h2 className="mt-3 text-3xl sm:text-4xl font-semibold font-display text-text-primary">
+                  {dict.cta.title}
+                </h2>
+                <p className="mt-4 text-text-secondary text-lg">{dict.cta.subtitle}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <a className="btn btn-primary shadow-glow" href={`/${lang}/contact`}>
+                  {dict.cta.primaryCta}
+                </a>
+                <a className="btn btn-outline" href={`/${lang}/products`}>
+                  {dict.cta.secondaryCta}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </MotionSection>
 
       <script
         type="application/ld+json"

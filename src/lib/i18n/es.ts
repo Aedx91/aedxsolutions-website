@@ -27,9 +27,16 @@ export const es = {
     },
   },
   hero: {
-    title: 'Software con IA para operaciones reales',
-    subtitle: 'Web moderna, integraciones API y consultoría que escalan con el crecimiento de tu equipo.',
-    cta: 'Hablemos'
+    title: 'Soluciones con IA para pequeños negocios que convierten tareas en impulso',
+    subtitle: 'Diseñamos, construimos y automatizamos sistemas que mantienen ventas, operaciones y soporte en marcha sin sumar personal.',
+    ctaPrimary: 'Agendar llamada estratégica',
+    ctaSecondary: 'Ver soluciones',
+    ctaTertiary: 'Ver demo',
+    highlights: [
+      'Copilotos de IA que se adaptan a tu flujo',
+      'Integraciones con las herramientas que ya usas',
+      'Lanzamientos rapidos con impacto medible',
+    ],
   },
   demoHero: {
     title: 'Espacio Carmy',
@@ -63,7 +70,72 @@ export const es = {
       ]
     }
   },
-  heroBadge: 'AedxSolutions • Construir • Integrar • Automatizar',
+  heroBadge: 'AedxSolutions • Operaciones con IA para Pymes',
+  signal: {
+    eyebrow: 'Del dato a la acción',
+    title: 'De insight a ejecución',
+    subtitle: 'Convertimos el caos diario en sistemas claros y automatizamos lo repetible para que tu equipo crezca.',
+    items: [
+      { title: 'Captura', desc: 'Unificamos entradas desde web, email y herramientas en un flujo listo para IA.' },
+      { title: 'Decide', desc: 'Priorizamos, resumimos y enroutamos con reglas que tu equipo valida.' },
+      { title: 'Ejecuta', desc: 'Activamos flujos, seguimientos y reportes automaticamente.' },
+    ],
+  },
+  solutions: {
+    eyebrow: 'Soluciones con IA',
+    title: 'Soluciones con IA para equipos pequenos',
+    subtitle: 'Automatizaciones prácticas construidas sobre tu stack actual y tu forma real de trabajar.',
+    items: [
+      {
+        title: 'Ingreso y Enrutamiento con IA',
+        desc: 'Convierte solicitudes en trabajo estructurado con contexto instantáneo.',
+        bullets: ['Captura web, email y formularios', 'Etiquetas y colas inteligentes', 'Seguimientos en minutos'],
+      },
+      {
+        title: 'Piloto Automático de Operaciones',
+        desc: 'Coordina tareas entre personas y sistemas con controles confiables.',
+        bullets: ['Orquestación de flujos', 'Checklists y aprobaciones', 'Alertas de excepciones'],
+      },
+      {
+        title: 'Inteligencia de Ingresos',
+        desc: 'Visibilidad de ventas sin más hojas de cálculo.',
+        bullets: ['Resumen de pipeline', 'Scoring de leads y alertas', 'Soporte para cotizaciones'],
+      },
+      {
+        title: 'Asistencia al Cliente',
+        desc: 'Respuestas más rápidas con la voz de tu marca.',
+        bullets: ['Insights de bandeja unificada', 'Respuestas sugeridas', 'Conocimiento bajo demanda'],
+      },
+    ],
+  },
+  outcomes: {
+    eyebrow: 'Resultados',
+    title: 'Victorias reales, impulso medible',
+    subtitle: 'Nada de IA de vitrina. Solo operaciones mejores cada semana.',
+    stats: [
+      { value: 'Semanas', label: 'Para lanzar un flujo real' },
+      { value: 'Menos handoffs', label: 'Con enrutamiento automático' },
+      { value: '24/7', label: 'Seguimientos sin agotamiento' },
+      { value: 'ROI claro', label: 'Paneles en los que confia liderazgo' },
+    ],
+  },
+  process: {
+    eyebrow: 'Entrega',
+    title: 'Cómo trabajamos',
+    steps: [
+      { title: 'Descubrir', desc: 'Mapeamos tu flujo, herramientas y cuellos de botella.' },
+      { title: 'Diseñar', desc: 'Prototipamos IA y automatizaciones con tu equipo.' },
+      { title: 'Desplegar', desc: 'Lanzamos el primer flujo y entrenamos al equipo.' },
+      { title: 'Optimizar', desc: 'Medimos impacto y escalamos lo que funciona.' },
+    ],
+  },
+  cta: {
+    eyebrow: 'Empecemos',
+    title: '¿Listo para operar más ligero con IA?',
+    subtitle: 'Cuéntanos cómo fluye el trabajo hoy y diseñamos un plan práctico de automatización.',
+    primaryCta: 'Hablar con Aedx',
+    secondaryCta: 'Ver capacidades',
+  },
   features: {
     sectionTitle: 'Elige qué planear',
     sectionSubtitle: 'Voltea una carta para ver el plan y toca “Más info” para saber cómo lo ejecutamos.',
