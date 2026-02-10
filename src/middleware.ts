@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-function buildCsp(nonce: string, isProd: boolean) {
+function buildCsp(isProd: boolean) {
   const base = [
     "default-src 'self'",
     "base-uri 'self'",
@@ -10,11 +10,13 @@ function buildCsp(nonce: string, isProd: boolean) {
     "img-src 'self' data: blob:",
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self' data:",
-    // NOTE: Some deployments may serve fully static HTML that cannot carry per-request nonces.
-    // Keep nonce support for future hardening, but allow inline scripts to avoid blank screens.
+    // NOTE: Next.js renders some required inline scripts. Enforcing nonce-based CSP
+    // requires *all* of those scripts to carry the matching nonce.
+    // Until that pipeline is fully in place, do NOT include a nonce in `script-src`,
+    // because browsers will then ignore `'unsafe-inline'` and block inline execution.
     isProd
-      ? `script-src 'self' 'nonce-${nonce}' 'unsafe-inline'`
-      : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval'`,
+      ? "script-src 'self' 'unsafe-inline'"
+      : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   ]
 
   if (isProd) {
@@ -67,7 +69,7 @@ export function middleware(req: NextRequest) {
 
   // Response headers
   res.headers.set('x-nonce', nonce)
-  res.headers.set('Content-Security-Policy', buildCsp(nonce, isProd))
+  res.headers.set('Content-Security-Policy', buildCsp(isProd))
   return res
 }
 
