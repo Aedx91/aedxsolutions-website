@@ -1,5 +1,6 @@
 export const en = {
   nav: { home: 'Home', products: 'Solutions', customers: 'Customers', contact: 'Contact' },
+  menu: { open: 'Open menu', close: 'Close menu' },
   footer: { privacy: 'Privacy', terms: 'Terms' },
   demo: {
     loginTitle: 'Demo Login | AedxSolutions',
