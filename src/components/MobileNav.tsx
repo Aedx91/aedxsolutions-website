@@ -33,6 +33,16 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
     }
   }, [open])
 
+  useEffect(() => {
+    const root = document.documentElement
+    if (open) {
+      root.setAttribute('data-nav-open', 'true')
+    } else {
+      root.removeAttribute('data-nav-open')
+    }
+    return () => root.removeAttribute('data-nav-open')
+  }, [open])
+
   const openLabel = dict.menu?.open ?? 'Open menu'
   const closeLabel = dict.menu?.close ?? 'Close menu'
 

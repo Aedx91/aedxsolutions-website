@@ -35,6 +35,20 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 @media (min-width: 1024px) { .section-pad { padding-top: 6rem; padding-bottom: 6rem; } }
 .radial-soft { background: radial-gradient(40rem 40rem at 50% -10%, rgba(0,0,0,0.06), transparent 60%); }
 
+/* Mobile nav push effect */
+.site-shell {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.35s ease, filter 0.35s ease;
+  will-change: transform;
+}
+@media (max-width: 767px) {
+  :root[data-nav-open="true"] .site-shell {
+    transform: translateX(-72vw);
+    filter: saturate(0.9);
+  }
+}
+
 /* Hero helpers */
 /* Softer, layered hero gradient that blends into page background without harsh cutoff */
 .hero-bg-base {
