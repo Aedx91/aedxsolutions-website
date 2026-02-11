@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
 import { AnimatePresence, motion } from 'framer-motion'
+import { createPortal } from 'react-dom'
 
 type DictShape = {
   nav: { products: string; customers: string; contact: string; home?: string }
@@ -13,6 +14,7 @@ type DictShape = {
 
 export default function MobileNav({ lang, dict }: { lang: string; dict: DictShape }) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const panelRef = useRef<HTMLDivElement | null>(null)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
 
@@ -32,6 +34,10 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
       document.body.style.overflow = prev
     }
   }, [open])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const root = document.documentElement
@@ -77,70 +83,74 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
         </span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <button
-              type="button"
-              aria-label={closeLabel}
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setOpen(false)}
-            />
-            <motion.div
-              id="mobile-nav"
-              ref={panelRef}
-              role="dialog"
-              aria-modal="true"
-              initial={{ x: 320 }}
-              animate={{ x: 0 }}
-              exit={{ x: 320 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-              className="absolute right-0 top-0 w-72 h-full bg-surface-section text-text-primary shadow-xl p-6 flex flex-col gap-6"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-sm uppercase tracking-[0.3em] text-text-secondary">
-                  {dict.nav.home ?? 'Menu'}
-                </span>
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="fixed inset-0 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 <button
                   type="button"
-                  className="text-text-secondary hover:text-text-primary"
+                  aria-label={closeLabel}
+                  className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                   onClick={() => setOpen(false)}
+                />
+                <motion.div
+                  id="mobile-nav"
+                  ref={panelRef}
+                  role="dialog"
+                  aria-modal="true"
+                  initial={{ x: 360 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: 360 }}
+                  transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+                  className="absolute right-0 top-0 h-full w-[78vw] max-w-[320px] bg-surface-section text-text-primary shadow-2xl p-6 flex flex-col gap-6"
                 >
-                  <span className="sr-only">{closeLabel}</span>
-                  ✕
-                </button>
-              </div>
-              <nav className="flex flex-col gap-4 text-lg">
-                <Link href={`/${lang}`} onClick={() => setOpen(false)} className="font-semibold">
-                  {dict.nav.home ?? 'Home'}
-                </Link>
-                <Link href={`/${lang}/products`} onClick={() => setOpen(false)}>
-                  {dict.nav.products}
-                </Link>
-                <Link href={`/${lang}/customers`} onClick={() => setOpen(false)}>
-                  {dict.nav.customers}
-                </Link>
-                <Link href={`/${lang}/contact`} onClick={() => setOpen(false)}>
-                  {dict.nav.contact}
-                </Link>
-                <Link href={`/${lang}/demo/login`} onClick={() => setOpen(false)}>
-                  {dict.demo?.loginButton ?? 'Demo Login'}
-                </Link>
-              </nav>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm uppercase tracking-[0.3em] text-text-secondary">
+                      {dict.nav.home ?? 'Menu'}
+                    </span>
+                    <button
+                      type="button"
+                      className="text-text-secondary hover:text-text-primary"
+                      onClick={() => setOpen(false)}
+                    >
+                      <span className="sr-only">{closeLabel}</span>
+                      ✕
+                    </button>
+                  </div>
+                  <nav className="flex flex-col gap-4 text-lg">
+                    <Link href={`/${lang}`} onClick={() => setOpen(false)} className="font-semibold">
+                      {dict.nav.home ?? 'Home'}
+                    </Link>
+                    <Link href={`/${lang}/products`} onClick={() => setOpen(false)}>
+                      {dict.nav.products}
+                    </Link>
+                    <Link href={`/${lang}/customers`} onClick={() => setOpen(false)}>
+                      {dict.nav.customers}
+                    </Link>
+                    <Link href={`/${lang}/contact`} onClick={() => setOpen(false)}>
+                      {dict.nav.contact}
+                    </Link>
+                    <Link href={`/${lang}/demo/login`} onClick={() => setOpen(false)}>
+                      {dict.demo?.loginButton ?? 'Demo Login'}
+                    </Link>
+                  </nav>
 
-              <div className="mt-auto flex items-center justify-between gap-3">
-                <LanguageSwitcher current={lang === 'es' ? 'es' : 'en'} />
-                <ThemeToggle />
-              </div>
-            </motion.div>
-          </motion.div>
+                  <div className="mt-auto flex items-center justify-between gap-3">
+                    <LanguageSwitcher current={lang === 'es' ? 'es' : 'en'} />
+                    <ThemeToggle />
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </div>
   )
 }

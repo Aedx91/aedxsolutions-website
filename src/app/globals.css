@@ -44,7 +44,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 }
 @media (max-width: 767px) {
   :root[data-nav-open="true"] .site-shell {
-    transform: translateX(-72vw);
+    transform: translateX(calc(-1 * min(78vw, 320px)));
     filter: saturate(0.9);
   }
 }
