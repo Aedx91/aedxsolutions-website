@@ -39,7 +39,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
               {dict.hero.title}
             </h1>
             <p className="mt-5 text-lg sm:text-xl text-text-secondary max-w-2xl">{dict.hero.subtitle}</p>
-            <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="mt-7 flex flex-wrap items-center gap-3">
               <a className="btn btn-primary shadow-glow" href={`/${lang}/contact`}>
                 {dict.hero.ctaPrimary}
               </a>
@@ -50,7 +50,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
                 {dict.hero.ctaTertiary}
               </a>
             </div>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm text-text-secondary">
+            <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-text-secondary">
               {dict.hero.highlights.map((item) => (
                 <div key={item} className="card">
                   <p className="font-medium text-text-primary">{item}</p>
@@ -70,7 +70,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
             </h2>
             <p className="mt-4 text-text-secondary text-lg">{dict.signal.subtitle}</p>
           </div>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="mt-9 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
             {dict.signal.items.map((item) => (
               <div key={item.title} className="card">
                 <h3 className="text-xl font-semibold text-text-primary">{item.title}</h3>
@@ -90,7 +90,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
             </h2>
             <p className="mt-4 text-text-secondary text-lg">{dict.solutions.subtitle}</p>
           </div>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="mt-9 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
             {dict.solutions.items.map((item) => (
               <div key={item.title} className="card">
                 <h3 className="text-xl font-semibold text-text-primary">{item.title}</h3>
@@ -115,7 +115,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
             </h2>
             <p className="mt-4 text-text-secondary text-lg">{dict.outcomes.subtitle}</p>
           </div>
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="mt-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
             {dict.outcomes.stats.map((stat) => (
               <div key={stat.label} className="card">
                 <p className="text-3xl font-semibold text-text-primary">{stat.value}</p>
@@ -134,7 +134,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
               {dict.process.title}
             </h2>
           </div>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="mt-9 grid grid-cols-1 md:grid-cols-4 gap-5 md:gap-6">
             {dict.process.steps.map((step, index) => (
               <div key={step.title} className="card">
                 <p className="text-xs uppercase tracking-[0.3em] text-text-secondary">{String(index + 1).padStart(2, '0')}</p>

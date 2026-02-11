@@ -113,37 +113,25 @@
 }
 
 .section { 
-  padding-top: 4rem; 
-  padding-bottom: 4rem; 
-}
-@media (max-width: 640px) {
-  .section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
+  padding-top: 3.5rem; 
+  padding-bottom: 3.5rem; 
 }
 @media (min-width: 640px) { 
   .section { 
-    padding-top: 5rem; 
-    padding-bottom: 5rem; 
+    padding-top: 4.5rem; 
+    padding-bottom: 4.5rem; 
   } 
 }
 @media (min-width: 1024px) { 
   .section { 
-    padding-top: 6rem; 
-    padding-bottom: 6rem; 
+    padding-top: 5.5rem; 
+    padding-bottom: 5.5rem; 
   } 
 }
 
 .section-sm { 
   padding-top: 2rem; 
   padding-bottom: 2rem; 
-}
-@media (max-width: 640px) {
-  .section-sm {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
 }
 @media (min-width: 640px) { 
   .section-sm { 
@@ -223,11 +211,6 @@ select:focus {
   padding:1.5rem; 
   box-shadow:0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05); 
   transition:all 0.2s ease-in-out;
-}
-@media (max-width: 640px) {
-  .card {
-    padding: 1.1rem;
-  }
 }
 .card:hover { 
   border-color:var(--border-hover); 
