@@ -45,22 +45,22 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
         aria-haspopup="dialog"
         type="button"
         onClick={() => setOpen(v => !v)}
-        className="inline-flex items-center justify-center p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+        className="inline-flex items-center justify-center p-2 rounded-md text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
       >
         <span className="sr-only">{open ? closeLabel : openLabel}</span>
         <span className="flex flex-col items-center justify-center">
           <span
-            className={`block h-0.5 w-5 rounded bg-text-primary transition-transform duration-200 ${
+            className={`block h-0.5 w-5 rounded bg-current transition-transform duration-200 ${
               open ? 'translate-y-1.5 rotate-45' : ''
             }`}
           />
           <span
-            className={`mt-1.5 block h-0.5 w-5 rounded bg-text-primary transition-opacity duration-200 ${
+            className={`mt-1.5 block h-0.5 w-5 rounded bg-current transition-opacity duration-200 ${
               open ? 'opacity-0' : 'opacity-100'
             }`}
           />
           <span
-            className={`mt-1.5 block h-0.5 w-5 rounded bg-text-primary transition-transform duration-200 ${
+            className={`mt-1.5 block h-0.5 w-5 rounded bg-current transition-transform duration-200 ${
               open ? '-translate-y-1.5 -rotate-45' : ''
             }`}
           />
