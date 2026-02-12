@@ -49,6 +49,33 @@ export const es = {
       'Creado para equipos ligeros',
     ],
   },
+  heroSpotlight: {
+    eyebrow: 'Destacados',
+    viewAll: 'Ver todas las soluciones',
+    items: [
+      {
+        tag: 'Más solicitado',
+        title: 'Sprint de Ingreso y Enrutamiento con IA',
+        desc: 'Convierte formularios web y correos entrantes en tareas estructuradas en días.',
+        cta: 'Ver solución',
+        href: '/products',
+      },
+      {
+        tag: 'Nuevo',
+        title: 'Inicio Rápido de Piloto Automático',
+        desc: 'Automatiza seguimientos y aprobaciones repetitivas manteniendo control humano.',
+        cta: 'Explorar despliegue',
+        href: '/products',
+      },
+      {
+        tag: 'Demo en vivo',
+        title: 'Demo Interactiva de Flujo',
+        desc: 'Visualiza el panel y el flujo operativo real antes de implementar.',
+        cta: 'Abrir demo',
+        href: '/demo/login',
+      },
+    ],
+  },
   demoHero: {
     title: 'Espacio Carmy',
     subtitle: 'Guarda los platos, citas, pelis y momentos que queremos anotar. Tú eliges; yo cocino; decidimos cómo cubrirlo.',

@@ -63,12 +63,29 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
                 {dict.hero.ctaTertiary}
               </a>
             </div>
-            <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-text-secondary">
-              {dict.hero.highlights.map((item) => (
-                <div key={item} className="card">
-                  <p className="font-medium text-text-primary">{item}</p>
-                </div>
-              ))}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-5">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs uppercase tracking-[0.22em] text-text-secondary">{dict.heroSpotlight.eyebrow}</p>
+                <a className="text-xs font-semibold text-text-primary underline underline-offset-4" href={`/${lang}/products`}>
+                  {dict.heroSpotlight.viewAll}
+                </a>
+              </div>
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                {dict.heroSpotlight.items.map((item) => (
+                  <a
+                    key={item.title}
+                    href={`/${lang}${item.href}`}
+                    className="rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-pink-400/40 hover:bg-white/[0.06]"
+                  >
+                    <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-text-secondary">
+                      {item.tag}
+                    </span>
+                    <h3 className="mt-3 text-base font-semibold text-text-primary">{item.title}</h3>
+                    <p className="mt-2 text-sm text-text-secondary">{item.desc}</p>
+                    <p className="mt-3 text-xs font-semibold text-text-primary">{item.cta} →</p>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

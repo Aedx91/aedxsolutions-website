@@ -49,6 +49,33 @@ export const en = {
       'Built for lean teams',
     ],
   },
+  heroSpotlight: {
+    eyebrow: 'Featured highlights',
+    viewAll: 'View all solutions',
+    items: [
+      {
+        tag: 'Most requested',
+        title: 'AI Intake & Routing Sprint',
+        desc: 'Turn web forms and inbox requests into structured tasks in days, not months.',
+        cta: 'See this solution',
+        href: '/products',
+      },
+      {
+        tag: 'New',
+        title: 'Ops Autopilot Quickstart',
+        desc: 'Automate repetitive follow-ups and approvals while keeping humans in control.',
+        cta: 'Explore rollout',
+        href: '/products',
+      },
+      {
+        tag: 'Live demo',
+        title: 'Interactive Workflow Demo',
+        desc: 'Preview the dashboard and real operator flow before committing to implementation.',
+        cta: 'Open demo',
+        href: '/demo/login',
+      },
+    ],
+  },
   demoHero: {
     title: 'Carmy space',
     subtitle: 'Keep the dishes, date nights, movies, and little moments we want to log. You pick; I cook; we decide how to cover it.',
