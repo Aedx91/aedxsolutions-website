@@ -121,6 +121,16 @@ export default function DemoDashboard({
     { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
   ]
 
+  const valentineBannerItems = useMemo(
+    () => [
+      'Would you like to be my valentine? 💜',
+      'Would you like to be my valentine? 💜',
+      'Would you like to be my valentine? 💜',
+      'Would you like to be my valentine? 💜',
+    ],
+    []
+  )
+
   const activeRouletteOptions = useMemo(() => rouletteOptions.slice(0, 6).filter(Boolean), [rouletteOptions])
   const optionCount = activeRouletteOptions.length || 1
   const wheelSegmentAngle = 360 / optionCount
@@ -877,6 +887,20 @@ export default function DemoDashboard({
           <p className="text-sm uppercase tracking-[0.2em] text-pink-200/70">Carmy space</p>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">{hero.title}</h1>
           <p className="mt-3 text-pink-100/80 max-w-2xl">{hero.subtitle}</p>
+
+          <div className="mt-6 hero-transition-banner" aria-label="Carmy offer banner">
+            <div className="hero-transition-shimmer" aria-hidden></div>
+            <div className="hero-transition-track" role="presentation">
+              {[...valentineBannerItems, ...valentineBannerItems].map((item, index) => (
+                <span
+                  key={`${item}-${index}`}
+                  className={`hero-transition-chip ${index % valentineBannerItems.length === 0 ? 'hero-transition-chip-accent' : ''}`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-6 inline-flex items-center gap-2 bg-white/5 border border-white/10 text-pink-100 px-3 py-2 rounded-full text-sm">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" /> Together mode is on

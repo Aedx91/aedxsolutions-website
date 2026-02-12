@@ -35,19 +35,6 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <div className="max-w-3xl">
             <span className="btn-chip">{dict.heroBadge}</span>
-            <div className="mt-5 hero-transition-banner" aria-label={dict.heroTransition.ariaLabel}>
-              <div className="hero-transition-shimmer" aria-hidden></div>
-              <div className="hero-transition-track" role="presentation">
-                {[...dict.heroTransition.items, ...dict.heroTransition.items].map((item, index) => (
-                  <span
-                    key={`${item}-${index}`}
-                    className={`hero-transition-chip ${index % dict.heroTransition.items.length === 0 ? 'hero-transition-chip-accent' : ''}`}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
             <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05] sm:leading-tight font-display text-text-hero">
               {dict.hero.title}
             </h1>
@@ -82,7 +69,6 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
                     </span>
                     <h3 className="mt-3 text-base font-semibold text-text-primary">{item.title}</h3>
                     <p className="mt-2 text-sm text-text-secondary">{item.desc}</p>
-                    <p className="mt-2 text-xs text-text-secondary">{item.price}</p>
                     <div className="mt-auto pt-4">
                       <span className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-text-primary">
                         {item.cta} →
