@@ -869,7 +869,13 @@ export default function DemoDashboard({
               </div>
 
               <div className="relative mt-6 h-72 w-72">
-                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300" />
+                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
+                  <div
+                    className={`h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300 ${
+                      isSpinningWheel ? 'roulette-pointer-tick' : ''
+                    } ${showCenterPick ? 'roulette-pointer-kick' : ''}`}
+                  />
+                </div>
 
                 <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
                   <motion.div
