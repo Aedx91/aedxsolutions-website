@@ -75,14 +75,19 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
                   <a
                     key={item.title}
                     href={`/${lang}${item.href}`}
-                    className="rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-pink-400/40 hover:bg-white/[0.06]"
+                    className="h-full rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-pink-400/40 hover:bg-white/[0.06] flex flex-col"
                   >
                     <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-text-secondary">
                       {item.tag}
                     </span>
                     <h3 className="mt-3 text-base font-semibold text-text-primary">{item.title}</h3>
                     <p className="mt-2 text-sm text-text-secondary">{item.desc}</p>
-                    <p className="mt-3 text-xs font-semibold text-text-primary">{item.cta} →</p>
+                    <p className="mt-2 text-xs text-text-secondary">{item.price}</p>
+                    <div className="mt-auto pt-4">
+                      <span className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-text-primary">
+                        {item.cta} →
+                      </span>
+                    </div>
                   </a>
                 ))}
               </div>
