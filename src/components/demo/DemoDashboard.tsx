@@ -91,9 +91,9 @@ export default function DemoDashboard({
   const [dateForm, setDateForm] = useState({ date: '', description: '' })
   const [integrations, setIntegrations] = useState<IntegrationStatus>({ google: false, microsoft: false })
   const [syncToCalendar, setSyncToCalendar] = useState(true)
-  const [rouletteOptions, setRouletteOptions] = useState<string[]>(DEFAULT_ROULETTE_OPTIONS)
+  const [rouletteOptions, setRouletteOptions] = useState<string[]>([])
   const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false)
-  const [selectedMenuItems, setSelectedMenuItems] = useState<string[]>(DEFAULT_ROULETTE_OPTIONS)
+  const [selectedMenuItems, setSelectedMenuItems] = useState<string[]>([])
   const [customEntries, setCustomEntries] = useState<string[]>([])
   const [customDraft, setCustomDraft] = useState('')
   const [rouletteError, setRouletteError] = useState<string | null>(null)
@@ -105,7 +105,6 @@ export default function DemoDashboard({
   const [roulettePick, setRoulettePick] = useState<string | null>(null)
   const [showCenterPick, setShowCenterPick] = useState(false)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
-  const rouletteStorageKey = useMemo(() => `carmy-roulette-options-${lang}`, [lang])
   const rouletteSoundStorageKey = useMemo(() => `carmy-roulette-sound-${lang}`, [lang])
   const rouletteSectionRef = useRef<HTMLDivElement | null>(null)
   const pointerTickTimersRef = useRef<number[]>([])
@@ -600,30 +599,6 @@ export default function DemoDashboard({
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const cached = window.localStorage.getItem(rouletteStorageKey)
-    if (!cached) return
-    try {
-      const parsed = JSON.parse(cached)
-      if (!Array.isArray(parsed)) return
-      const safe = parsed
-        .map((item) => (typeof item === 'string' ? normalizeEntry(item) : ''))
-        .filter(Boolean)
-        .slice(0, 6)
-      if (safe.length > 0) {
-        setRouletteOptions(dedupeEntries(safe))
-      }
-    } catch (error) {
-      console.error('Failed to parse roulette options', error)
-    }
-  }, [rouletteStorageKey])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    window.localStorage.setItem(rouletteStorageKey, JSON.stringify(rouletteOptions))
-  }, [rouletteOptions, rouletteStorageKey])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
     const cached = window.localStorage.getItem(rouletteSoundStorageKey)
     if (cached === 'off') setSoundEnabled(false)
     if (cached === 'on') setSoundEnabled(true)
@@ -983,7 +958,7 @@ export default function DemoDashboard({
 
                   <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
                     <motion.div
-                      className={`relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
+                      className={`roulette-wheel-depth relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
                       initial={false}
                       animate={{ rotate: wheelRotation }}
                       transition={
@@ -992,6 +967,9 @@ export default function DemoDashboard({
                           : { duration: 0 }
                       }
                     >
+                      <div className="roulette-wheel-shade pointer-events-none absolute inset-0 rounded-full" />
+                      <div className="roulette-wheel-grain pointer-events-none absolute inset-0 rounded-full" />
+
                       {boundaryRotationClasses.map((rotationClass) => (
                         <div
                           key={`line-${rotationClass}`}
@@ -1016,6 +994,7 @@ export default function DemoDashboard({
                       ))}
 
                       <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/20 blur-md" />
+                      <div className="roulette-wheel-rim pointer-events-none absolute inset-0 rounded-full" />
                     </motion.div>
 
                     {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
