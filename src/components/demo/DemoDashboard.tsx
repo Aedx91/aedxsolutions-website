@@ -909,11 +909,13 @@ export default function DemoDashboard({
                   </motion.div>
 
                   <div
-                    className={`absolute left-1/2 top-1/2 flex min-h-14 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/70 px-3 text-center text-xs font-bold text-pink-100 ${
-                      showCenterPick ? 'roulette-center-pop' : ''
+                    className={`absolute left-1/2 top-1/2 flex min-h-14 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/70 px-3 text-center text-xs font-bold text-pink-100 ${
+                      showCenterPick ? 'roulette-center-glow' : ''
                     }`}
                   >
-                    {roulettePick && !isSpinningWheel ? roulettePick : 'Spin'}
+                    <span className={showCenterPick ? 'roulette-center-text-pop' : ''}>
+                      {roulettePick && !isSpinningWheel ? roulettePick : 'Spin'}
+                    </span>
                   </div>
 
                   {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
