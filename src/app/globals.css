@@ -152,8 +152,53 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 }
 
 /* Carmy roulette visuals */
-.roulette-slice {
-  clip-path: polygon(50% 50%, 50% 0, 93.3% 25%);
+.roulette-slices-1 {
+  background: rgba(88, 28, 135, 0.88);
+}
+
+.roulette-slices-2 {
+  background: conic-gradient(
+    rgba(88, 28, 135, 0.88) 0deg 180deg,
+    rgba(112, 26, 117, 0.82) 180deg 360deg
+  );
+}
+
+.roulette-slices-3 {
+  background: conic-gradient(
+    rgba(88, 28, 135, 0.88) 0deg 120deg,
+    rgba(112, 26, 117, 0.82) 120deg 240deg,
+    rgba(126, 34, 206, 0.78) 240deg 360deg
+  );
+}
+
+.roulette-slices-4 {
+  background: conic-gradient(
+    rgba(88, 28, 135, 0.88) 0deg 90deg,
+    rgba(112, 26, 117, 0.82) 90deg 180deg,
+    rgba(126, 34, 206, 0.78) 180deg 270deg,
+    rgba(134, 25, 143, 0.76) 270deg 360deg
+  );
+}
+
+.roulette-slices-5 {
+  background: conic-gradient(
+    rgba(88, 28, 135, 0.88) 0deg 72deg,
+    rgba(112, 26, 117, 0.82) 72deg 144deg,
+    rgba(126, 34, 206, 0.78) 144deg 216deg,
+    rgba(134, 25, 143, 0.76) 216deg 288deg,
+    rgba(91, 33, 182, 0.8) 288deg 360deg
+  );
+}
+
+.roulette-slices-6 {
+  background: conic-gradient(
+    rgba(88, 28, 135, 0.88) 0deg 60deg,
+    rgba(112, 26, 117, 0.82) 60deg 120deg,
+    rgba(126, 34, 206, 0.78) 120deg 180deg,
+    rgba(134, 25, 143, 0.76) 180deg 240deg,
+    rgba(91, 33, 182, 0.8) 240deg 300deg,
+    rgba(112, 26, 117, 0.82) 300deg 360deg
+  );
 }
 
 @keyframes rouletteBrakeShake {

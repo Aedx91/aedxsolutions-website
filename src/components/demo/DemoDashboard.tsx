@@ -118,18 +118,46 @@ export default function DemoDashboard({
     { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
   ]
 
-  const wheelSegmentAngle = 360 / rouletteOptions.length
-  const wheelSlots = useMemo(() => Array.from({ length: 6 }, (_, index) => rouletteOptions[index] ?? ''), [rouletteOptions])
-  const segmentRotationClasses = ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]']
-  const counterRotationClasses = ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]']
-  const segmentColorClasses = [
-    'bg-purple-950/85',
-    'bg-fuchsia-950/80',
-    'bg-purple-900/80',
-    'bg-fuchsia-900/75',
-    'bg-purple-950/85',
-    'bg-fuchsia-950/80',
-  ]
+  const activeRouletteOptions = useMemo(() => rouletteOptions.slice(0, 6).filter(Boolean), [rouletteOptions])
+  const optionCount = activeRouletteOptions.length || 1
+  const wheelSegmentAngle = 360 / optionCount
+  const rotationClassMap: Record<number, string[]> = {
+    1: ['rotate-0'],
+    2: ['rotate-0', 'rotate-[180deg]'],
+    3: ['rotate-0', 'rotate-[120deg]', 'rotate-[240deg]'],
+    4: ['rotate-0', 'rotate-[90deg]', 'rotate-[180deg]', 'rotate-[270deg]'],
+    5: ['rotate-0', 'rotate-[72deg]', 'rotate-[144deg]', 'rotate-[216deg]', 'rotate-[288deg]'],
+    6: ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]'],
+  }
+  const counterRotationClassMap: Record<number, string[]> = {
+    1: ['rotate-0'],
+    2: ['rotate-0', '-rotate-[180deg]'],
+    3: ['rotate-0', '-rotate-[120deg]', '-rotate-[240deg]'],
+    4: ['rotate-0', '-rotate-[90deg]', '-rotate-[180deg]', '-rotate-[270deg]'],
+    5: ['rotate-0', '-rotate-[72deg]', '-rotate-[144deg]', '-rotate-[216deg]', '-rotate-[288deg]'],
+    6: ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]'],
+  }
+  const boundaryRotationClassMap: Record<number, string[]> = {
+    1: [],
+    2: ['rotate-0', 'rotate-[180deg]'],
+    3: ['rotate-0', 'rotate-[120deg]', 'rotate-[240deg]'],
+    4: ['rotate-0', 'rotate-[90deg]', 'rotate-[180deg]', 'rotate-[270deg]'],
+    5: ['rotate-0', 'rotate-[72deg]', 'rotate-[144deg]', 'rotate-[216deg]', 'rotate-[288deg]'],
+    6: ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]'],
+  }
+  const wheelSliceClassMap: Record<number, string> = {
+    1: 'roulette-slices-1',
+    2: 'roulette-slices-2',
+    3: 'roulette-slices-3',
+    4: 'roulette-slices-4',
+    5: 'roulette-slices-5',
+    6: 'roulette-slices-6',
+  }
+
+  const labelRotationClasses = rotationClassMap[optionCount]
+  const labelCounterRotationClasses = counterRotationClassMap[optionCount]
+  const boundaryRotationClasses = boundaryRotationClassMap[optionCount]
+  const wheelSliceClass = wheelSliceClassMap[optionCount]
 
   const normalizeEntry = (value: string) => value.trim().replace(/\s+/g, ' ')
 
@@ -255,10 +283,10 @@ export default function DemoDashboard({
   }
 
   const spinRoulette = () => {
-    if (isSpinningWheel || rouletteOptions.length === 0) return
+    if (isSpinningWheel || activeRouletteOptions.length === 0) return
 
-    const selectedIndex = Math.floor(randomUnit() * rouletteOptions.length)
-    const selectedDish = rouletteOptions[selectedIndex]
+    const selectedIndex = Math.floor(randomUnit() * activeRouletteOptions.length)
+    const selectedDish = activeRouletteOptions[selectedIndex]
     const centerAngle = selectedIndex * wheelSegmentAngle + wheelSegmentAngle / 2
     const landingRotation = (360 - centerAngle + 360) % 360
     const fullTurns = 6 + Math.floor(randomUnit() * 3)
@@ -789,9 +817,9 @@ export default function DemoDashboard({
               <div className="relative mt-6 h-72 w-72">
                 <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300" />
 
-                <div className={wheelBraking ? 'roulette-brake-shake' : ''}>
+                <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
                   <motion.div
-                    className="relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 bg-gradient-to-br from-purple-600/35 via-fuchsia-600/20 to-pink-600/35 shadow-2xl shadow-pink-900/30"
+                    className={`relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
                     initial={false}
                     animate={{ rotate: wheelRotation }}
                     transition={
@@ -800,22 +828,19 @@ export default function DemoDashboard({
                         : { duration: 0 }
                     }
                   >
-                    {wheelSlots.map((_, index) => (
+                    {boundaryRotationClasses.map((rotationClass) => (
                       <div
-                        key={`slice-${index}`}
-                        className={`roulette-slice absolute inset-0 origin-center ${segmentRotationClasses[index]} ${segmentColorClasses[index]}`}
+                        key={`line-${rotationClass}`}
+                        className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${rotationClass}`}
                       />
                     ))}
 
-                    {wheelSlots.map((dish, index) => (
+                    {activeRouletteOptions.map((dish, index) => (
                       <div key={`label-${index}`}>
-                        <div
-                          className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${segmentRotationClasses[index]}`}
-                        />
-                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${segmentRotationClasses[index]}`}>
+                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelRotationClasses[index]}`}>
                           <div className="-translate-y-[112px]">
-                            <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${counterRotationClasses[index]}`}>
-                              {dish || '—'}
+                            <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${labelCounterRotationClasses[index]}`}>
+                              {dish}
                             </div>
                           </div>
                         </div>
