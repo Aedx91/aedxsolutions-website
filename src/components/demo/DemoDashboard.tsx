@@ -265,6 +265,17 @@ export default function DemoDashboard({
     setCustomEntries((prev) => prev.filter((item) => item !== entry))
   }
 
+  const clearRoulette = () => {
+    setRouletteOptions([])
+    setSelectedMenuItems([])
+    setCustomEntries([])
+    setCustomDraft('')
+    setRoulettePick(null)
+    setShowCenterPick(false)
+    setRouletteError(null)
+    setToast('Roulette cleared')
+  }
+
   const addDishToRoulette = (dish: string) => {
     setRouletteError(null)
     setTab('menu')
@@ -824,13 +835,23 @@ export default function DemoDashboard({
               <div className="text-xs uppercase tracking-[0.2em] text-pink-200/80">Carmy quick roulette</div>
               <h3 className="mt-2 text-xl font-semibold text-pink-100">What should we eat tonight?</h3>
 
-              <button
-                type="button"
-                onClick={openRouletteModal}
-                className="mt-4 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white"
-              >
-                Add to Roulette
-              </button>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={openRouletteModal}
+                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white"
+                >
+                  Add to Roulette
+                </button>
+                <button
+                  type="button"
+                  onClick={clearRoulette}
+                  disabled={activeRouletteOptions.length === 0}
+                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-rose-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Clear Roulette
+                </button>
+              </div>
 
               <div className="relative mt-6 h-72 w-72">
                 <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300" />
