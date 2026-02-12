@@ -222,6 +222,52 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
   animation: rouletteBrakeRing 0.45s ease-out;
 }
 
+@keyframes roulettePunkPanelPop {
+  0% {
+    opacity: 0.55;
+    transform: translateY(7px) scale(0.97);
+    box-shadow: 0 0 0 rgba(236, 72, 153, 0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 24px rgba(236, 72, 153, 0.26), 0 0 32px rgba(147, 51, 234, 0.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 rgba(236, 72, 153, 0);
+  }
+}
+
+@keyframes roulettePunkTextGlitch {
+  0% { opacity: 0; transform: translateY(3px); text-shadow: 0 0 0 rgba(236, 72, 153, 0); }
+  20% { opacity: 1; transform: translateY(-1px); text-shadow: 1px 0 rgba(236, 72, 153, 0.55), -1px 0 rgba(168, 85, 247, 0.45); }
+  38% { transform: translateX(1px); }
+  56% { transform: translateX(-1px); }
+  100% { opacity: 1; transform: translate(0, 0); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45); }
+}
+
+.roulette-result-panel {
+  position: relative;
+  background-image: linear-gradient(145deg, rgba(14, 7, 26, 0.86), rgba(36, 10, 46, 0.68));
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
+}
+
+.roulette-result-kicker {
+  color: #f2b3e5;
+}
+
+.roulette-result-punk-pop {
+  animation: roulettePunkPanelPop 0.42s cubic-bezier(0.2, 0.85, 0.24, 1);
+}
+
+.roulette-result-punk-text {
+  display: inline-block;
+  animation: roulettePunkTextGlitch 0.44s ease-out;
+}
+
 @keyframes rouletteCenterGlow {
   0% { box-shadow: 0 0 0 rgba(236, 72, 153, 0); }
   55% { box-shadow: 0 0 24px rgba(236, 72, 153, 0.35); }

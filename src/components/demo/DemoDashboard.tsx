@@ -97,6 +97,7 @@ export default function DemoDashboard({
   const [customEntries, setCustomEntries] = useState<string[]>([])
   const [customDraft, setCustomDraft] = useState('')
   const [rouletteError, setRouletteError] = useState<string | null>(null)
+  const [soundEnabled, setSoundEnabled] = useState(true)
   const [wheelRotation, setWheelRotation] = useState(0)
   const [isSpinningWheel, setIsSpinningWheel] = useState(false)
   const [wheelBraking, setWheelBraking] = useState(false)
@@ -105,8 +106,10 @@ export default function DemoDashboard({
   const [showCenterPick, setShowCenterPick] = useState(false)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
   const rouletteStorageKey = useMemo(() => `carmy-roulette-options-${lang}`, [lang])
+  const rouletteSoundStorageKey = useMemo(() => `carmy-roulette-sound-${lang}`, [lang])
   const rouletteSectionRef = useRef<HTMLDivElement | null>(null)
   const pointerTickTimersRef = useRef<number[]>([])
+  const audioContextRef = useRef<AudioContext | null>(null)
 
   const dishes = useMemo(
     () => MENU_SOURCE,
@@ -192,6 +195,47 @@ export default function DemoDashboard({
     }
     if (length > 20) return 'text-[11px] leading-[1.1]'
     return 'text-xs leading-[1.12]'
+  }
+
+  const ensureAudioContext = () => {
+    if (typeof window === 'undefined') return null
+    const AudioCtx = window.AudioContext
+    if (!AudioCtx) return null
+
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioCtx()
+    }
+
+    if (audioContextRef.current.state === 'suspended') {
+      void audioContextRef.current.resume()
+    }
+
+    return audioContextRef.current
+  }
+
+  const playRouletteSound = (accent = false) => {
+    if (!soundEnabled) return
+
+    const audioContext = ensureAudioContext()
+    if (!audioContext) return
+
+    const now = audioContext.currentTime
+    const oscillator = audioContext.createOscillator()
+    const gain = audioContext.createGain()
+
+    oscillator.type = accent ? 'triangle' : 'square'
+    oscillator.frequency.setValueAtTime(accent ? 880 : 620, now)
+    oscillator.frequency.exponentialRampToValueAtTime(accent ? 540 : 420, now + (accent ? 0.12 : 0.05))
+
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(accent ? 0.045 : 0.03, now + 0.01)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + (accent ? 0.14 : 0.07))
+
+    oscillator.connect(gain)
+    gain.connect(audioContext.destination)
+
+    oscillator.start(now)
+    oscillator.stop(now + (accent ? 0.14 : 0.07))
   }
 
   const normalizeEntry = (value: string) => value.trim().replace(/\s+/g, ' ')
@@ -331,6 +375,8 @@ export default function DemoDashboard({
   const spinRoulette = () => {
     if (isSpinningWheel || activeRouletteOptions.length === 0) return
 
+    ensureAudioContext()
+
     pointerTickTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
     pointerTickTimersRef.current = []
 
@@ -357,6 +403,7 @@ export default function DemoDashboard({
 
       const startTimer = window.setTimeout(() => {
         setPointerTickPulse(true)
+        playRouletteSound(false)
         const endTimer = window.setTimeout(() => setPointerTickPulse(false), 52)
         pointerTickTimersRef.current.push(endTimer)
       }, triggerAt)
@@ -374,6 +421,7 @@ export default function DemoDashboard({
       setWheelBraking(false)
       setPointerTickPulse(false)
       setShowCenterPick(true)
+      playRouletteSound(true)
     }, 4200)
   }
 
@@ -575,6 +623,18 @@ export default function DemoDashboard({
   }, [rouletteOptions, rouletteStorageKey])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const cached = window.localStorage.getItem(rouletteSoundStorageKey)
+    if (cached === 'off') setSoundEnabled(false)
+    if (cached === 'on') setSoundEnabled(true)
+  }, [rouletteSoundStorageKey])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(rouletteSoundStorageKey, soundEnabled ? 'on' : 'off')
+  }, [rouletteSoundStorageKey, soundEnabled])
+
+  useEffect(() => {
     if (!showCenterPick) return
     const t = window.setTimeout(() => setShowCenterPick(false), 1200)
     return () => window.clearTimeout(t)
@@ -583,6 +643,9 @@ export default function DemoDashboard({
   useEffect(() => {
     return () => {
       pointerTickTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
+      if (audioContextRef.current) {
+        void audioContextRef.current.close()
+      }
     }
   }, [])
 
@@ -896,65 +959,83 @@ export default function DemoDashboard({
                 >
                   Clear Roulette
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSoundEnabled((prev) => !prev)
+                    ensureAudioContext()
+                  }}
+                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-sky-400/50 hover:text-white"
+                >
+                  Sound: {soundEnabled ? 'On' : 'Off'}
+                </button>
               </div>
 
-              <div className="relative mt-6 h-72 w-72">
-                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
-                  <div
-                    className={`h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300 ${
-                      pointerTickPulse ? 'roulette-pointer-tick-pulse' : ''
-                    } ${showCenterPick ? 'roulette-pointer-kick' : ''}`}
-                  />
-                </div>
+              <div className="mt-6 flex w-full max-w-3xl flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-8">
+                <div className="relative h-72 w-72 shrink-0">
+                  <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
+                    <div
+                      className={`h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300 ${
+                        pointerTickPulse ? 'roulette-pointer-tick-pulse' : ''
+                      } ${showCenterPick ? 'roulette-pointer-kick' : ''}`}
+                    />
+                  </div>
 
-                <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
-                  <motion.div
-                    className={`relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
-                    initial={false}
-                    animate={{ rotate: wheelRotation }}
-                    transition={
-                      isSpinningWheel
-                        ? { duration: 4.2, ease: [0.08, 0.88, 0.16, 1] }
-                        : { duration: 0 }
-                    }
-                  >
-                    {boundaryRotationClasses.map((rotationClass) => (
-                      <div
-                        key={`line-${rotationClass}`}
-                        className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${rotationClass}`}
-                      />
-                    ))}
+                  <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
+                    <motion.div
+                      className={`relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
+                      initial={false}
+                      animate={{ rotate: wheelRotation }}
+                      transition={
+                        isSpinningWheel
+                          ? { duration: 4.2, ease: [0.08, 0.88, 0.16, 1] }
+                          : { duration: 0 }
+                      }
+                    >
+                      {boundaryRotationClasses.map((rotationClass) => (
+                        <div
+                          key={`line-${rotationClass}`}
+                          className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${rotationClass}`}
+                        />
+                      ))}
 
-                    {activeRouletteOptions.map((dish, index) => (
-                      <div key={`label-${index}`}>
-                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelMidRotationClasses[index]}`}>
-                          <div className={labelRadiusClass}>
-                            <div
-                              className={`roulette-slice-label ${labelWidthClass} text-center break-words [overflow-wrap:anywhere] ${labelMidCounterRotationClasses[index]} ${getSliceLabelSizeClass(
-                                dish
-                              )}`}
-                            >
-                              {dish}
+                      {activeRouletteOptions.map((dish, index) => (
+                        <div key={`label-${index}`}>
+                          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelMidRotationClasses[index]}`}>
+                            <div className={labelRadiusClass}>
+                              <div
+                                className={`roulette-slice-label ${labelWidthClass} text-center break-words [overflow-wrap:anywhere] ${labelMidCounterRotationClasses[index]} ${getSliceLabelSizeClass(
+                                  dish
+                                )}`}
+                              >
+                                {dish}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
 
-                    <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/20 blur-md" />
-                  </motion.div>
+                      <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/20 blur-md" />
+                    </motion.div>
 
-                  <div
-                    className={`absolute left-1/2 top-1/2 flex min-h-14 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/70 px-3 text-center text-xs font-bold text-pink-100 ${
-                      showCenterPick ? 'roulette-center-glow' : ''
-                    }`}
-                  >
-                    <span className={showCenterPick ? 'roulette-center-text-pop' : ''}>
-                      {roulettePick && !isSpinningWheel ? roulettePick : 'Spin'}
+                    {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
+                  </div>
+                </div>
+
+                <div
+                  className={`roulette-result-panel w-full max-w-sm rounded-2xl border border-white/10 bg-black/40 p-4 text-center md:max-w-xs md:text-left ${
+                    showCenterPick ? 'roulette-result-punk-pop' : ''
+                  }`}
+                >
+                  <div className="roulette-result-kicker text-[11px] uppercase tracking-[0.18em] text-pink-200/75">Selected dish</div>
+                  <div className="mt-2 min-h-8 text-lg font-semibold text-pink-100">
+                    <span className={showCenterPick ? 'roulette-result-punk-text' : ''}>
+                      {roulettePick && !isSpinningWheel ? roulettePick : '—'}
                     </span>
                   </div>
-
-                  {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
+                  <div className="mt-1 text-xs text-pink-100/65">
+                    {isSpinningWheel ? 'Spinning…' : 'Ready for next spin'}
+                  </div>
                 </div>
               </div>
 
