@@ -232,27 +232,6 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
     inset 0 0 18px rgba(236, 72, 153, 0.16);
 }
 
-@keyframes rouletteBrakeShake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-1px); }
-  40% { transform: translateX(1px); }
-  60% { transform: translateX(-1px); }
-  80% { transform: translateX(1px); }
-}
-
-.roulette-brake-shake {
-  animation: rouletteBrakeShake 0.34s ease-out;
-}
-
-@keyframes rouletteBrakeRing {
-  0% { opacity: 0.8; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.06); }
-}
-
-.roulette-brake-ring {
-  animation: rouletteBrakeRing 0.45s ease-out;
-}
-
 @keyframes roulettePunkPanelPop {
   0% {
     opacity: 0.55;

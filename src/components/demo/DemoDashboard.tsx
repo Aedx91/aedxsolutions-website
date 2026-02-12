@@ -100,7 +100,6 @@ export default function DemoDashboard({
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [wheelRotation, setWheelRotation] = useState(0)
   const [isSpinningWheel, setIsSpinningWheel] = useState(false)
-  const [wheelBraking, setWheelBraking] = useState(false)
   const [pointerTickPulse, setPointerTickPulse] = useState(false)
   const [roulettePick, setRoulettePick] = useState<string | null>(null)
   const [showCenterPick, setShowCenterPick] = useState(false)
@@ -194,6 +193,27 @@ export default function DemoDashboard({
     }
     if (length > 20) return 'text-[11px] leading-[1.1]'
     return 'text-xs leading-[1.12]'
+  }
+
+  const getWinnerFromRotation = (finalRotationValue: number, options: string[]) => {
+    if (options.length === 0) return null
+    const segmentAngle = 360 / options.length
+    const normalizedRotation = ((finalRotationValue % 360) + 360) % 360
+
+    let bestIndex = 0
+    let smallestDistance = Number.POSITIVE_INFINITY
+
+    for (let index = 0; index < options.length; index++) {
+      const centerAngle = index * segmentAngle + segmentAngle / 2
+      const pointerRelativeAngle = (centerAngle + normalizedRotation) % 360
+      const distanceToPointer = Math.min(pointerRelativeAngle, 360 - pointerRelativeAngle)
+      if (distanceToPointer < smallestDistance) {
+        smallestDistance = distanceToPointer
+        bestIndex = index
+      }
+    }
+
+    return options[bestIndex]
   }
 
   const ensureAudioContext = () => {
@@ -379,8 +399,9 @@ export default function DemoDashboard({
     pointerTickTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
     pointerTickTimersRef.current = []
 
-    const selectedIndex = Math.floor(randomUnit() * activeRouletteOptions.length)
-    const selectedDish = activeRouletteOptions[selectedIndex]
+    const spinOptions = [...activeRouletteOptions]
+    const selectedIndex = Math.floor(randomUnit() * spinOptions.length)
+    const selectedDish = spinOptions[selectedIndex]
     const centerAngle = selectedIndex * wheelSegmentAngle + wheelSegmentAngle / 2
     const landingRotation = (360 - centerAngle + 360) % 360
     const fullTurns = 6 + Math.floor(randomUnit() * 3)
@@ -391,7 +412,6 @@ export default function DemoDashboard({
     const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 
     setIsSpinningWheel(true)
-    setWheelBraking(false)
     setShowCenterPick(false)
     setPointerTickPulse(false)
     setWheelRotation(finalRotation)
@@ -411,13 +431,9 @@ export default function DemoDashboard({
     }
 
     window.setTimeout(() => {
-      setWheelBraking(true)
-    }, 3200)
-
-    window.setTimeout(() => {
-      setRoulettePick(selectedDish)
+      const resolvedWinner = getWinnerFromRotation(finalRotation, spinOptions)
+      setRoulettePick(resolvedWinner ?? selectedDish)
       setIsSpinningWheel(false)
-      setWheelBraking(false)
       setPointerTickPulse(false)
       setShowCenterPick(true)
       playRouletteSound(true)
@@ -922,14 +938,15 @@ export default function DemoDashboard({
                 <button
                   type="button"
                   onClick={openRouletteModal}
-                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white"
+                  disabled={isSpinningWheel}
+                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Add to Roulette
                 </button>
                 <button
                   type="button"
                   onClick={clearRoulette}
-                  disabled={activeRouletteOptions.length === 0}
+                  disabled={activeRouletteOptions.length === 0 || isSpinningWheel}
                   className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-rose-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Clear Roulette
@@ -940,7 +957,8 @@ export default function DemoDashboard({
                     setSoundEnabled((prev) => !prev)
                     ensureAudioContext()
                   }}
-                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-sky-400/50 hover:text-white"
+                  disabled={isSpinningWheel}
+                  className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-sky-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Sound: {soundEnabled ? 'On' : 'Off'}
                 </button>
@@ -956,7 +974,7 @@ export default function DemoDashboard({
                     />
                   </div>
 
-                  <div className={`relative h-full w-full ${wheelBraking ? 'roulette-brake-shake' : ''}`}>
+                  <div className="relative h-full w-full">
                     <motion.div
                       className={`roulette-wheel-depth relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 shadow-2xl shadow-pink-900/30 ${wheelSliceClass}`}
                       initial={false}
@@ -997,7 +1015,6 @@ export default function DemoDashboard({
                       <div className="roulette-wheel-rim pointer-events-none absolute inset-0 rounded-full" />
                     </motion.div>
 
-                    {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
                   </div>
                 </div>
 
