@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import FlipCard from '@/components/FlipCard'
@@ -104,6 +104,7 @@ export default function DemoDashboard({
   const [showCenterPick, setShowCenterPick] = useState(false)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
   const rouletteStorageKey = useMemo(() => `carmy-roulette-options-${lang}`, [lang])
+  const rouletteSectionRef = useRef<HTMLDivElement | null>(null)
 
   const dishes = useMemo(
     () => MENU_SOURCE,
@@ -220,6 +221,14 @@ export default function DemoDashboard({
 
   const addDishToRoulette = (dish: string) => {
     setRouletteError(null)
+    setTab('menu')
+
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        rouletteSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+    }
+
     setRouletteOptions((prev) => {
       const exists = prev.some((item) => item.toLowerCase() === dish.toLowerCase())
       if (exists) {
@@ -761,7 +770,10 @@ export default function DemoDashboard({
             Pick a dish, choose who covers it, then submit so we log it.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-black to-pink-900/30 p-6 shadow-lg shadow-purple-900/30">
+          <div
+            ref={rouletteSectionRef}
+            className="mt-8 rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-black to-pink-900/30 p-6 shadow-lg shadow-purple-900/30"
+          >
             <div className="flex flex-col items-center">
               <div className="text-xs uppercase tracking-[0.2em] text-pink-200/80">Carmy quick roulette</div>
               <h3 className="mt-2 text-xl font-semibold text-pink-100">What should we eat tonight?</h3>
