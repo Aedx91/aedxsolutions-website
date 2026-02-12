@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { getDictionary, Lang } from '@/lib/i18n/dictionaries'
 import { pageMeta } from '@/lib/seo'
 import { MotionSection } from '@/components/MotionSection'
+import HeroOfferBanner from '@/components/HeroOfferBanner'
 
 export const dynamic = 'force-static'
 
@@ -35,21 +36,7 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <div className="max-w-3xl">
             <span className="btn-chip">{dict.heroBadge}</span>
-            <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05] sm:leading-tight font-display text-text-hero">
-              {dict.hero.title}
-            </h1>
-            <p className="mt-5 text-lg sm:text-xl text-text-secondary max-w-2xl">{dict.hero.subtitle}</p>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <a className="btn btn-primary shadow-glow" href={`/${lang}/contact`}>
-                {dict.hero.ctaPrimary}
-              </a>
-              <a className="btn btn-outline" href={`/${lang}/products`}>
-                {dict.hero.ctaSecondary}
-              </a>
-              <a className="btn btn-outline" href={`/${lang}/demo/login`}>
-                {dict.hero.ctaTertiary}
-              </a>
-            </div>
+            <HeroOfferBanner lang={lang} />
             <div className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-5">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs uppercase tracking-[0.22em] text-text-secondary">{dict.heroSpotlight.eyebrow}</p>
