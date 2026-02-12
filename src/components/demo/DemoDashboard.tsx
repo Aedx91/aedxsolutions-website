@@ -100,11 +100,13 @@ export default function DemoDashboard({
   const [wheelRotation, setWheelRotation] = useState(0)
   const [isSpinningWheel, setIsSpinningWheel] = useState(false)
   const [wheelBraking, setWheelBraking] = useState(false)
+  const [pointerTickPulse, setPointerTickPulse] = useState(false)
   const [roulettePick, setRoulettePick] = useState<string | null>(null)
   const [showCenterPick, setShowCenterPick] = useState(false)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
   const rouletteStorageKey = useMemo(() => `carmy-roulette-options-${lang}`, [lang])
   const rouletteSectionRef = useRef<HTMLDivElement | null>(null)
+  const pointerTickTimersRef = useRef<number[]>([])
 
   const dishes = useMemo(
     () => MENU_SOURCE,
@@ -329,17 +331,38 @@ export default function DemoDashboard({
   const spinRoulette = () => {
     if (isSpinningWheel || activeRouletteOptions.length === 0) return
 
+    pointerTickTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
+    pointerTickTimersRef.current = []
+
     const selectedIndex = Math.floor(randomUnit() * activeRouletteOptions.length)
     const selectedDish = activeRouletteOptions[selectedIndex]
     const centerAngle = selectedIndex * wheelSegmentAngle + wheelSegmentAngle / 2
     const landingRotation = (360 - centerAngle + 360) % 360
     const fullTurns = 6 + Math.floor(randomUnit() * 3)
     const finalRotation = wheelRotation + fullTurns * 360 + landingRotation
+    const spinDurationMs = 4200
+    const totalAngle = finalRotation - wheelRotation
+    const segmentPasses = Math.max(1, Math.floor(totalAngle / wheelSegmentAngle))
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 
     setIsSpinningWheel(true)
     setWheelBraking(false)
     setShowCenterPick(false)
+    setPointerTickPulse(false)
     setWheelRotation(finalRotation)
+
+    for (let step = 1; step <= segmentPasses; step++) {
+      const progress = step / segmentPasses
+      const triggerAt = Math.round(spinDurationMs * easeOutCubic(progress))
+
+      const startTimer = window.setTimeout(() => {
+        setPointerTickPulse(true)
+        const endTimer = window.setTimeout(() => setPointerTickPulse(false), 52)
+        pointerTickTimersRef.current.push(endTimer)
+      }, triggerAt)
+
+      pointerTickTimersRef.current.push(startTimer)
+    }
 
     window.setTimeout(() => {
       setWheelBraking(true)
@@ -349,6 +372,7 @@ export default function DemoDashboard({
       setRoulettePick(selectedDish)
       setIsSpinningWheel(false)
       setWheelBraking(false)
+      setPointerTickPulse(false)
       setShowCenterPick(true)
     }, 4200)
   }
@@ -555,6 +579,12 @@ export default function DemoDashboard({
     const t = window.setTimeout(() => setShowCenterPick(false), 1200)
     return () => window.clearTimeout(t)
   }, [showCenterPick])
+
+  useEffect(() => {
+    return () => {
+      pointerTickTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
+    }
+  }, [])
 
   if (!isAuthed) return null
 
@@ -872,7 +902,7 @@ export default function DemoDashboard({
                 <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
                   <div
                     className={`h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300 ${
-                      isSpinningWheel ? 'roulette-pointer-tick' : ''
+                      pointerTickPulse ? 'roulette-pointer-tick-pulse' : ''
                     } ${showCenterPick ? 'roulette-pointer-kick' : ''}`}
                   />
                 </div>
