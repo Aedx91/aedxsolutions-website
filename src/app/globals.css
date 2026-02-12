@@ -231,3 +231,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 .roulette-center-pop {
   animation: rouletteCenterPop 0.42s ease-out;
 }
+
+.roulette-slice-label {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  letter-spacing: -0.01em;
+}

@@ -137,6 +137,22 @@ export default function DemoDashboard({
     5: ['rotate-0', '-rotate-[72deg]', '-rotate-[144deg]', '-rotate-[216deg]', '-rotate-[288deg]'],
     6: ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]'],
   }
+  const labelMidRotationClassMap: Record<number, string[]> = {
+    1: ['rotate-0'],
+    2: ['rotate-[90deg]', 'rotate-[270deg]'],
+    3: ['rotate-[60deg]', 'rotate-[180deg]', 'rotate-[300deg]'],
+    4: ['rotate-[45deg]', 'rotate-[135deg]', 'rotate-[225deg]', 'rotate-[315deg]'],
+    5: ['rotate-[36deg]', 'rotate-[108deg]', 'rotate-[180deg]', 'rotate-[252deg]', 'rotate-[324deg]'],
+    6: ['rotate-[30deg]', 'rotate-[90deg]', 'rotate-[150deg]', 'rotate-[210deg]', 'rotate-[270deg]', 'rotate-[330deg]'],
+  }
+  const labelMidCounterRotationClassMap: Record<number, string[]> = {
+    1: ['rotate-0'],
+    2: ['-rotate-[90deg]', '-rotate-[270deg]'],
+    3: ['-rotate-[60deg]', '-rotate-[180deg]', '-rotate-[300deg]'],
+    4: ['-rotate-[45deg]', '-rotate-[135deg]', '-rotate-[225deg]', '-rotate-[315deg]'],
+    5: ['-rotate-[36deg]', '-rotate-[108deg]', '-rotate-[180deg]', '-rotate-[252deg]', '-rotate-[324deg]'],
+    6: ['-rotate-[30deg]', '-rotate-[90deg]', '-rotate-[150deg]', '-rotate-[210deg]', '-rotate-[270deg]', '-rotate-[330deg]'],
+  }
   const boundaryRotationClassMap: Record<number, string[]> = {
     1: [],
     2: ['rotate-0', 'rotate-[180deg]'],
@@ -156,6 +172,8 @@ export default function DemoDashboard({
 
   const labelRotationClasses = rotationClassMap[optionCount]
   const labelCounterRotationClasses = counterRotationClassMap[optionCount]
+  const labelMidRotationClasses = labelMidRotationClassMap[optionCount]
+  const labelMidCounterRotationClasses = labelMidCounterRotationClassMap[optionCount]
   const boundaryRotationClasses = boundaryRotationClassMap[optionCount]
   const wheelSliceClass = wheelSliceClassMap[optionCount]
 
@@ -837,9 +855,9 @@ export default function DemoDashboard({
 
                     {activeRouletteOptions.map((dish, index) => (
                       <div key={`label-${index}`}>
-                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelRotationClasses[index]}`}>
-                          <div className="-translate-y-[112px]">
-                            <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${labelCounterRotationClasses[index]}`}>
+                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelMidRotationClasses[index]}`}>
+                          <div className="-translate-y-[84px]">
+                            <div className={`roulette-slice-label w-24 text-center ${labelMidCounterRotationClasses[index]}`}>
                               {dish}
                             </div>
                           </div>
