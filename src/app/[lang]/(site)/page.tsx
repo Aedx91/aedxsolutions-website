@@ -35,6 +35,19 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
         <div className="container section">
           <div className="max-w-3xl">
             <span className="btn-chip">{dict.heroBadge}</span>
+            <div className="mt-5 hero-transition-banner" aria-label={dict.heroTransition.ariaLabel}>
+              <div className="hero-transition-shimmer" aria-hidden></div>
+              <div className="hero-transition-track" role="presentation">
+                {[...dict.heroTransition.items, ...dict.heroTransition.items].map((item, index) => (
+                  <span
+                    key={`${item}-${index}`}
+                    className={`hero-transition-chip ${index % dict.heroTransition.items.length === 0 ? 'hero-transition-chip-accent' : ''}`}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
             <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05] sm:leading-tight font-display text-text-hero">
               {dict.hero.title}
             </h1>

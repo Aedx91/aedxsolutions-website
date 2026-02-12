@@ -39,6 +39,16 @@ export const es = {
       'Lanzamiento rápido con ROI claro',
     ],
   },
+  heroTransition: {
+    ariaLabel: 'Destacados de capacidades en vivo',
+    items: [
+      'Ya disponible • Ingreso y Enrutamiento con IA',
+      'Piloto Automático de Operaciones',
+      'Asistencia al Cliente',
+      'Inteligencia de Ingresos',
+      'Creado para equipos ligeros',
+    ],
+  },
   demoHero: {
     title: 'Espacio Carmy',
     subtitle: 'Guarda los platos, citas, pelis y momentos que queremos anotar. Tú eliges; yo cocino; decidimos cómo cubrirlo.',

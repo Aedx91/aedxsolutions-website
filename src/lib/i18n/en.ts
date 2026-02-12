@@ -39,6 +39,16 @@ export const en = {
       'Fast launch with clear ROI',
     ],
   },
+  heroTransition: {
+    ariaLabel: 'Live capabilities highlights',
+    items: [
+      'Now live • AI Intake & Routing',
+      'Operations Autopilot',
+      'Customer Care Assist',
+      'Revenue Intelligence',
+      'Built for lean teams',
+    ],
+  },
   demoHero: {
     title: 'Carmy space',
     subtitle: 'Keep the dishes, date nights, movies, and little moments we want to log. You pick; I cook; we decide how to cover it.',

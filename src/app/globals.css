@@ -76,6 +76,85 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
 .hero-bg-overlay { background: linear-gradient(var(--hero-overlay), var(--hero-overlay)); }
 .icon-gradient { background: linear-gradient(135deg,var(--brand-primary),var(--brand-secondary)); }
 
+@keyframes heroTransitionTicker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes heroTransitionShimmer {
+  0% { transform: translateX(-130%); }
+  100% { transform: translateX(130%); }
+}
+
+.hero-transition-banner {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hero-transition-banner::before,
+.hero-transition-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-transition-banner::before {
+  left: 0;
+  background: linear-gradient(to right, var(--surface-hero), transparent);
+}
+
+.hero-transition-banner::after {
+  right: 0;
+  background: linear-gradient(to left, var(--surface-hero), transparent);
+}
+
+.hero-transition-track {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  animation: heroTransitionTicker 24s linear infinite;
+}
+
+.hero-transition-chip {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.4rem 0.72rem;
+}
+
+.hero-transition-chip-accent {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: rgba(0, 174, 239, 0.1);
+}
+
+.hero-transition-shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.12), transparent 60%);
+  animation: heroTransitionShimmer 4.2s ease-in-out infinite;
+}
+
 /* Decorative hero texture as a standalone overlay (so it can span header + hero and be feathered). */
 .hero-pattern-overlay {
   background-image:
@@ -106,6 +185,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-primary);
   .hero-bg-feather {
     -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
     mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  }
+  .hero-transition-track,
+  .hero-transition-shimmer {
+    animation: none;
   }
 }
 
