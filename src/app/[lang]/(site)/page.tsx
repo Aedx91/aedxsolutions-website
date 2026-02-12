@@ -37,6 +37,17 @@ export default async function HomeLangPage(props: { params: Promise<{ lang: stri
           <div className="max-w-3xl">
             <span className="btn-chip">{dict.heroBadge}</span>
             <HeroOfferBanner lang={lang} />
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a className="btn btn-primary shadow-glow" href={`/${lang}/contact`}>
+                {lang === 'es' ? 'Solicitar hoja de ruta' : 'Get a roadmap'}
+              </a>
+              <a className="btn btn-outline" href={`/${lang}/products`}>
+                {lang === 'es' ? 'Explorar soluciones' : 'Explore solutions'}
+              </a>
+              <a className="btn btn-outline" href={`/${lang}/demo/login`}>
+                {lang === 'es' ? 'Ver demo' : 'See demo'}
+              </a>
+            </div>
             <div className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-5">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs uppercase tracking-[0.22em] text-text-secondary">{dict.heroSpotlight.eyebrow}</p>
