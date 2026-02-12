@@ -22,6 +22,35 @@ type IntegrationStatus = {
   microsoft: boolean
 }
 
+const MENU_SOURCE = [
+  'Truffle pasta',
+  'Spicy tuna bowls',
+  'Citrus salmon',
+  'Gnocchi w/ pesto',
+  'Miso cod',
+  'Roasted veggies',
+  'Tiramisu jars',
+  'Berry shortcake',
+  'Mochi flight',
+  'Porcini risotto',
+  'Charred broccolini',
+  'Chili crisp noodles',
+  'Lemon butter scallops',
+  'Burrata salad',
+  'Harissa chicken',
+  'Pomegranate lamb',
+  'Garlic miso eggplant',
+  'Chimichurri steak',
+  'Cacio e pepe',
+  'Caprese toasties',
+  'Matcha tiramisu',
+  'Salted caramel pots',
+  'Mango sticky rice',
+  'Affogato duo',
+]
+
+const DEFAULT_ROULETTE_OPTIONS = MENU_SOURCE.slice(0, 6)
+
 export default function DemoDashboard({
   lang,
   labels,
@@ -62,38 +91,22 @@ export default function DemoDashboard({
   const [dateForm, setDateForm] = useState({ date: '', description: '' })
   const [integrations, setIntegrations] = useState<IntegrationStatus>({ google: false, microsoft: false })
   const [syncToCalendar, setSyncToCalendar] = useState(true)
+  const [rouletteOptions, setRouletteOptions] = useState<string[]>(DEFAULT_ROULETTE_OPTIONS)
+  const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false)
+  const [selectedMenuItems, setSelectedMenuItems] = useState<string[]>(DEFAULT_ROULETTE_OPTIONS)
+  const [customEntries, setCustomEntries] = useState<string[]>([])
+  const [customDraft, setCustomDraft] = useState('')
+  const [rouletteError, setRouletteError] = useState<string | null>(null)
   const [wheelRotation, setWheelRotation] = useState(0)
   const [isSpinningWheel, setIsSpinningWheel] = useState(false)
+  const [wheelBraking, setWheelBraking] = useState(false)
   const [roulettePick, setRoulettePick] = useState<string | null>(null)
+  const [showCenterPick, setShowCenterPick] = useState(false)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
+  const rouletteStorageKey = useMemo(() => `carmy-roulette-options-${lang}`, [lang])
 
   const dishes = useMemo(
-    () => [
-      'Truffle pasta',
-      'Spicy tuna bowls',
-      'Citrus salmon',
-      'Gnocchi w/ pesto',
-      'Miso cod',
-      'Roasted veggies',
-      'Tiramisu jars',
-      'Berry shortcake',
-      'Mochi flight',
-      'Porcini risotto',
-      'Charred broccolini',
-      'Chili crisp noodles',
-      'Lemon butter scallops',
-      'Burrata salad',
-      'Harissa chicken',
-      'Pomegranate lamb',
-      'Garlic miso eggplant',
-      'Chimichurri steak',
-      'Cacio e pepe',
-      'Caprese toasties',
-      'Matcha tiramisu',
-      'Salted caramel pots',
-      'Mango sticky rice',
-      'Affogato duo',
-    ],
+    () => MENU_SOURCE,
     []
   )
 
@@ -104,10 +117,124 @@ export default function DemoDashboard({
     { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
   ]
 
-  const rouletteOptions = useMemo(() => dishes.slice(0, 6), [dishes])
   const wheelSegmentAngle = 360 / rouletteOptions.length
+  const wheelSlots = useMemo(() => Array.from({ length: 6 }, (_, index) => rouletteOptions[index] ?? ''), [rouletteOptions])
   const segmentRotationClasses = ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]']
   const counterRotationClasses = ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]']
+  const segmentColorClasses = [
+    'bg-purple-950/85',
+    'bg-fuchsia-950/80',
+    'bg-purple-900/80',
+    'bg-fuchsia-900/75',
+    'bg-purple-950/85',
+    'bg-fuchsia-950/80',
+  ]
+
+  const normalizeEntry = (value: string) => value.trim().replace(/\s+/g, ' ')
+
+  const dedupeEntries = (items: string[]) => {
+    const seen = new Set<string>()
+    return items.filter((item) => {
+      const key = item.toLowerCase()
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  }
+
+  const openRouletteModal = () => {
+    setRouletteError(null)
+    setCustomDraft('')
+    setSelectedMenuItems(rouletteOptions.filter((item) => MENU_SOURCE.includes(item)))
+    setCustomEntries(rouletteOptions.filter((item) => !MENU_SOURCE.includes(item)))
+    setIsRouletteModalOpen(true)
+  }
+
+  const addCustomDraft = () => {
+    const normalized = normalizeEntry(customDraft)
+    if (!normalized) return
+    if (normalized.length > 20) {
+      setRouletteError('Custom option must be 20 chars max')
+      return
+    }
+
+    const merged = dedupeEntries([...customEntries, normalized])
+    if (selectedMenuItems.length + merged.length > 6) {
+      setRouletteError('Max 6 options')
+      return
+    }
+
+    setRouletteError(null)
+    setCustomEntries(merged)
+    setCustomDraft('')
+  }
+
+  const submitRouletteOptions = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const normalizedDraft = normalizeEntry(customDraft)
+    if (normalizedDraft && normalizedDraft.length > 20) {
+      setRouletteError('Custom option must be 20 chars max')
+      return
+    }
+
+    const mergedCustom = normalizedDraft ? dedupeEntries([...customEntries, normalizedDraft]) : customEntries
+    const nextOptions = dedupeEntries([...selectedMenuItems, ...mergedCustom])
+
+    if (nextOptions.length > 6) {
+      setRouletteError('Max 6 options')
+      return
+    }
+
+    if (nextOptions.length === 0) {
+      setRouletteError('Add at least 1 option')
+      return
+    }
+
+    setRouletteOptions(nextOptions)
+    setRoulettePick(null)
+    setShowCenterPick(false)
+    setCustomEntries(mergedCustom)
+    setCustomDraft('')
+    setRouletteError(null)
+    setIsRouletteModalOpen(false)
+  }
+
+  const toggleMenuOption = (entry: string) => {
+    setRouletteError(null)
+    setSelectedMenuItems((prev) => {
+      const exists = prev.includes(entry)
+      if (exists) return prev.filter((item) => item !== entry)
+      if (prev.length + customEntries.length >= 6) {
+        setRouletteError('Max 6 options')
+        return prev
+      }
+      return [...prev, entry]
+    })
+  }
+
+  const removeCustomEntry = (entry: string) => {
+    setRouletteError(null)
+    setCustomEntries((prev) => prev.filter((item) => item !== entry))
+  }
+
+  const addDishToRoulette = (dish: string) => {
+    setRouletteError(null)
+    setRouletteOptions((prev) => {
+      const exists = prev.some((item) => item.toLowerCase() === dish.toLowerCase())
+      if (exists) {
+        setToast('Already in roulette')
+        return prev
+      }
+      if (prev.length >= 6) {
+        setToast('Max 6 options')
+        return prev
+      }
+      const next = [...prev, dish]
+      setToast(`Added to roulette: ${dish}`)
+      return next
+    })
+  }
 
   const randomUnit = () => {
     if (typeof window !== 'undefined' && window.crypto?.getRandomValues) {
@@ -129,11 +256,19 @@ export default function DemoDashboard({
     const finalRotation = wheelRotation + fullTurns * 360 + landingRotation
 
     setIsSpinningWheel(true)
+    setWheelBraking(false)
+    setShowCenterPick(false)
     setWheelRotation(finalRotation)
+
+    window.setTimeout(() => {
+      setWheelBraking(true)
+    }, 3200)
 
     window.setTimeout(() => {
       setRoulettePick(selectedDish)
       setIsSpinningWheel(false)
+      setWheelBraking(false)
+      setShowCenterPick(true)
     }, 4200)
   }
 
@@ -309,6 +444,36 @@ export default function DemoDashboard({
     const t = window.setTimeout(() => setToast(null), 2500)
     return () => window.clearTimeout(t)
   }, [toast])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const cached = window.localStorage.getItem(rouletteStorageKey)
+    if (!cached) return
+    try {
+      const parsed = JSON.parse(cached)
+      if (!Array.isArray(parsed)) return
+      const safe = parsed
+        .map((item) => (typeof item === 'string' ? normalizeEntry(item) : ''))
+        .filter(Boolean)
+        .slice(0, 6)
+      if (safe.length > 0) {
+        setRouletteOptions(dedupeEntries(safe))
+      }
+    } catch (error) {
+      console.error('Failed to parse roulette options', error)
+    }
+  }, [rouletteStorageKey])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(rouletteStorageKey, JSON.stringify(rouletteOptions))
+  }, [rouletteOptions, rouletteStorageKey])
+
+  useEffect(() => {
+    if (!showCenterPick) return
+    const t = window.setTimeout(() => setShowCenterPick(false), 1200)
+    return () => window.clearTimeout(t)
+  }, [showCenterPick])
 
   if (!isAuthed) return null
 
@@ -601,38 +766,63 @@ export default function DemoDashboard({
               <div className="text-xs uppercase tracking-[0.2em] text-pink-200/80">Carmy quick roulette</div>
               <h3 className="mt-2 text-xl font-semibold text-pink-100">What should we eat tonight?</h3>
 
-              <div className="relative mt-6 h-72 w-72">
-                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-b-[18px] border-b-pink-300" />
+              <button
+                type="button"
+                onClick={openRouletteModal}
+                className="mt-4 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white"
+              >
+                Add to Roulette
+              </button>
 
-                <motion.div
-                  className="relative h-full w-full rounded-full border-4 border-pink-400/50 bg-gradient-to-br from-purple-600/35 via-fuchsia-600/20 to-pink-600/35 shadow-2xl shadow-pink-900/30"
-                  initial={false}
-                  animate={{ rotate: wheelRotation }}
-                  transition={
-                    isSpinningWheel
-                      ? { duration: 4.2, ease: [0.12, 0.85, 0.12, 1] }
-                      : { duration: 0 }
-                  }
-                >
-                  {rouletteOptions.map((dish, index) => (
-                    <div key={dish}>
+              <div className="relative mt-6 h-72 w-72">
+                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-t-[18px] border-t-pink-300" />
+
+                <div className={wheelBraking ? 'roulette-brake-shake' : ''}>
+                  <motion.div
+                    className="relative h-full w-full overflow-hidden rounded-full border-4 border-pink-400/50 bg-gradient-to-br from-purple-600/35 via-fuchsia-600/20 to-pink-600/35 shadow-2xl shadow-pink-900/30"
+                    initial={false}
+                    animate={{ rotate: wheelRotation }}
+                    transition={
+                      isSpinningWheel
+                        ? { duration: 4.2, ease: [0.08, 0.88, 0.16, 1] }
+                        : { duration: 0 }
+                    }
+                  >
+                    {wheelSlots.map((_, index) => (
                       <div
-                        className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${segmentRotationClasses[index]}`}
+                        key={`slice-${index}`}
+                        className={`roulette-slice absolute inset-0 origin-center ${segmentRotationClasses[index]} ${segmentColorClasses[index]}`}
                       />
-                      <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${segmentRotationClasses[index]}`}>
-                        <div className="-translate-y-[112px]">
-                          <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${counterRotationClasses[index]}`}>
-                            {dish}
+                    ))}
+
+                    {wheelSlots.map((dish, index) => (
+                      <div key={`label-${index}`}>
+                        <div
+                          className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${segmentRotationClasses[index]}`}
+                        />
+                        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${segmentRotationClasses[index]}`}>
+                          <div className="-translate-y-[112px]">
+                            <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${counterRotationClasses[index]}`}>
+                              {dish || '—'}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/60 text-sm font-bold text-pink-100">
-                    Spin
+                    <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/20 blur-md" />
+                  </motion.div>
+
+                  <div
+                    className={`absolute left-1/2 top-1/2 flex min-h-14 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/70 px-3 text-center text-xs font-bold text-pink-100 ${
+                      showCenterPick ? 'roulette-center-pop' : ''
+                    }`}
+                  >
+                    {roulettePick && !isSpinningWheel ? roulettePick : 'Spin'}
                   </div>
-                </motion.div>
+
+                  {wheelBraking ? <div className="roulette-brake-ring pointer-events-none absolute inset-3 rounded-full border border-pink-300/40" /> : null}
+                </div>
               </div>
 
               <button
@@ -656,7 +846,16 @@ export default function DemoDashboard({
 
               const subtitle = (
                 <>
-                  <p className="text-xs text-pink-100/70">Tap a pay option below.</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs text-pink-100/70">Tap a pay option below.</p>
+                    <button
+                      type="button"
+                      onClick={() => addDishToRoulette(dish)}
+                      className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-pink-100 transition-all hover:border-pink-400/50 hover:text-white"
+                    >
+                      Add to Roulette
+                    </button>
+                  </div>
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     {payOptions.map((opt) => {
                       const active = selected === opt.id
@@ -744,6 +943,121 @@ export default function DemoDashboard({
           setToast(labels.toastSaved)
         }}
       />
+
+      {isRouletteModalOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm px-4">
+          <div className="w-full max-w-xl rounded-2xl border border-white/10 bg-gradient-to-br from-purple-950 via-black to-pink-950 p-6 shadow-2xl shadow-pink-900/30">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="text-xs uppercase tracking-[0.2em] text-pink-200/80">Add to Roulette</div>
+                <h4 className="mt-1 text-xl font-semibold text-pink-100">Build your 6 options</h4>
+              </div>
+              <button
+                type="button"
+                className="text-pink-100/70 hover:text-white"
+                onClick={() => {
+                  setRouletteError(null)
+                  setIsRouletteModalOpen(false)
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <form className="mt-5 space-y-5" onSubmit={submitRouletteOptions}>
+              <div>
+                <div className="text-sm font-semibold text-pink-100">Menu options</div>
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                  {MENU_SOURCE.map((item) => {
+                    const checked = selectedMenuItems.includes(item)
+                    return (
+                      <label
+                        key={item}
+                        className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-all ${
+                          checked
+                            ? 'border-pink-400/50 bg-pink-500/15 text-white'
+                            : 'border-white/10 bg-white/5 text-pink-100/85 hover:border-pink-400/40'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleMenuOption(item)}
+                          className="h-4 w-4 rounded border-white/20 bg-white/10"
+                        />
+                        <span>{item}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold text-pink-100">Custom option</div>
+                <div className="mt-2 flex gap-2">
+                  <input
+                    type="text"
+                    value={customDraft}
+                    maxLength={20}
+                    onChange={(e) => {
+                      setRouletteError(null)
+                      setCustomDraft(e.target.value)
+                    }}
+                    placeholder="Pizza"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-pink-100/40 focus:border-pink-400 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-pink-100 hover:border-pink-400/50"
+                    onClick={addCustomDraft}
+                  >
+                    Add
+                  </button>
+                </div>
+
+                {customEntries.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {customEntries.map((entry) => (
+                      <button
+                        key={entry}
+                        type="button"
+                        onClick={() => removeCustomEntry(entry)}
+                        className="rounded-full border border-pink-400/40 bg-pink-500/15 px-3 py-1 text-xs text-pink-100 hover:border-pink-300"
+                      >
+                        {entry} ✕
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-pink-100/70">
+                <span>{selectedMenuItems.length + customEntries.length} / 6 selected</span>
+                {rouletteError ? <span className="text-rose-300">{rouletteError}</span> : null}
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRouletteError(null)
+                    setIsRouletteModalOpen(false)
+                  }}
+                  className="rounded-full border border-white/10 px-4 py-2 text-sm text-pink-100 hover:border-pink-400/50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-full bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/25"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
 
       {toast ? (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg border border-white/10 z-50">
