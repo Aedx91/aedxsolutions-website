@@ -121,22 +121,6 @@ export default function DemoDashboard({
   const activeRouletteOptions = useMemo(() => rouletteOptions.slice(0, 6).filter(Boolean), [rouletteOptions])
   const optionCount = activeRouletteOptions.length || 1
   const wheelSegmentAngle = 360 / optionCount
-  const rotationClassMap: Record<number, string[]> = {
-    1: ['rotate-0'],
-    2: ['rotate-0', 'rotate-[180deg]'],
-    3: ['rotate-0', 'rotate-[120deg]', 'rotate-[240deg]'],
-    4: ['rotate-0', 'rotate-[90deg]', 'rotate-[180deg]', 'rotate-[270deg]'],
-    5: ['rotate-0', 'rotate-[72deg]', 'rotate-[144deg]', 'rotate-[216deg]', 'rotate-[288deg]'],
-    6: ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]'],
-  }
-  const counterRotationClassMap: Record<number, string[]> = {
-    1: ['rotate-0'],
-    2: ['rotate-0', '-rotate-[180deg]'],
-    3: ['rotate-0', '-rotate-[120deg]', '-rotate-[240deg]'],
-    4: ['rotate-0', '-rotate-[90deg]', '-rotate-[180deg]', '-rotate-[270deg]'],
-    5: ['rotate-0', '-rotate-[72deg]', '-rotate-[144deg]', '-rotate-[216deg]', '-rotate-[288deg]'],
-    6: ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]'],
-  }
   const labelMidRotationClassMap: Record<number, string[]> = {
     1: ['rotate-0'],
     2: ['rotate-[90deg]', 'rotate-[270deg]'],
@@ -170,12 +154,43 @@ export default function DemoDashboard({
     6: 'roulette-slices-6',
   }
 
-  const labelRotationClasses = rotationClassMap[optionCount]
-  const labelCounterRotationClasses = counterRotationClassMap[optionCount]
   const labelMidRotationClasses = labelMidRotationClassMap[optionCount]
   const labelMidCounterRotationClasses = labelMidCounterRotationClassMap[optionCount]
   const boundaryRotationClasses = boundaryRotationClassMap[optionCount]
   const wheelSliceClass = wheelSliceClassMap[optionCount]
+  const labelRadiusClassMap: Record<number, string> = {
+    1: '-translate-y-[88px]',
+    2: '-translate-y-[90px]',
+    3: '-translate-y-[92px]',
+    4: '-translate-y-[90px]',
+    5: '-translate-y-[86px]',
+    6: '-translate-y-[80px]',
+  }
+  const labelWidthClassMap: Record<number, string> = {
+    1: 'w-40',
+    2: 'w-36',
+    3: 'w-32',
+    4: 'w-28',
+    5: 'w-24',
+    6: 'w-20',
+  }
+  const labelRadiusClass = labelRadiusClassMap[optionCount]
+  const labelWidthClass = labelWidthClassMap[optionCount]
+
+  const getSliceLabelSizeClass = (dish: string) => {
+    const length = dish.length
+    if (optionCount >= 5) {
+      if (length > 18) return 'text-[9px] leading-[1.05]'
+      if (length > 13) return 'text-[10px] leading-[1.05]'
+      return 'text-[11px] leading-[1.08]'
+    }
+    if (optionCount === 4) {
+      if (length > 18) return 'text-[10px] leading-[1.08]'
+      return 'text-[11px] leading-[1.1]'
+    }
+    if (length > 20) return 'text-[11px] leading-[1.1]'
+    return 'text-xs leading-[1.12]'
+  }
 
   const normalizeEntry = (value: string) => value.trim().replace(/\s+/g, ' ')
 
@@ -877,8 +892,12 @@ export default function DemoDashboard({
                     {activeRouletteOptions.map((dish, index) => (
                       <div key={`label-${index}`}>
                         <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${labelMidRotationClasses[index]}`}>
-                          <div className="-translate-y-[84px]">
-                            <div className={`roulette-slice-label w-24 text-center ${labelMidCounterRotationClasses[index]}`}>
+                          <div className={labelRadiusClass}>
+                            <div
+                              className={`roulette-slice-label ${labelWidthClass} text-center break-words [overflow-wrap:anywhere] ${labelMidCounterRotationClasses[index]} ${getSliceLabelSizeClass(
+                                dish
+                              )}`}
+                            >
                               {dish}
                             </div>
                           </div>
