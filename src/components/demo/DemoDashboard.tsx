@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import FlipCard from '@/components/FlipCard'
 import WalmartDemoModal from '@/components/demo/WalmartDemoModal'
 import { getStoredAuth } from '@/hooks/useAuth'
@@ -61,6 +62,9 @@ export default function DemoDashboard({
   const [dateForm, setDateForm] = useState({ date: '', description: '' })
   const [integrations, setIntegrations] = useState<IntegrationStatus>({ google: false, microsoft: false })
   const [syncToCalendar, setSyncToCalendar] = useState(true)
+  const [wheelRotation, setWheelRotation] = useState(0)
+  const [isSpinningWheel, setIsSpinningWheel] = useState(false)
+  const [roulettePick, setRoulettePick] = useState<string | null>(null)
   const datesStorageKey = useMemo(() => `carmy-dates-${lang}`, [lang])
 
   const dishes = useMemo(
@@ -99,6 +103,39 @@ export default function DemoDashboard({
     { id: 'x3', label: 'x3', desc: 'Carmy covers it' },
     { id: 'x4', label: 'x4', desc: 'Bodymatic mode' },
   ]
+
+  const rouletteOptions = useMemo(() => dishes.slice(0, 6), [dishes])
+  const wheelSegmentAngle = 360 / rouletteOptions.length
+  const segmentRotationClasses = ['rotate-0', 'rotate-[60deg]', 'rotate-[120deg]', 'rotate-[180deg]', 'rotate-[240deg]', 'rotate-[300deg]']
+  const counterRotationClasses = ['rotate-0', '-rotate-[60deg]', '-rotate-[120deg]', '-rotate-[180deg]', '-rotate-[240deg]', '-rotate-[300deg]']
+
+  const randomUnit = () => {
+    if (typeof window !== 'undefined' && window.crypto?.getRandomValues) {
+      const randomBuffer = new Uint32Array(1)
+      window.crypto.getRandomValues(randomBuffer)
+      return randomBuffer[0] / 4294967296
+    }
+    return Math.random()
+  }
+
+  const spinRoulette = () => {
+    if (isSpinningWheel || rouletteOptions.length === 0) return
+
+    const selectedIndex = Math.floor(randomUnit() * rouletteOptions.length)
+    const selectedDish = rouletteOptions[selectedIndex]
+    const centerAngle = selectedIndex * wheelSegmentAngle + wheelSegmentAngle / 2
+    const landingRotation = (360 - centerAngle + 360) % 360
+    const fullTurns = 6 + Math.floor(randomUnit() * 3)
+    const finalRotation = wheelRotation + fullTurns * 360 + landingRotation
+
+    setIsSpinningWheel(true)
+    setWheelRotation(finalRotation)
+
+    window.setTimeout(() => {
+      setRoulettePick(selectedDish)
+      setIsSpinningWheel(false)
+    }, 4200)
+  }
 
   const formatDate = (value: string) => {
     try {
@@ -558,6 +595,60 @@ export default function DemoDashboard({
           <p className="mt-2 text-pink-100/80 max-w-2xl mx-auto text-center">
             Pick a dish, choose who covers it, then submit so we log it.
           </p>
+
+          <div className="mt-8 rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-black to-pink-900/30 p-6 shadow-lg shadow-purple-900/30">
+            <div className="flex flex-col items-center">
+              <div className="text-xs uppercase tracking-[0.2em] text-pink-200/80">Carmy quick roulette</div>
+              <h3 className="mt-2 text-xl font-semibold text-pink-100">What should we eat tonight?</h3>
+
+              <div className="relative mt-6 h-72 w-72">
+                <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 h-0 w-0 border-x-[11px] border-x-transparent border-b-[18px] border-b-pink-300" />
+
+                <motion.div
+                  className="relative h-full w-full rounded-full border-4 border-pink-400/50 bg-gradient-to-br from-purple-600/35 via-fuchsia-600/20 to-pink-600/35 shadow-2xl shadow-pink-900/30"
+                  initial={false}
+                  animate={{ rotate: wheelRotation }}
+                  transition={
+                    isSpinningWheel
+                      ? { duration: 4.2, ease: [0.12, 0.85, 0.12, 1] }
+                      : { duration: 0 }
+                  }
+                >
+                  {rouletteOptions.map((dish, index) => (
+                    <div key={dish}>
+                      <div
+                        className={`absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 -translate-y-full bg-white/25 origin-bottom ${segmentRotationClasses[index]}`}
+                      />
+                      <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${segmentRotationClasses[index]}`}>
+                        <div className="-translate-y-[112px]">
+                          <div className={`w-24 text-center text-[11px] font-semibold leading-tight text-pink-50 ${counterRotationClasses[index]}`}>
+                            {dish}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/60 text-sm font-bold text-pink-100">
+                    Spin
+                  </div>
+                </motion.div>
+              </div>
+
+              <button
+                type="button"
+                onClick={spinRoulette}
+                disabled={isSpinningWheel}
+                className="mt-6 rounded-full border border-white/10 bg-gradient-to-r from-purple-600 to-pink-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-500/25 transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSpinningWheel ? 'Spinning...' : 'Spin the roulette'}
+              </button>
+
+              <p className="mt-4 min-h-6 text-center text-sm text-pink-100/90">
+                {roulettePick ? `Tonight's pick: ${roulettePick}` : 'Tap spin for a random food choice.'}
+              </p>
+            </div>
+          </div>
 
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {dishes.map((dish) => {

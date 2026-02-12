@@ -57,7 +57,6 @@ export default function MobileNav({ lang, dict }: { lang: string; dict: DictShap
       <button
         ref={buttonRef}
         aria-controls="mobile-nav"
-        aria-expanded={open}
         aria-haspopup="dialog"
         type="button"
         onClick={() => setOpen(v => !v)}
